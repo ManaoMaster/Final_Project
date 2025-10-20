@@ -1,0 +1,11 @@
+C:\Users\acre_tuajing\Desktop\khanun\ProjectHub\ProjectHub.Domain\bin\Debug\net9.0\ProjectHub.Domain.deps.json
+C:\Users\acre_tuajing\Desktop\khanun\ProjectHub\ProjectHub.Domain\bin\Debug\net9.0\ProjectHub.Domain.dll
+C:\Users\acre_tuajing\Desktop\khanun\ProjectHub\ProjectHub.Domain\bin\Debug\net9.0\ProjectHub.Domain.pdb
+C:\Users\acre_tuajing\Desktop\khanun\ProjectHub\ProjectHub.Domain\obj\Debug\net9.0\ProjectHub.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\acre_tuajing\Desktop\khanun\ProjectHub\ProjectHub.Domain\obj\Debug\net9.0\ProjectHub.Domain.AssemblyInfoInputs.cache
+C:\Users\acre_tuajing\Desktop\khanun\ProjectHub\ProjectHub.Domain\obj\Debug\net9.0\ProjectHub.Domain.AssemblyInfo.cs
+C:\Users\acre_tuajing\Desktop\khanun\ProjectHub\ProjectHub.Domain\obj\Debug\net9.0\ProjectHub.Domain.csproj.CoreCompileInputs.cache
+C:\Users\acre_tuajing\Desktop\khanun\ProjectHub\ProjectHub.Domain\obj\Debug\net9.0\ProjectHub.Domain.dll
+C:\Users\acre_tuajing\Desktop\khanun\ProjectHub\ProjectHub.Domain\obj\Debug\net9.0\refint\ProjectHub.Domain.dll
+C:\Users\acre_tuajing\Desktop\khanun\ProjectHub\ProjectHub.Domain\obj\Debug\net9.0\ProjectHub.Domain.pdb
+C:\Users\acre_tuajing\Desktop\khanun\ProjectHub\ProjectHub.Domain\obj\Debug\net9.0\ref\ProjectHub.Domain.dll
