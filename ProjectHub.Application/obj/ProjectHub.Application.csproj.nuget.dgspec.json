@@ -1,33 +1,39 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.Application\\ProjectHub.Application.csproj": {}
+    "C:\\school\\final_project\\Final_Project\\ProjectHub.Application\\ProjectHub.Application.csproj": {}
   },
   "projects": {
-    "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.Application\\ProjectHub.Application.csproj": {
+    "C:\\school\\final_project\\Final_Project\\ProjectHub.Application\\ProjectHub.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.Application\\ProjectHub.Application.csproj",
+        "projectUniqueName": "C:\\school\\final_project\\Final_Project\\ProjectHub.Application\\ProjectHub.Application.csproj",
         "projectName": "ProjectHub.Application",
-        "projectPath": "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.Application\\ProjectHub.Application.csproj",
-        "packagesPath": "C:\\Users\\acre_tuajing\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.Application\\obj\\",
+        "projectPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Application\\ProjectHub.Application.csproj",
+        "packagesPath": "C:\\Users\\ghost\\.nuget\\packages\\",
+        "outputPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Application\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\acre_tuajing\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\ghost\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.Domain\\ProjectHub.Domain.csproj": {
-                "projectPath": "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.Domain\\ProjectHub.Domain.csproj"
+              "C:\\school\\final_project\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj": {
+                "projectPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj"
               }
             }
           }
@@ -50,11 +56,7 @@
           "dependencies": {
             "MediatR": {
               "target": "Package",
-              "version": "[13.0.0, )"
-            },
-            "MediatR.Extensions.Microsoft.DependencyInjection": {
-              "target": "Package",
-              "version": "[11.1.0, )"
+              "version": "[12.1.1, )"
             }
           },
           "imports": [
@@ -77,22 +79,28 @@
         }
       }
     },
-    "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.Domain\\ProjectHub.Domain.csproj": {
+    "C:\\school\\final_project\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.Domain\\ProjectHub.Domain.csproj",
+        "projectUniqueName": "C:\\school\\final_project\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj",
         "projectName": "ProjectHub.Domain",
-        "projectPath": "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.Domain\\ProjectHub.Domain.csproj",
-        "packagesPath": "C:\\Users\\acre_tuajing\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.Domain\\obj\\",
+        "projectPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj",
+        "packagesPath": "C:\\Users\\ghost\\.nuget\\packages\\",
+        "outputPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Domain\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\acre_tuajing\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\ghost\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {

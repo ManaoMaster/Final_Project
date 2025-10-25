@@ -1,111 +1,45 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.API\\ProjectHub.API.csproj": {}
+    "C:\\school\\final_project\\Final_Project\\ProjectHub.API\\ProjectHub.API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.API\\ProjectHub.API.csproj": {
+    "C:\\school\\final_project\\Final_Project\\ProjectHub.API\\ProjectHub.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.API\\ProjectHub.API.csproj",
+        "projectUniqueName": "C:\\school\\final_project\\Final_Project\\ProjectHub.API\\ProjectHub.API.csproj",
         "projectName": "ProjectHub.API",
-        "projectPath": "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.API\\ProjectHub.API.csproj",
-        "packagesPath": "C:\\Users\\acre_tuajing\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.API\\obj\\",
+        "projectPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.API\\ProjectHub.API.csproj",
+        "packagesPath": "C:\\Users\\ghost\\.nuget\\packages\\",
+        "outputPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.API\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\acre_tuajing\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\ghost\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.Application\\ProjectHub.Application.csproj": {
-                "projectPath": "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.Application\\ProjectHub.Application.csproj"
+              "C:\\school\\final_project\\Final_Project\\ProjectHub.Application\\ProjectHub.Application.csproj": {
+                "projectPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Application\\ProjectHub.Application.csproj"
               },
-              "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.Infrastructure\\ProjectHub.Infrastructure.csproj": {
-                "projectPath": "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.Infrastructure\\ProjectHub.Infrastructure.csproj"
-              }
-            }
-          }
-        },
-        "warningProperties": {
-          "warnAsError": [
-            "NU1605"
-          ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.300"
-      },
-      "frameworks": {
-        "net9.0": {
-          "targetAlias": "net9.0",
-          "dependencies": {
-            "Microsoft.EntityFrameworkCore": {
-              "target": "Package",
-              "version": "[9.0.10, )"
-            },
-            "Microsoft.EntityFrameworkCore.Design": {
-              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
-              "suppressParent": "All",
-              "target": "Package",
-              "version": "[9.0.10, )"
-            }
-          },
-          "imports": [
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48",
-            "net481"
-          ],
-          "assetTargetFallback": true,
-          "warn": true,
-          "frameworkReferences": {
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
-        }
-      }
-    },
-    "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.Application\\ProjectHub.Application.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.Application\\ProjectHub.Application.csproj",
-        "projectName": "ProjectHub.Application",
-        "projectPath": "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.Application\\ProjectHub.Application.csproj",
-        "packagesPath": "C:\\Users\\acre_tuajing\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.Application\\obj\\",
-        "projectStyle": "PackageReference",
-        "configFilePaths": [
-          "C:\\Users\\acre_tuajing\\AppData\\Roaming\\NuGet\\NuGet.Config"
-        ],
-        "originalTargetFrameworks": [
-          "net9.0"
-        ],
-        "sources": {
-          "https://api.nuget.org/v3/index.json": {}
-        },
-        "frameworks": {
-          "net9.0": {
-            "targetAlias": "net9.0",
-            "projectReferences": {
-              "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.Domain\\ProjectHub.Domain.csproj": {
-                "projectPath": "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.Domain\\ProjectHub.Domain.csproj"
+              "C:\\school\\final_project\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj": {
+                "projectPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj"
+              },
+              "C:\\school\\final_project\\Final_Project\\ProjectHub.Infrastructure\\ProjectHub.Infrastructure.csproj": {
+                "projectPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Infrastructure\\ProjectHub.Infrastructure.csproj"
               }
             }
           }
@@ -128,11 +62,99 @@
           "dependencies": {
             "MediatR": {
               "target": "Package",
-              "version": "[13.0.0, )"
+              "version": "[12.1.1, )"
             },
-            "MediatR.Extensions.Microsoft.DependencyInjection": {
+            "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[11.1.0, )"
+              "version": "[9.0.10, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[9.0.10, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[9.0.6, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\school\\final_project\\Final_Project\\ProjectHub.Application\\ProjectHub.Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\school\\final_project\\Final_Project\\ProjectHub.Application\\ProjectHub.Application.csproj",
+        "projectName": "ProjectHub.Application",
+        "projectPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Application\\ProjectHub.Application.csproj",
+        "packagesPath": "C:\\Users\\ghost\\.nuget\\packages\\",
+        "outputPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Application\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\ghost\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "C:\\school\\final_project\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj": {
+                "projectPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.300"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "MediatR": {
+              "target": "Package",
+              "version": "[12.1.1, )"
             }
           },
           "imports": [
@@ -155,22 +177,28 @@
         }
       }
     },
-    "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.Domain\\ProjectHub.Domain.csproj": {
+    "C:\\school\\final_project\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.Domain\\ProjectHub.Domain.csproj",
+        "projectUniqueName": "C:\\school\\final_project\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj",
         "projectName": "ProjectHub.Domain",
-        "projectPath": "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.Domain\\ProjectHub.Domain.csproj",
-        "packagesPath": "C:\\Users\\acre_tuajing\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.Domain\\obj\\",
+        "projectPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj",
+        "packagesPath": "C:\\Users\\ghost\\.nuget\\packages\\",
+        "outputPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Domain\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\acre_tuajing\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\ghost\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -214,33 +242,39 @@
         }
       }
     },
-    "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.Infrastructure\\ProjectHub.Infrastructure.csproj": {
+    "C:\\school\\final_project\\Final_Project\\ProjectHub.Infrastructure\\ProjectHub.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.Infrastructure\\ProjectHub.Infrastructure.csproj",
+        "projectUniqueName": "C:\\school\\final_project\\Final_Project\\ProjectHub.Infrastructure\\ProjectHub.Infrastructure.csproj",
         "projectName": "ProjectHub.Infrastructure",
-        "projectPath": "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.Infrastructure\\ProjectHub.Infrastructure.csproj",
-        "packagesPath": "C:\\Users\\acre_tuajing\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.Infrastructure\\obj\\",
+        "projectPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Infrastructure\\ProjectHub.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\ghost\\.nuget\\packages\\",
+        "outputPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\acre_tuajing\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\ghost\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.Application\\ProjectHub.Application.csproj": {
-                "projectPath": "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.Application\\ProjectHub.Application.csproj"
+              "C:\\school\\final_project\\Final_Project\\ProjectHub.Application\\ProjectHub.Application.csproj": {
+                "projectPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Application\\ProjectHub.Application.csproj"
               },
-              "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.Domain\\ProjectHub.Domain.csproj": {
-                "projectPath": "C:\\Users\\acre_tuajing\\Desktop\\khanun\\ProjectHub\\ProjectHub.Domain\\ProjectHub.Domain.csproj"
+              "C:\\school\\final_project\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj": {
+                "projectPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj"
               }
             }
           }
@@ -261,13 +295,17 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "MediatR": {
+              "target": "Package",
+              "version": "[12.1.1, )"
+            },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
               "version": "[9.0.10, )"
             },
-            "Microsoft.EntityFrameworkCore.SqlServer": {
+            "Microsoft.EntityFrameworkCore.Sqlite": {
               "target": "Package",
               "version": "[9.0.10, )"
             },
@@ -284,10 +322,6 @@
             "Microsoft.Extensions.Configuration.Json": {
               "target": "Package",
               "version": "[9.0.10, )"
-            },
-            "Pomelo.EntityFrameworkCore.MySql": {
-              "target": "Package",
-              "version": "[9.0.0, )"
             }
           },
           "imports": [

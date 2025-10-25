@@ -1,7 +1,10 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace ProjectHub.Domain.Entities
 {
     public class Users
     {
+        [Key]
         public int User_id { get; set; }
         public string Email { get; set; } = string.Empty;
         public string Username { get; set; } = string.Empty;
