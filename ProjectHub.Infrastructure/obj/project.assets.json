@@ -3698,23 +3698,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Acer\\.nuget\\packages\\": {},
+    "C:\\Users\\ghost\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Acer\\Source\\Repos\\Final_Project\\ProjectHub.Infrastructure\\ProjectHub.Infrastructure.csproj",
+      "projectUniqueName": "C:\\school\\final_project\\Final_Project\\ProjectHub.Infrastructure\\ProjectHub.Infrastructure.csproj",
       "projectName": "ProjectHub.Infrastructure",
-      "projectPath": "C:\\Users\\Acer\\Source\\Repos\\Final_Project\\ProjectHub.Infrastructure\\ProjectHub.Infrastructure.csproj",
-      "packagesPath": "C:\\Users\\Acer\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Acer\\Source\\Repos\\Final_Project\\ProjectHub.Infrastructure\\obj\\",
+      "projectPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Infrastructure\\ProjectHub.Infrastructure.csproj",
+      "packagesPath": "C:\\Users\\ghost\\.nuget\\packages\\",
+      "outputPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Acer\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\ghost\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -3729,11 +3729,11 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "C:\\Users\\Acer\\Source\\Repos\\Final_Project\\ProjectHub.Application\\ProjectHub.Application.csproj": {
-              "projectPath": "C:\\Users\\Acer\\Source\\Repos\\Final_Project\\ProjectHub.Application\\ProjectHub.Application.csproj"
+            "C:\\school\\final_project\\Final_Project\\ProjectHub.Application\\ProjectHub.Application.csproj": {
+              "projectPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Application\\ProjectHub.Application.csproj"
             },
-            "C:\\Users\\Acer\\Source\\Repos\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj": {
-              "projectPath": "C:\\Users\\Acer\\Source\\Repos\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj"
+            "C:\\school\\final_project\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj": {
+              "projectPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj"
             }
           }
         }
@@ -3799,7 +3799,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
