@@ -342,3 +342,8 @@ C:\Users\Acer\Source\Repos\Final_Project\ProjectHub.API\obj\Debug\net9.0\refint\
 C:\Users\Acer\Source\Repos\Final_Project\ProjectHub.API\obj\Debug\net9.0\ProjectHub.API.pdb
 C:\Users\Acer\source\repos\Final_Project\ProjectHub.API\obj\Debug\net9.0\ProjectHub.API.genruntimeconfig.cache
 C:\Users\Acer\source\repos\Final_Project\ProjectHub.API\obj\Debug\net9.0\ref\ProjectHub.API.dll
+C:\school\final_project\Final_Project\ProjectHub.API\bin\Debug\net9.0\AutoMapper.dll
+C:\school\final_project\Final_Project\ProjectHub.API\bin\Debug\net9.0\Microsoft.IdentityModel.Abstractions.dll
+C:\school\final_project\Final_Project\ProjectHub.API\bin\Debug\net9.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\school\final_project\Final_Project\ProjectHub.API\bin\Debug\net9.0\Microsoft.IdentityModel.Logging.dll
+C:\school\final_project\Final_Project\ProjectHub.API\bin\Debug\net9.0\Microsoft.IdentityModel.Tokens.dll

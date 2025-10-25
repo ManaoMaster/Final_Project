@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using ProjectHub.API.Contracts.Users;
 using ProjectHub.API.Contracts.Projects;
+using ProjectHub.API.Contracts.Tables;
 using ProjectHub.Application.Features.Users.Register;
 using ProjectHub.Application.Features.Projects.CreateProject;
+using ProjectHub.Application.Features.Tables.CreateTable;
 
 namespace ProjectHub.API.Mapping
 {
@@ -15,6 +17,11 @@ namespace ProjectHub.API.Mapping
 
             // API -> Application (Projects)
             CreateMap<CreateProjectRequest, CreateProjectCommand>();
+
+            // API -> Appliation (Tables)
+            CreateMap<CreateTableRequest, CreateTableCommand>();
         }
+
+
     }
 }

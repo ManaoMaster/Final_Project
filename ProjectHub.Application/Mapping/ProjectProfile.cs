@@ -18,10 +18,13 @@ namespace ProjectHub.Application.Mapping
 
             // Command -> Domain (เพื่อใช้ใน Handler)
             CreateMap<CreateProjectCommand, Projects>()
-                .ForMember(d => d.Project_id, m => m.Ignore())
-                .ForMember(d => d.Created_at, m => m.Ignore())
+                .ForMember(d => d.Project_id, m => m.Ignore()) // Database จะสร้างให้
+                .ForMember(d => d.Created_at, m => m.Ignore()) // Entity มี Default / DB จัดการ
                 .ForMember(d => d.User_id, m => m.MapFrom(s => s.UserId))
-                .ForMember(d => d.Name, m => m.MapFrom(s => s.Name));
+                .ForMember(d => d.Name, m => m.MapFrom(s => s.Name))
+                // *** เพิ่ม: Ignore Navigation Property เพื่อความชัดเจนและป้องกันปัญหา ***
+                .ForMember(d => d.Tables, m => m.Ignore()) 
+                .ForMember(d => d.Users, m => m.Ignore()); // <-- เพิ่ม Users ด้วย (ถ้ามี)
         }
     }
 }

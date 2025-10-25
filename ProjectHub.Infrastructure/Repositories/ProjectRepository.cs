@@ -34,5 +34,14 @@ namespace ProjectHub.Infrastructure.Repositories
                 p.User_id == userId && p.Name == projectName
             );
         }
+
+        public async Task<Projects?> GetProjectByIdAsync(int projectId)
+        {
+            // ใช้ FirstOrDefaultAsync เพื่อหา Project ตาม ID
+            // Include(p => p.Tables) ถ้าต้องการโหลด Tables มาด้วย (Optional)
+            return await _context.Projects
+            // .Include(p => p.Tables)
+            .FirstOrDefaultAsync(p => p.Project_id == projectId);
+        }
     }
 }

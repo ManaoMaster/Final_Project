@@ -11,5 +11,7 @@ namespace ProjectHub.Application.Repositories // ต้องใช้ Namespace
     {
         Task<bool> IsProjectNameUniqueForUserAsync(int userId, string projectName);
         Task AddProjectAsync(Projects project);
+
+        Task<Projects?> GetProjectByIdAsync(int projectId); // คืนค่า Project หรือ null ถ้าไม่เจอ
     }
 }
