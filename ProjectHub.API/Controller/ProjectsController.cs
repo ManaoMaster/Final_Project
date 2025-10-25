@@ -26,9 +26,8 @@ namespace ProjectHub.API.Controllers
             var command = new CreateProjectCommand // <-- 'CreateProjectCommand' จะถูกพบ
             {
                 UserId = request.UserId,
-                Name = request.Name
+                Name = request.Name,
             };
-
             try
             {
                 // 2. ส่ง Command ไปยัง Handler
@@ -45,7 +44,7 @@ namespace ProjectHub.API.Controllers
             {
                 return BadRequest(new { Error = ex.Message });
             }
-            catch (System.Exception ex)
+            catch (System.Exception)
             {
                 // (จับ Error ทั่วไป)
                 return StatusCode(500, new { Error = "An unexpected error occurred." });
