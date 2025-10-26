@@ -11,7 +11,8 @@ namespace ProjectHub.Application.Repositories
     {
         Task<bool> IsEmailUniqueAsync(string email);
         Task AddUserAsync(Users user);
-
         Task<bool> ExistsAsync(int userId);
+        Task<ProjectHub.Domain.Entities.Users?> GetByEmailAsync(string email);
+
     }
 }

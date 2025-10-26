@@ -2,6 +2,7 @@ using AutoMapper;
 using MediatR;
 using ProjectHub.Application.DTOs;
 using ProjectHub.Application.Repositories;
+using BCrypt.Net;
 using UserEntity = ProjectHub.Domain.Entities.Users;
 
 
@@ -30,14 +31,14 @@ namespace ProjectHub.Application.Features.Users.Register
             if (exists)
                 throw new ArgumentException("Email already exists.");
 
-            // map Command -> Entity
-            var user = _mapper.Map<UserEntity>(request);
-            // (โปรด Hash Password จริง ๆ ในโปรดักชัน)
-            user.Created_at = DateTime.UtcNow;
 
+            //เพิ่มให้มีการ hashpassword ตอน register
+            var user = _mapper.Map<UserEntity>(request);
+            user.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
+            user.Created_at = DateTime.UtcNow;
             await _userRepository.AddUserAsync(user);
 
-            // ✅ map Entity -> DTO
+            // map Entity -> DTO
             return _mapper.Map<UserResponseDto>(user);
         }
     }

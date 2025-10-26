@@ -37,5 +37,17 @@ namespace ProjectHub.Infrastructure.Repositories
         // 8. Implement การ validate หา id ก่อน new project
         public Task<bool> ExistsAsync(int userId)
     => _context.Users.AnyAsync(u => u.User_id == userId);
+
+
+        // ตรวจสอบ Email ใน DB เพื่อ check login
+        public Task<Users?> GetByEmailAsync(string email)
+    => _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+
+
+
     }
+
+
+
+
 }

@@ -33,3 +33,15 @@ C:\Users\Acer\Source\Repos\Final_Project\ProjectHub.Domain\obj\Debug\net9.0\Proj
 C:\Users\Acer\Source\Repos\Final_Project\ProjectHub.Domain\obj\Debug\net9.0\refint\ProjectHub.Domain.dll
 C:\Users\Acer\Source\Repos\Final_Project\ProjectHub.Domain\obj\Debug\net9.0\ProjectHub.Domain.pdb
 C:\Users\Acer\Source\Repos\Final_Project\ProjectHub.Domain\obj\Debug\net9.0\ref\ProjectHub.Domain.dll
+C:\Users\Acer\source\repos\Final_Project1\ProjectHub.Domain\bin\Debug\net9.0\ProjectHub.Domain.deps.json
+C:\Users\Acer\source\repos\Final_Project1\ProjectHub.Domain\bin\Debug\net9.0\ProjectHub.Domain.dll
+C:\Users\Acer\source\repos\Final_Project1\ProjectHub.Domain\bin\Debug\net9.0\ProjectHub.Domain.pdb
+C:\Users\Acer\source\repos\Final_Project1\ProjectHub.Domain\obj\Debug\net9.0\ProjectHub.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Acer\source\repos\Final_Project1\ProjectHub.Domain\obj\Debug\net9.0\ProjectHub.Domain.AssemblyInfoInputs.cache
+C:\Users\Acer\source\repos\Final_Project1\ProjectHub.Domain\obj\Debug\net9.0\ProjectHub.Domain.AssemblyInfo.cs
+C:\Users\Acer\source\repos\Final_Project1\ProjectHub.Domain\obj\Debug\net9.0\ProjectHub.Domain.csproj.CoreCompileInputs.cache
+C:\Users\Acer\source\repos\Final_Project1\ProjectHub.Domain\obj\Debug\net9.0\ProjectHub.Domain.sourcelink.json
+C:\Users\Acer\source\repos\Final_Project1\ProjectHub.Domain\obj\Debug\net9.0\ProjectHub.Domain.dll
+C:\Users\Acer\source\repos\Final_Project1\ProjectHub.Domain\obj\Debug\net9.0\refint\ProjectHub.Domain.dll
+C:\Users\Acer\source\repos\Final_Project1\ProjectHub.Domain\obj\Debug\net9.0\ProjectHub.Domain.pdb
+C:\Users\Acer\source\repos\Final_Project1\ProjectHub.Domain\obj\Debug\net9.0\ref\ProjectHub.Domain.dll

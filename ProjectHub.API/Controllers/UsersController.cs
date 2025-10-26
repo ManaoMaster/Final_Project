@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ProjectHub.API.Contracts.Users;
 using ProjectHub.Application.DTOs;
+using ProjectHub.Application.Features.Users.Login;
 using ProjectHub.Application.Features.Users.Register;
 
 namespace ProjectHub.API.Controllers
@@ -26,8 +27,15 @@ namespace ProjectHub.API.Controllers
             var command = _mapper.Map<RegisterUserCommand>(request);
             var userDto = await _mediator.Send(command, ct);
 
-            // ไม่มี GetById ก็ใช้ Created + Location ตรง ๆ
+            
             return Created($"/api/users/{userDto.UserId}", userDto);
+        }
+
+        [HttpPost("login")]
+        public async Task<ActionResult<TokenResponseDto>> Login([FromBody] LoginRequest req, CancellationToken ct)
+        {
+            var token = await _mediator.Send(new LoginCommand { Email = req.Email, Password = req.Password }, ct);
+            return Ok(token);
         }
     }
 }
