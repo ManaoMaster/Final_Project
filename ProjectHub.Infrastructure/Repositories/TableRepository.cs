@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using ProjectHub.Application.Repositories; // ใช้ Interface จาก Application
+using ProjectHub.Application.Interfaces;
 using ProjectHub.Domain.Entities; // ใช้ Entity Tables
 using ProjectHub.Infrastructure.Persistence; // ใช้ DbContext
 using System.Threading.Tasks;

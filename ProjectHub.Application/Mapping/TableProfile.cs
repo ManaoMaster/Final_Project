@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using ProjectHub.Application.DTOs;
+using ProjectHub.Application.Dtos;
 using ProjectHub.Application.Features.Tables.CreateTable; // Command
 using ProjectHub.Domain.Entities; // Entity
 

@@ -1,7 +1,7 @@
 using System.Linq; // เพิ่ม using นี้สำหรับ .AnyAsync()
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore; // เพิ่ม using นี้สำหรับ EF Core
-using ProjectHub.Application.Repositories; // ใช้ Interface
+using ProjectHub.Application.Interfaces;
 using ProjectHub.Domain.Entities;         // ใช้ Entity Columns
 using ProjectHub.Infrastructure.Persistence; // ใช้ DbContext
 

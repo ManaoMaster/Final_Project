@@ -1,4 +1,4 @@
-﻿namespace ProjectHub.Application.DTOs
+﻿namespace ProjectHub.Application.Dtos
 {
     public class TokenResponseDto  
     {

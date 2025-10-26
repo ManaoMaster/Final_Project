@@ -1,5 +1,5 @@
 using AutoMapper;
-using ProjectHub.Application.DTOs; // Response DTO
+using ProjectHub.Application.Dtos;
 using ProjectHub.Application.Features.Columns.CreateColumn; // Command
 using ProjectHub.Domain.Entities; // Entity
 

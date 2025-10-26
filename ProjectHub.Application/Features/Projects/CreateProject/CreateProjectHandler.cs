@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
-using ProjectHub.Application.DTOs;
-using ProjectHub.Application.Repositories;
-using ProjectEntity = ProjectHub.Domain.Entities.Projects; 
+using ProjectHub.Application.Dtos;
+using ProjectHub.Application.Interfaces;
+using ProjectEntity = ProjectHub.Domain.Entities.Projects;
 
 namespace ProjectHub.Application.Features.Projects.CreateProject
 {

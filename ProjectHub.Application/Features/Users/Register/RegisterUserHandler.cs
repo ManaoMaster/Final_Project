@@ -1,9 +1,9 @@
 using AutoMapper;
 using MediatR;
-using ProjectHub.Application.DTOs;
-using ProjectHub.Application.Repositories;
+using ProjectHub.Application.Dtos;
 using BCrypt.Net;
 using UserEntity = ProjectHub.Domain.Entities.Users;
+using ProjectHub.Application.Interfaces;
 
 
 namespace ProjectHub.Application.Features.Users.Register

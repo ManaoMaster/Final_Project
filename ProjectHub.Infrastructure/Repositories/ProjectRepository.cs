@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using ProjectHub.Application.Repositories;
+using ProjectHub.Application.Interfaces;
 using ProjectHub.Domain.Entities;
 using ProjectHub.Infrastructure.Persistence;
 

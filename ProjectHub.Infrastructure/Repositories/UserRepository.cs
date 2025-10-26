@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using ProjectHub.Application.Repositories; // 1. อ้างอิง Interface (สัญญา) จาก Application
+using ProjectHub.Application.Interfaces;
 using ProjectHub.Domain.Entities;
 using ProjectHub.Infrastructure.Persistence; // 2. อ้างอิง AppDbContext
 using System.Threading.Tasks;
@@ -34,7 +34,14 @@ namespace ProjectHub.Infrastructure.Repositories
             return await _context.Users.AnyAsync(u => u.Email == email);
         }
 
-        // 8. Implement การ validate หา id ก่อน new project
+        public async Task UpdateUserAsync(Users user)
+        {
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+        }
+
+
+        // Implement การ validate หา id ก่อน new project
         public Task<bool> ExistsAsync(int userId)
     => _context.Users.AnyAsync(u => u.User_id == userId);
 
@@ -42,6 +49,18 @@ namespace ProjectHub.Infrastructure.Repositories
         // ตรวจสอบ Email ใน DB เพื่อ check login
         public Task<Users?> GetByEmailAsync(string email)
     => _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+
+
+        public Task<Users?> GetByIdAsync(int userId)
+        => _context.Users.FirstOrDefaultAsync(u => u.User_id == userId);
+
+        public Task<bool> IsUsernameUsedByOtherAsync(int userId, string username)
+        => _context.Users.AnyAsync(u => u.User_id != userId && u.Username == username);
+
+        public Task<bool> IsEmailUsedByOtherAsync(int userId, string email)
+       => _context.Users.AnyAsync(u => u.User_id != userId && u.Email.ToLower() == email.ToLower());
+
+
 
 
 

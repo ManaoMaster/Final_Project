@@ -1,5 +1,5 @@
 using MediatR;
-using ProjectHub.Application.DTOs; // ต้องใช้ Response DTO
+using ProjectHub.Application.Dtos;
 using System.ComponentModel.DataAnnotations; // ต้องใช้ [Required]
 
 namespace ProjectHub.Application.Features.Columns.CreateColumn

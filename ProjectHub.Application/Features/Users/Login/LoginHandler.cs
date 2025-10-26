@@ -1,7 +1,7 @@
 ﻿using MediatR;
-using ProjectHub.Application.DTOs;
-using ProjectHub.Application.Repositories;
+using ProjectHub.Application.Dtos;
 using BCrypt.Net;
+using ProjectHub.Application.Interfaces;
 
 namespace ProjectHub.Application.Features.Users.Login
 {

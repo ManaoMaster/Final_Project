@@ -5,14 +5,21 @@ using System.Text;
 using System.Threading.Tasks;
 using ProjectHub.Domain.Entities;
 
-namespace ProjectHub.Application.Repositories
+namespace ProjectHub.Application.Interfaces
 {
     public interface IUserRepository
     {
         Task<bool> IsEmailUniqueAsync(string email);
         Task AddUserAsync(Users user);
         Task<bool> ExistsAsync(int userId);
-        Task<ProjectHub.Domain.Entities.Users?> GetByEmailAsync(string email);
+
+        Task<Users?> GetByIdAsync(int userId);
+        Task<Users?> GetByEmailAsync(string email);
+
+        Task<bool> IsEmailUsedByOtherAsync(int userId, string email);
+        Task<bool> IsUsernameUsedByOtherAsync(int userId, string username);
+        Task UpdateUserAsync(Users user);
+
 
     }
 }

@@ -1,7 +1,7 @@
 using AutoMapper;
 using MediatR;
-using ProjectHub.Application.DTOs;
-using ProjectHub.Application.Repositories;
+using ProjectHub.Application.Dtos;
+using ProjectHub.Application.Interfaces;
 using ProjectHub.Domain.Entities; // ใช้ Entity Tables
 using System;
 using System.Threading;

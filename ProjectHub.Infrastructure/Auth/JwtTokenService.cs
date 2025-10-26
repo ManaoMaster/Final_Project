@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
-using ProjectHub.Application.DTOs;
+using ProjectHub.Application.Dtos;
 using ProjectHub.Application.Features.Users.Login;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -16,18 +15,23 @@ namespace ProjectHub.Infrastructure.Auth
 
         public TokenResponseDto GenerateForUser(int userId, string email, string username)
         {
+
             var issuer = _config["Jwt:Issuer"]!;
             var audience = _config["Jwt:Audience"]!;
             var key = _config["Jwt:Key"]!;
             var minutes = int.Parse(_config["Jwt:AccessTokenMinutes"] ?? "60");
 
             var claims = new[]
-{
-    new Claim(Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames.Sub, userId.ToString()),
-    new Claim(Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames.Email, email),
-    new Claim(ClaimTypes.Name, username)
-};
+            {
+                // มาตรฐาน JWT
+                new Claim("sub",   userId.ToString()),
+                new Claim("email", email),
 
+                // แบบ .NET (หลายจุดใน ASP.NET Core อ่านจากอันนี้)
+                new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
+                new Claim(ClaimTypes.Email,          email),
+                new Claim(ClaimTypes.Name,           username),
+            };
 
             var creds = new SigningCredentials(
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),

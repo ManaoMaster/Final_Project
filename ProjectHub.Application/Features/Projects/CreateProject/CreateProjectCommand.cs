@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using MediatR;
-using ProjectHub.Application.DTOs;
+using ProjectHub.Application.Dtos;
 
 namespace ProjectHub.Application.Features.Projects.CreateProject;
 

@@ -1,6 +1,6 @@
 using System;
 
-namespace ProjectHub.Application.DTOs
+namespace ProjectHub.Application.Dtos
 {
     // DTO สำหรับข้อมูล Column ที่จะส่งกลับ
     public class ColumnResponseDto

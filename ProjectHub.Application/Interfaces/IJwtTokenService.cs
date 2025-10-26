@@ -1,4 +1,4 @@
-﻿using ProjectHub.Application.DTOs;
+﻿using ProjectHub.Application.Dtos;
 
 namespace ProjectHub.Application.Features.Users.Login
 {

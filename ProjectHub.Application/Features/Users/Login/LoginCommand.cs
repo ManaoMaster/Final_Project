@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using ProjectHub.Application.DTOs;
+using ProjectHub.Application.Dtos;
 using System.ComponentModel.DataAnnotations;
 
 namespace ProjectHub.Application.Features.Users.Login

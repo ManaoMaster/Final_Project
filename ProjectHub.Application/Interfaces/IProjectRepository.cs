@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ProjectHub.Domain.Entities;
 
-namespace ProjectHub.Application.Repositories // ต้องใช้ Namespace นี้
+namespace ProjectHub.Application.Interfaces // ต้องใช้ Namespace นี้
 {
     public interface IProjectRepository
     {

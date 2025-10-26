@@ -1,7 +1,7 @@
 using ProjectHub.Domain.Entities; // ใช้ Entity Columns
 using System.Threading.Tasks;
 
-namespace ProjectHub.Application.Repositories // ต้องใช้ Namespace นี้
+namespace ProjectHub.Application.Interfaces // ต้องใช้ Namespace นี้
 {
     // นี่คือ Interface (สัญญา) สำหรับจัดการข้อมูล Column
     public interface IColumnRepository

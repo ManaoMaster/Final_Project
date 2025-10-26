@@ -3,10 +3,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using AutoMapper; // เพิ่ม Using นี้
-using ProjectHub.Application.DTOs;
-using ProjectHub.Application.Repositories;
 using ProjectHub.Domain.Entities;
-using ProjectHub.Application.Features.Columns.CreateColumn; // ใช้ Entity Columns
+using ProjectHub.Application.Features.Columns.CreateColumn;
+using ProjectHub.Application.Interfaces;
+using ProjectHub.Application.Dtos; // ใช้ Entity Columns
 
 namespace ProjectHub.Application.Features.Columns.CreateColumn
 {
