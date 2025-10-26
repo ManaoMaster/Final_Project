@@ -1,6 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ProjectHub.Application.DTOs; // TableResponseDto
+using ProjectHub.Application.Dtos; // TableResponseDto
 using ProjectHub.Application.Features.Tables.CreateTable; // CreateTableCommand
 using System;
 using System.Threading.Tasks;

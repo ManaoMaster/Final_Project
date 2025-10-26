@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper; // เพิ่ม: ถ้าใช้ AutoMapper ใน API
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ProjectHub.Application.DTOs; // เพิ่ม: สำหรับ Response DTO
+using ProjectHub.Application.Dtos;
 using ProjectHub.Application.Features.Columns.CreateColumn; // เพิ่ม: สำหรับ Command
 
 namespace ProjectHub.API.Controllers

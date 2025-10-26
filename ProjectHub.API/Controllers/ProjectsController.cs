@@ -2,7 +2,7 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ProjectHub.API.Contracts.Projects;
-using ProjectHub.Application.DTOs;
+using ProjectHub.Application.Dtos;
 using ProjectHub.Application.Features.Projects.CreateProject;
 
 namespace ProjectHub.API.Controllers
