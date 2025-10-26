@@ -1,0 +1,48 @@
+using System.Linq; // เพิ่ม using นี้สำหรับ .AnyAsync()
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore; // เพิ่ม using นี้สำหรับ EF Core
+using ProjectHub.Application.Repositories; // ใช้ Interface
+using ProjectHub.Domain.Entities;         // ใช้ Entity Columns
+using ProjectHub.Infrastructure.Persistence; // ใช้ DbContext
+
+namespace ProjectHub.Infrastructure.Repositories
+{
+    // ต้อง Implement IColumnRepository
+    public class ColumnRepository : IColumnRepository
+    {
+        private readonly AppDbContext _context;
+
+        public ColumnRepository(AppDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<bool> IsColumnNameUniqueForTableAsync(int tableId, string columnName)
+        {
+            // ใช้ EF Core query กับ DbContext เพื่อเช็คชื่อซ้ำใน Table เดียวกัน
+            return await _context.Columns
+                .AnyAsync(c => c.Table_id == tableId && c.Name == columnName);
+        }
+
+        public async Task<bool> HasPrimaryKeyAsync(int tableId)
+        {
+            // ใช้ EF Core query เพื่อเช็คว่ามี Column ไหนใน Table นี้ที่เป็น Primary Key แล้ว
+            return await _context.Columns
+                .AnyAsync(c => c.Table_id == tableId && c.Is_primary == true);
+        }
+
+        public async Task AddColumnAsync(Columns column)
+        {
+            // เพิ่ม Column ใหม่เข้า DbContext
+            await _context.Columns.AddAsync(column);
+            // บันทึกการเปลี่ยนแปลงลง Database
+            await _context.SaveChangesAsync();
+        }
+
+        // GetColumnByIdAsync (อาจจะไม่จำเป็นสำหรับ Create แต่ใส่ไว้เผื่ออนาคต)
+        public async Task<Columns?> GetColumnByIdAsync(int columnId)
+        {
+            return await _context.Columns.FindAsync(columnId);
+        }
+    }
+}

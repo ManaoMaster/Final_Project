@@ -7,7 +7,7 @@ using ProjectHub.Application.Features.Projects.CreateProject;
 using ProjectHub.Application.Features.Tables.CreateTable;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using ProjectHub.API.Contracts.Columns;
-using ProjectHub.Application.Features.Cplumns.CreateColumn;
+using ProjectHub.Application.Features.Columns.CreateColumn;
 
 namespace ProjectHub.API.Mapping
 {
