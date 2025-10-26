@@ -2,6 +2,7 @@ using System.Reflection;
 using AutoMapper;
 using MediatR; // สำหรับ AddMediatR
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using ProjectHub.API.Mapping; // ApiMappingProfile
 // --- เพิ่ม Using Statements ที่จำเป็น ---
@@ -10,6 +11,7 @@ using ProjectHub.Application.Mapping; // ProjectProfile, UserProfile
 using ProjectHub.Application.Repositories; // สำหรับ IUserRepository
 using ProjectHub.Infrastructure.Persistence;
 using ProjectHub.Infrastructure.Repositories; // สำหรับ UserRepository
+
 
 // (ลบ using MediatR; ที่ซ้ำซ้อนออก 1 บรรทัด เพื่อแก้ Warning CS0105)
 
@@ -45,7 +47,7 @@ builder.Services.AddMediatR(cfg =>
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITableRepository, TableRepository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>(); // (Comment ไว้ก่อน ถ้ายังไม่สร้าง)
-
+builder.Services.AddScoped<IColumnRepository, ColumnRepository>();
 // --- 4. ลงทะเบียน Controllers (ที่คุณมีอยู่แล้ว) ---
 builder.Services.AddControllers();
 

@@ -5,6 +5,9 @@ using ProjectHub.API.Contracts.Tables;
 using ProjectHub.Application.Features.Users.Register;
 using ProjectHub.Application.Features.Projects.CreateProject;
 using ProjectHub.Application.Features.Tables.CreateTable;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using ProjectHub.API.Contracts.Columns;
+using ProjectHub.Application.Features.Cplumns.CreateColumn;
 
 namespace ProjectHub.API.Mapping
 {
@@ -20,6 +23,8 @@ namespace ProjectHub.API.Mapping
 
             // API -> Appliation (Tables)
             CreateMap<CreateTableRequest, CreateTableCommand>();
+
+            CreateMap<CreateColumnRequest, CreateColumnCommand>();
         }
 
 
