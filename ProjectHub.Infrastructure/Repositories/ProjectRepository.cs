@@ -43,5 +43,11 @@ namespace ProjectHub.Infrastructure.Repositories
             // .Include(p => p.Tables)
             .FirstOrDefaultAsync(p => p.Project_id == projectId);
         }
+
+        public async Task UpdateProjectAsync(Projects project)
+        {
+            _context.Projects.Update(project);
+            await _context.SaveChangesAsync();
+        }
     }
 }

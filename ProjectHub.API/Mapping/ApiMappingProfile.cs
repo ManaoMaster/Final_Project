@@ -8,6 +8,7 @@ using ProjectHub.API.Contracts.Users;
 using ProjectHub.API.Controllers;
 using ProjectHub.Application.Features.Columns.CreateColumn;
 using ProjectHub.Application.Features.Projects.CreateProject;
+using ProjectHub.Application.Features.Projects.EditProject;
 using ProjectHub.Application.Features.Rows.CreateRow;
 using ProjectHub.Application.Features.Tables.CreateTable;
 using ProjectHub.Application.Features.Users.Register;
@@ -30,6 +31,8 @@ namespace ProjectHub.API.Mapping
             CreateMap<CreateColumnRequest, CreateColumnCommand>();
 
             CreateMap<CreateRowRequest, CreateRowCommand>();
+
+            CreateMap<EditProjectRequest, EditProjectCommand>();
         }
     }
 }

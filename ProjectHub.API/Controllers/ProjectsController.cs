@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using ProjectHub.API.Contracts.Projects;
 using ProjectHub.Application.Dtos;
 using ProjectHub.Application.Features.Projects.CreateProject;
+using ProjectHub.Application.Features.Projects.EditProject;
 
 namespace ProjectHub.API.Controllers
 {
@@ -35,6 +36,14 @@ namespace ProjectHub.API.Controllers
 
             // ไม่มี GetById ก็ใช้ Created + Location ตรงๆได้
             return Created($"/api/projects/{result.ProjectId}", result);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> EditProject([FromBody] EditProjectRequest request, CancellationToken ct)
+        {
+            var command = _mapper.Map<EditProjectCommand>(request);
+            var result = await _mediator.Send(command, ct);
+            return Ok(result);
         }
     }
 }
