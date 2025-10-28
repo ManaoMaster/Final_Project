@@ -1,5 +1,5 @@
-using ProjectHub.Domain.Entities; // ใช้ Entity Columns
 using System.Threading.Tasks;
+using ProjectHub.Domain.Entities; // ใช้ Entity Columns
 
 namespace ProjectHub.Application.Interfaces // ต้องใช้ Namespace นี้
 {
@@ -25,5 +25,10 @@ namespace ProjectHub.Application.Interfaces // ต้องใช้ Namespace �
         // Input: ID ของ Column ที่ต้องการ
         // Output: Object Columns หรือ null ถ้าไม่เจอ
         Task<Columns?> GetColumnByIdAsync(int columnId); // <--- Return type แก้ไขแล้ว
+
+        // สัญญาข้อที่ 5 (Optional): ดึงข้อมูล Column ตาม ID ของ Table
+        // Input: ID ของ Table ที่ต้องการ
+        // Output: List ของ Object Columns หรือ null ถ้าไม่เจอ
+        Task<IEnumerable<Columns>> GetColumnsByTableIdAsync(int tableId);
     }
 }

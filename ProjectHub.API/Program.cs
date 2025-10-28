@@ -20,7 +20,8 @@ using System.Security.Claims;
 using System.Text;
 
 // LOGGING: ADDED
-using Microsoft.IdentityModel.Logging; // เปิดรายละเอียด error ของ JWT ตอน DEV
+using Microsoft.IdentityModel.Logging;
+using ProjectHub.Application.Repositories; // เปิดรายละเอียด error ของ JWT ตอน DEV
 
 // (ลบ using MediatR; ที่ซ้ำซ้อนออก 1 บรรทัด เพื่อแก้ Warning CS0105)
 
@@ -57,6 +58,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITableRepository, TableRepository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>(); // (Comment ไว้ก่อน ถ้ายังไม่สร้าง)
 builder.Services.AddScoped<IColumnRepository, ColumnRepository>();
+builder.Services.AddScoped<IRowRepository, RowRepository>();
 
 // --- 4. ลงทะเบียน Controllers (ที่คุณมีอยู่แล้ว) ---
 builder.Services.AddControllers();
@@ -99,7 +101,7 @@ builder.Services
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)),
 
             // ช่วยให้ validate หมดอายุตรงเป๊ะ (ไม่มี +5 นาที)
             ClockSkew = TimeSpan.Zero,

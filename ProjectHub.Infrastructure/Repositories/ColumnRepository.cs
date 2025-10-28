@@ -44,5 +44,16 @@ namespace ProjectHub.Infrastructure.Repositories
         {
             return await _context.Columns.FindAsync(columnId);
         }
+
+        // --- เพิ่ม Implementation ของ GetColumnsByTableIdAsync ---
+        // Implement การดึง Columns ทั้งหมดของ Table (สำหรับ Validate JSON ใน CreateRowHandler)
+        public async Task<IEnumerable<Columns>> GetColumnsByTableIdAsync(int tableId)
+        {
+            // ใช้ Where เพื่อกรอง Columns ที่มี Table_id ตรงกัน
+            // ToListAsync เพื่อดึงข้อมูลทั้งหมดมาเป็น List ใน Memory
+            return await _context.Columns
+                                 .Where(c => c.Table_id == tableId)
+                                 .ToListAsync();
+        }
     }
 }

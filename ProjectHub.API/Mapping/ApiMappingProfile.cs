@@ -1,13 +1,16 @@
 ﻿using AutoMapper;
-using ProjectHub.API.Contracts.Users;
-using ProjectHub.API.Contracts.Projects;
-using ProjectHub.API.Contracts.Tables;
-using ProjectHub.Application.Features.Users.Register;
-using ProjectHub.Application.Features.Projects.CreateProject;
-using ProjectHub.Application.Features.Tables.CreateTable;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using ProjectHub.API.Contracts.Columns;
+using ProjectHub.API.Contracts.Projects;
+using ProjectHub.API.Contracts.Rows;
+using ProjectHub.API.Contracts.Tables;
+using ProjectHub.API.Contracts.Users;
+using ProjectHub.API.Controllers;
 using ProjectHub.Application.Features.Columns.CreateColumn;
+using ProjectHub.Application.Features.Projects.CreateProject;
+using ProjectHub.Application.Features.Rows.CreateRow;
+using ProjectHub.Application.Features.Tables.CreateTable;
+using ProjectHub.Application.Features.Users.Register;
 
 namespace ProjectHub.API.Mapping
 {
@@ -25,8 +28,8 @@ namespace ProjectHub.API.Mapping
             CreateMap<CreateTableRequest, CreateTableCommand>();
 
             CreateMap<CreateColumnRequest, CreateColumnCommand>();
+
+            CreateMap<CreateRowRequest, CreateRowCommand>();
         }
-
-
     }
 }

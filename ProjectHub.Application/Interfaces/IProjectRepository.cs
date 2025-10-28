@@ -13,5 +13,7 @@ namespace ProjectHub.Application.Interfaces // ต้องใช้ Namespace �
         Task AddProjectAsync(Projects project);
 
         Task<Projects?> GetProjectByIdAsync(int projectId); // คืนค่า Project หรือ null ถ้าไม่เจอ
+
+        
     }
 }
