@@ -44,7 +44,7 @@ namespace ProjectHub.Infrastructure.Repositories
             .FirstOrDefaultAsync(p => p.Project_id == projectId);
         }
 
-        public async Task UpdateProjectAsync(Projects project)
+        public async Task EditProjectAsync(Projects project)
         {
             _context.Projects.Update(project);
             await _context.SaveChangesAsync();

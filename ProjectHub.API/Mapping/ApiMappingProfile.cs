@@ -9,9 +9,10 @@ using ProjectHub.API.Controllers;
 using ProjectHub.Application.Features.Columns.CreateColumn;
 using ProjectHub.Application.Features.Projects.CreateProject;
 using ProjectHub.Application.Features.Projects.DeleteProject;
-using ProjectHub.Application.Features.Projects.EditProject;
+using ProjectHub.Application.Features.Projects.UpdateProject;
 using ProjectHub.Application.Features.Rows.CreateRow;
 using ProjectHub.Application.Features.Tables.CreateTable;
+using ProjectHub.Application.Features.Tables.UpdateTable;
 using ProjectHub.Application.Features.Users.Register;
 
 namespace ProjectHub.API.Mapping
@@ -33,9 +34,11 @@ namespace ProjectHub.API.Mapping
 
             CreateMap<CreateRowRequest, CreateRowCommand>();
 
-            CreateMap<EditProjectRequest, EditProjectCommand>();
+            CreateMap<UpdateProjectRequest, UpdateProjectCommand>();
 
             CreateMap<DeleteProjectRequest, DeleteProjectCommand>();
+
+            CreateMap<UpdateTableRequest, UpdateTableCommand>();
         }
     }
 }

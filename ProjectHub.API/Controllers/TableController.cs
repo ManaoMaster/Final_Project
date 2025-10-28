@@ -1,9 +1,12 @@
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
-using ProjectHub.Application.Dtos; // TableResponseDto
-using ProjectHub.Application.Features.Tables.CreateTable; // CreateTableCommand
 using System;
 using System.Threading.Tasks;
+using AutoMapper;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using ProjectHub.API.Contracts.Tables;
+using ProjectHub.Application.Dtos; // TableResponseDto
+using ProjectHub.Application.Features.Tables.CreateTable;
+using ProjectHub.Application.Features.Tables.UpdateTable; // CreateTableCommand
 
 namespace ProjectHub.API.Controllers
 {
@@ -12,15 +15,15 @@ namespace ProjectHub.API.Controllers
     public class TablesController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IMapper _mapper; // เพิ่ม: ถ้าใช้ AutoMapper
 
-        // Inject MediatR
-        public TablesController(IMediator mediator)
+        public TablesController(IMediator mediator, IMapper mapper)
         {
             _mediator = mediator;
+            _mapper = mapper; // เพิ่ม
         }
 
         // DTO สำหรับรับ Input จาก Client (ควรอยู่ใน Contracts แต่ใช้ record ที่นี่เพื่อความง่าย)
-        public record CreateTableRequest(int ProjectId, string Name);
 
         // POST /api/tables
         [HttpPost]
@@ -31,7 +34,7 @@ namespace ProjectHub.API.Controllers
             var command = new CreateTableCommand
             {
                 ProjectId = request.ProjectId,
-                Name = request.Name
+                Name = request.Name,
             };
 
             try
@@ -54,5 +57,29 @@ namespace ProjectHub.API.Controllers
                 return StatusCode(500, new { Error = "An unexpected error occurred." });
             }
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateTable(
+            [FromRoute] int id,
+            [FromBody] UpdateTableRequest request,
+            CancellationToken ct
+        )
+        {
+            var command = _mapper.Map<UpdateTableCommand>(request);
+            command.TableId = id;
+            var result = await _mediator.Send(command, ct);
+            return Ok(result);
+        }
+
+        // [HttpDelete("{id}")]
+        // public async Task<IActionResult> DeleteTable(
+        //     [FromRoute] int id,
+        //     CancellationToken ct
+        // )
+        // {
+        //     var command = new DeleteTableCommand { TableId = id };
+        //     var result = await _mediator.Send(command, ct);
+        //     return Ok(result);
+        // }
     }
 }

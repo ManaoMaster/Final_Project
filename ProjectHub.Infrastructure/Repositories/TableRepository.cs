@@ -32,13 +32,23 @@ namespace ProjectHub.Infrastructure.Repositories
             await _context.SaveChangesAsync(); // บันทึกการเปลี่ยนแปลงลง DB
         }
 
-        // --- เพิ่ม Implementation ของ GetTableByIdAsync ---
-        // Implement การดึง Table ตาม ID (สำหรับ Handler)
         public async Task<Tables?> GetTableByIdAsync(int tableId)
         {
             // ใช้ FindAsync ซึ่งเป็นวิธีที่เร็วที่สุดในการหา Entity ตาม Primary Key
-            // คืนค่า Table object หรือ null ถ้าไม่เจอ ID นั้น
             return await _context.Tables.FindAsync(tableId);
+        }
+
+        // *** เพิ่ม: Implementation ของ UpdateTableAsync ***
+        public async Task EditTableAsync(Tables tableToUpdate)
+        {
+            // เนื่องจาก tableToUpdate ถูกดึงมาจาก Context (ผ่าน GetTableByIdAsync)
+            // EF Core จะ Track การเปลี่ยนแปลง Property (เช่น Name) โดยอัตโนมัติ
+            // เราแค่สั่ง SaveChanges() ก็พอ
+            await _context.SaveChangesAsync();
+
+            // หรือถ้าต้องการความชัดเจน (เผื่อ Entity ไม่ได้ถูก Track)
+            // _context.Tables.Update(tableToUpdate);
+            // await _context.SaveChangesAsync();
         }
     }
 }

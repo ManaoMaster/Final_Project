@@ -2,7 +2,7 @@
 using ProjectHub.Application.Dtos;
 using ProjectHub.Application.Features.Projects.CreateProject;
 using ProjectHub.Application.Features.Projects.DeleteProject;
-using ProjectHub.Application.Features.Projects.EditProject;
+using ProjectHub.Application.Features.Projects.UpdateProject;
 using ProjectHub.Domain.Entities;
 
 namespace ProjectHub.Application.Mapping
@@ -28,7 +28,7 @@ namespace ProjectHub.Application.Mapping
                 .ForMember(d => d.Tables, m => m.Ignore())
                 .ForMember(d => d.Users, m => m.Ignore()); // <-- เพิ่ม Users ด้วย (ถ้ามี)
 
-            CreateMap<EditProjectCommand, Projects>()
+            CreateMap<UpdateProjectCommand, Projects>()
                 .ForMember(d => d.Name, m => m.MapFrom(s => s.NewName))
                 .ForMember(d => d.Project_id, m => m.Ignore())
                 .ForMember(d => d.Created_at, m => m.Ignore())

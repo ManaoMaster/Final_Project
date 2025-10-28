@@ -6,21 +6,22 @@ using MediatR;
 using ProjectHub.Application.Dtos;
 using ProjectHub.Application.Interfaces;
 
-namespace ProjectHub.Application.Features.Projects.EditProject
+namespace ProjectHub.Application.Features.Projects.UpdateProject
 {
-    public class EditProjectHandler : IRequestHandler<EditProjectCommand, ProjectResponseDto>
+    public class UpdateProjectHandler : IRequestHandler<UpdateProjectCommand, ProjectResponseDto>
     {
         private readonly IProjectRepository _projectRepository;
         private readonly IMapper _mapper;
 
-        public EditProjectHandler(IProjectRepository projectRepository, IMapper mapper)
+        public UpdateProjectHandler(IProjectRepository projectRepository, IMapper mapper)
         {
             _projectRepository = projectRepository;
             _mapper = mapper;
         }
 
+
         public async Task<ProjectResponseDto> Handle(
-            EditProjectCommand request,
+            UpdateProjectCommand request,
             CancellationToken cancellationToken
         )
         {
@@ -43,7 +44,7 @@ namespace ProjectHub.Application.Features.Projects.EditProject
             _mapper.Map(request, projectToUpdate);
 
             // 4. เรียก Repository เพื่อบันทึกการเปลี่ยนแปลง
-            await _projectRepository.UpdateProjectAsync(projectToUpdate);
+            await _projectRepository.EditProjectAsync(projectToUpdate);
 
             // 5. Map Entity ที่อัปเดตแล้ว กลับเป็น DTO เพื่อส่งคืน
             var responseDto = _mapper.Map<ProjectResponseDto>(projectToUpdate);

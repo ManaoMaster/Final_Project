@@ -1,11 +1,11 @@
+using System;
+using System.Threading.Tasks;
 using AutoMapper; // เพิ่ม: ถ้าใช้ AutoMapper ใน API
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ProjectHub.API.Contracts.Rows;
 using ProjectHub.Application.Dtos; // เพิ่ม: สำหรับ Response DTO
 using ProjectHub.Application.Features.Rows.CreateRow; // เพิ่ม: สำหรับ Command
-using System;
-using System.Threading.Tasks;
 
 namespace ProjectHub.API.Controllers
 {
@@ -22,6 +22,7 @@ namespace ProjectHub.API.Controllers
             _mediator = mediator;
             _mapper = mapper; // เพิ่ม
         }
+
         // --- Endpoint: POST /api/rows ---
         [HttpPost]
         public async Task<IActionResult> CreateRow([FromBody] CreateRowRequest request)
@@ -51,7 +52,10 @@ namespace ProjectHub.API.Controllers
             {
                 // ควร Log exception ex ไว้ด้วย
                 Console.WriteLine($"Error creating row: {ex}"); // Log ง่ายๆ ไปก่อน
-                return StatusCode(500, new { Error = "An unexpected error occurred while creating the row." });
+                return StatusCode(
+                    500,
+                    new { Error = "An unexpected error occurred while creating the row." }
+                );
             }
         }
 
@@ -62,7 +66,7 @@ namespace ProjectHub.API.Controllers
         //     // สร้าง GetRowByIdQuery และ Handler
         // }
 
-         // --- (Optional) Endpoint: GET /api/tables/{tableId}/rows ---
+        // --- (Optional) Endpoint: GET /api/tables/{tableId}/rows ---
         // [HttpGet("/api/tables/{tableId}/rows")] // Route ที่แตกต่าง
         // public async Task<IActionResult> GetRowsByTableId(int tableId, [FromQuery] int page = 1, [FromQuery] int pageSize = 20)
         // {
@@ -70,4 +74,3 @@ namespace ProjectHub.API.Controllers
         // }
     }
 }
-

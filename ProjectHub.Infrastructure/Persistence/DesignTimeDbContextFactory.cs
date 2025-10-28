@@ -1,7 +1,7 @@
-using System.IO; // เพิ่ม Using นี้
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration; // เพิ่ม Using นี้
+using System.IO; // เพิ่ม Using นี้
 
 namespace ProjectHub.Infrastructure.Persistence;
 
@@ -13,10 +13,7 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppDbConte
 
         // 1. กำหนดค่า Path ไปยัง API Project (ที่ appsettings.json อาศัยอยู่)
         // Path นี้คือการเดินย้อนกลับจาก Infrastructure -> FINAL_PROJECT -> ProjectHub.API
-        string apiProjectPath = Path.Combine(
-            Directory.GetCurrentDirectory(),
-            "../ProjectHub.infrastructure"
-        );
+        string apiProjectPath = Path.Combine(Directory.GetCurrentDirectory(), "../ProjectHub.API");
 
         // 2. อ่าน appsettings.json จาก API Project
         IConfigurationRoot configuration = new ConfigurationBuilder()
@@ -28,7 +25,7 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppDbConte
         var connectionString =
             configuration.GetConnectionString("DefaultConnection")
             // *** ใช้ Fallback Path เดียวกันกับ Program.cs ***
-            ?? "Data Source=../ProjectHub.db";
+            ?? "Data Source=../ProjectHub.db"; 
 
         // 4. สร้าง Options Builder
         var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();

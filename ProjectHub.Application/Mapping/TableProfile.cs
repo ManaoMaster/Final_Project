@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ProjectHub.Application.Dtos;
 using ProjectHub.Application.Features.Tables.CreateTable; // Command
+using ProjectHub.Application.Features.Tables.UpdateTable;
 using ProjectHub.Domain.Entities; // Entity
 
 namespace ProjectHub.Application.Mapping
@@ -20,14 +21,22 @@ namespace ProjectHub.Application.Mapping
             CreateMap<CreateTableCommand, Tables>()
                 .ForMember(d => d.Table_id, m => m.Ignore()) // Database จะสร้างให้
                 .ForMember(d => d.Created_at, m => m.Ignore()) // Entity มี Default
-                // *** แก้ไข: Map จาก UserId ใน Command ไปยัง Project_id ใน Entity ***
+                                                               // *** แก้ไข: Map จาก UserId ใน Command ไปยัง Project_id ใน Entity ***
                 .ForMember(d => d.Project_id, m => m.MapFrom(s => s.ProjectId)) // <-- แก้ไขบรรทัดนี้
                 .ForMember(d => d.Name, m => m.MapFrom(s => s.Name))
                 // *** Ignore Navigation Properties เพื่อความชัดเจน ***
-                .ForMember(d => d.Projects, m => m.Ignore()) 
-                .ForMember(d => d.Columns, m => m.Ignore()) 
-                .ForMember(d => d.Rows, m => m.Ignore()); 
+                .ForMember(d => d.Projects, m => m.Ignore())
+                .ForMember(d => d.Columns, m => m.Ignore())
+                .ForMember(d => d.Rows, m => m.Ignore());
+                
+            CreateMap<UpdateTableCommand, Tables>()
+                .ForMember(d => d.Name, m => m.MapFrom(s => s.NewName))
+                .ForMember(d => d.Table_id, m => m.Ignore())
+                .ForMember(d => d.Created_at, m => m.Ignore())
+                // *** Ignore Navigation Properties เพื่อความชัดเจน ***
+                .ForMember(d => d.Projects, m => m.Ignore())
+                .ForMember(d => d.Columns, m => m.Ignore())
+                .ForMember(d => d.Rows, m => m.Ignore());
         }
     }
 }
-
