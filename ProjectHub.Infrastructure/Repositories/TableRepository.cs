@@ -50,5 +50,10 @@ namespace ProjectHub.Infrastructure.Repositories
             // _context.Tables.Update(tableToUpdate);
             // await _context.SaveChangesAsync();
         }
+        public async Task DeleteTableAsync(Tables table)
+        {
+            _context.Tables.Remove(table);
+            await _context.SaveChangesAsync();
+        }
     }
 }

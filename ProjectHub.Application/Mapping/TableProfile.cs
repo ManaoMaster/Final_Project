@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ProjectHub.Application.Dtos;
 using ProjectHub.Application.Features.Tables.CreateTable; // Command
+using ProjectHub.Application.Features.Tables.DeleteTable;
 using ProjectHub.Application.Features.Tables.UpdateTable;
 using ProjectHub.Domain.Entities; // Entity
 
@@ -28,9 +29,16 @@ namespace ProjectHub.Application.Mapping
                 .ForMember(d => d.Projects, m => m.Ignore())
                 .ForMember(d => d.Columns, m => m.Ignore())
                 .ForMember(d => d.Rows, m => m.Ignore());
-                
+
             CreateMap<UpdateTableCommand, Tables>()
                 .ForMember(d => d.Name, m => m.MapFrom(s => s.NewName))
+                .ForMember(d => d.Table_id, m => m.Ignore())
+                .ForMember(d => d.Created_at, m => m.Ignore())
+                // *** Ignore Navigation Properties เพื่อความชัดเจน ***
+                .ForMember(d => d.Projects, m => m.Ignore())
+                .ForMember(d => d.Columns, m => m.Ignore())
+                .ForMember(d => d.Rows, m => m.Ignore());
+            CreateMap<DeleteTableCommand, Tables>()
                 .ForMember(d => d.Table_id, m => m.Ignore())
                 .ForMember(d => d.Created_at, m => m.Ignore())
                 // *** Ignore Navigation Properties เพื่อความชัดเจน ***

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using ProjectHub.API.Contracts.Tables;
 using ProjectHub.Application.Dtos; // TableResponseDto
 using ProjectHub.Application.Features.Tables.CreateTable;
+using ProjectHub.Application.Features.Tables.DeleteTable;
 using ProjectHub.Application.Features.Tables.UpdateTable; // CreateTableCommand
 
 namespace ProjectHub.API.Controllers
@@ -71,15 +72,38 @@ namespace ProjectHub.API.Controllers
             return Ok(result);
         }
 
-        // [HttpDelete("{id}")]
-        // public async Task<IActionResult> DeleteTable(
-        //     [FromRoute] int id,
-        //     CancellationToken ct
-        // )
-        // {
-        //     var command = new DeleteTableCommand { TableId = id };
-        //     var result = await _mediator.Send(command, ct);
-        //     return Ok(result);
-        // }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTable(
+            // [FromRoute]: ดึงค่า Parameter 'id' มาจาก URL Path ({id})
+            [FromRoute] int id,
+            CancellationToken ct
+        )
+        {
+            // --- สร้าง Command ---
+            // สร้าง Delete Command โดยตรง พร้อมกำหนด ID ที่จะลบ
+            var command = new DeleteTableCommand { TableId = id };
+
+            try
+            {
+                // --- Logic Execution ---
+                // ส่ง Command ไปให้ MediatR
+                // Handler (DeleteProjectHandler) จะทำงาน, ดึงข้อมูล, สั่งลบ
+                // (คืนค่า Unit.Value เพราะไม่มีข้อมูลส่งกลับ)
+                await _mediator.Send(command, ct);
+
+                // --- Response ---
+                // คืนค่า 204 No Content = สำเร็จ แต่ไม่มีข้อมูลส่งกลับ
+                return NoContent();
+            }
+            catch (ArgumentException ex) // จับ Error จาก Handler (เช่น ไม่เจอ Project ID)
+            {
+                return NotFound(new { Error = ex.Message }); // คืน 404 Not Found
+            }
+            catch (Exception ex) // จับ Error อื่นๆ
+            {
+                // ควร Log ex
+                return StatusCode(500, new { Error = "An unexpected error occurred." }); // คืน 500
+            }
+        }
     }
 }

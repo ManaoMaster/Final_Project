@@ -14,5 +14,7 @@ namespace ProjectHub.Application.Interfaces // ต้องใช้ Namespace �
 
         Task<Tables?> GetTableByIdAsync(int tableId);
         Task EditTableAsync(Tables tableToUpdate);
+
+        Task DeleteTableAsync(Tables tableToDelete);
     }
 }
