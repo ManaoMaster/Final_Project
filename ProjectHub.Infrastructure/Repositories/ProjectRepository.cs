@@ -49,5 +49,11 @@ namespace ProjectHub.Infrastructure.Repositories
             _context.Projects.Update(project);
             await _context.SaveChangesAsync();
         }
+
+        public async Task DeleteProjectAsync(Projects project)
+        {
+            _context.Projects.Remove(project);
+            await _context.SaveChangesAsync();
+        }
     }
 }

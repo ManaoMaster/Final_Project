@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ProjectHub.Application.Dtos;
 using ProjectHub.Application.Features.Projects.CreateProject;
+using ProjectHub.Application.Features.Projects.DeleteProject;
 using ProjectHub.Application.Features.Projects.EditProject;
 using ProjectHub.Domain.Entities;
 
@@ -29,6 +30,13 @@ namespace ProjectHub.Application.Mapping
 
             CreateMap<EditProjectCommand, Projects>()
                 .ForMember(d => d.Name, m => m.MapFrom(s => s.NewName))
+                .ForMember(d => d.Project_id, m => m.Ignore())
+                .ForMember(d => d.Created_at, m => m.Ignore())
+                // *** เพิ่ม: Ignore Navigation Property เพื่อความชัดเจนและป้องกันปัญหา ***
+                .ForMember(d => d.Tables, m => m.Ignore())
+                .ForMember(d => d.Users, m => m.Ignore());
+
+            CreateMap<DeleteProjectCommand, Projects>()
                 .ForMember(d => d.Project_id, m => m.Ignore())
                 .ForMember(d => d.Created_at, m => m.Ignore())
                 // *** เพิ่ม: Ignore Navigation Property เพื่อความชัดเจนและป้องกันปัญหา ***
