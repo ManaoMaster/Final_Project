@@ -41,7 +41,6 @@ namespace ProjectHub.API.Mapping
 
             CreateMap<UpdateTableRequest, UpdateTableCommand>();
 
-            CreateMap<DeleteColumnCommand, DeleteColumnRequest>();
         }
     }
 }
