@@ -1,6 +1,7 @@
 using AutoMapper;
 using ProjectHub.Application.Dtos; // ใช้ DTO
 using ProjectHub.Application.Features.Rows.CreateRow; // ใช้ Command
+using ProjectHub.Application.Features.Rows.UpdateRow;
 using ProjectHub.Domain.Entities; // ใช้ Entity
 
 namespace ProjectHub.Application.Mapping
@@ -24,7 +25,12 @@ namespace ProjectHub.Application.Mapping
                 .ForMember(d => d.Data, m => m.MapFrom(s => s.Data)) // ชื่อตรงกัน
                 // *** เพิ่ม: Ignore Navigation Property เพื่อความชัดเจน ***
                 .ForMember(d => d.Table, m => m.Ignore()); // Ignore Navigation Property 'Table'
+
+            CreateMap<UpdateRowCommand, Rows>()
+                .ForMember(d => d.Row_id, m => m.Ignore())
+                .ForMember(d => d.Created_at, m => m.Ignore())
+                .ForMember(d => d.Table_id, m => m.Ignore())
+                .ForMember(d => d.Data, m => m.MapFrom(s => s.NewData));
         }
     }
 }
-

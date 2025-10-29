@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text.Json; // สำหรับ JSON Validation
 using System.Threading;
 using System.Threading.Tasks;
+using ProjectHub.Application.Validation;
 
 // ใช้ Alias ป้องกัน Namespace Collision กับ Features.Columns
 using ColumnEntity = ProjectHub.Domain.Entities.Columns;
@@ -58,7 +59,7 @@ namespace ProjectHub.Application.Features.Rows.CreateRow
             // --- 3. Validate JSON Data ---
             try
             {
-                ValidateJsonDataAgainstSchema(request.Data, columnsSchema);
+                JsonDataValidator.Validate(request.Data, columnsSchema.ToList());
             }
             catch (JsonException jsonEx)
             {
@@ -87,76 +88,7 @@ namespace ProjectHub.Application.Features.Rows.CreateRow
         }
 
         // --- Helper Method for JSON Validation ---
-        private void ValidateJsonDataAgainstSchema(string jsonDataString, IEnumerable<ColumnEntity> schema)
-        {
-            if (string.IsNullOrWhiteSpace(jsonDataString))
-            {
-                throw new ArgumentException("Row data (JSON) cannot be empty.");
-            }
-
-            using JsonDocument jsonData = JsonDocument.Parse(jsonDataString);
-            var root = jsonData.RootElement;
-
-            if (root.ValueKind != JsonValueKind.Object)
-            {
-                throw new ArgumentException("Row data must be a JSON object.");
-            }
-
-            // เก็บชื่อ Property ที่เจอใน JSON เพื่อเช็ค Key เกิน
-            var jsonPropertiesPresent = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-
-            // วน Loop ผ่าน Properties ใน JSON ที่ Client ส่งมา
-            foreach (var jsonProperty in root.EnumerateObject())
-            {
-                jsonPropertiesPresent.Add(jsonProperty.Name);
-
-                // หา Column ที่ตรงกับชื่อ Property ใน Schema (ไม่สนตัวพิมพ์เล็ก/ใหญ่)
-                var columnDefinition = schema.FirstOrDefault(c => c.Name.Equals(jsonProperty.Name, StringComparison.OrdinalIgnoreCase));
-
-                // 1. เช็ค Key เกิน: ถ้า Property ใน JSON ไม่มีใน Schema
-                if (columnDefinition == null)
-                {
-                    throw new ArgumentException($"Invalid column name '{jsonProperty.Name}' found in JSON data. It does not exist in the table schema.");
-                }
-
-                var valueElement = jsonProperty.Value;
-
-                // 2. เช็ค Null: ถ้า Value เป็น null แต่ Schema ไม่อนุญาต
-                if (valueElement.ValueKind == JsonValueKind.Null && !columnDefinition.Is_nullable)
-                {
-                    throw new ArgumentException($"Column '{columnDefinition.Name}' cannot be null.");
-                }
-
-                // 3. เช็ค Data Type (ถ้าไม่ Null)
-                if (valueElement.ValueKind != JsonValueKind.Null)
-                {
-                    bool typeMatch = columnDefinition.Data_type.ToUpperInvariant() switch
-                    {
-                        // คุณอาจต้องปรับแก้ Type String เหล่านี้ให้ตรงกับที่คุณใช้
-                        "TEXT" => valueElement.ValueKind == JsonValueKind.String,
-                        "INTEGER" => valueElement.ValueKind == JsonValueKind.Number && valueElement.TryGetInt64(out _),
-                        "REAL" => valueElement.ValueKind == JsonValueKind.Number, // Number covers Int & Float/Double
-                        "BOOLEAN" => valueElement.ValueKind == JsonValueKind.True || valueElement.ValueKind == JsonValueKind.False,
-                        // เพิ่ม Type อื่นๆ เช่น "DATE", "DATETIME" และ Logic การ Parse/Validate
-                        _ => throw new ArgumentException($"Unsupported data type '{columnDefinition.Data_type}' defined in schema for column '{columnDefinition.Name}'.") // หรือจะ Skip การเช็ค Type ที่ไม่รู้จัก
-                    };
-
-                    if (!typeMatch)
-                    {
-                        throw new ArgumentException($"Invalid data type for column '{columnDefinition.Name}'. Expected '{columnDefinition.Data_type}' but received '{valueElement.ValueKind}'.");
-                    }
-                }
-            }
-
-            // 4. เช็ค Key ขาด: วน Loop ผ่าน Schema เพื่อดูว่ามี Column ไหนที่จำเป็น (Not Nullable) แต่ไม่มีใน JSON หรือไม่
-            foreach (var column in schema)
-            {
-                if (!column.Is_nullable && !jsonPropertiesPresent.Contains(column.Name))
-                {
-                    throw new ArgumentException($"Required column '{column.Name}' is missing from JSON data.");
-                }
-            }
-        }
+      
     }
 }
 

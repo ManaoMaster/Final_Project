@@ -90,7 +90,7 @@ namespace ProjectHub.API.Controllers
         // มาที่ Route /api/projects/{id} (เช่น /api/projects/5)
         [HttpPut("{id}")]
         // IActionResult: ระบุว่าคืนค่า HTTP Status Code (อาจมี Body หรือไม่มีก็ได้)
-        public async Task<IActionResult> EditProject(
+        public async Task<IActionResult> UpdateProject(
             // [FromRoute]: บอกให้ดึงค่า Parameter 'id' มาจาก URL Path ({id})
             [FromRoute] int id,
             // [FromBody]: บอกให้ดึงข้อมูลใหม่ (NewName) มาจาก Request Body (JSON)

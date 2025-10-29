@@ -1,7 +1,7 @@
+using System.Threading.Tasks; // ใช้ Task
 using ProjectHub.Application.Repositories; // ใช้ Interface จาก Application
-using ProjectHub.Domain.Entities;         // ใช้ Entity Rows
+using ProjectHub.Domain.Entities; // ใช้ Entity Rows
 using ProjectHub.Infrastructure.Persistence; // ใช้ AppDbContext
-using System.Threading.Tasks;             // ใช้ Task
 
 namespace ProjectHub.Infrastructure.Repositories
 {
@@ -26,9 +26,19 @@ namespace ProjectHub.Infrastructure.Repositories
 
         // --- (Implement เมธอดอื่นๆ ของ IRowRepository ที่อาจมีในอนาคต) ---
         // public async Task<IEnumerable<Rows>> GetRowsByTableIdAsync(int tableId) { ... }
-        // public async Task<Rows?> GetRowByIdAsync(int rowId) { ... }
-        // public async Task UpdateRowAsync(Rows row) { ... }
+        public async Task<Rows?> GetRowByIdAsync(int rowId)
+        {
+            // ใช้ FindAsync ซึ่งเป็นวิธีที่เร็วที่สุดในการหา Entity ตาม Primary Key
+            return await _context.Rows.FindAsync(rowId);
+        }
+
+        public async Task UpdateRowAsync(Rows row)
+        {
+            // ใช้ EF Core เพื่ออัปเดต Entity Rows ใน DbContext
+            _context.Rows.Update(row);
+            // บันทึกการเปลี่ยนแปลงลง Database จริง
+            await _context.SaveChangesAsync();
+        }
         // public async Task DeleteRowAsync(int rowId) { ... }
     }
 }
-

@@ -12,6 +12,7 @@ using ProjectHub.Application.Features.Projects.CreateProject;
 using ProjectHub.Application.Features.Projects.DeleteProject;
 using ProjectHub.Application.Features.Projects.UpdateProject;
 using ProjectHub.Application.Features.Rows.CreateRow;
+using ProjectHub.Application.Features.Rows.UpdateRow;
 using ProjectHub.Application.Features.Tables.CreateTable;
 using ProjectHub.Application.Features.Tables.UpdateTable;
 using ProjectHub.Application.Features.Users.Register;
@@ -40,6 +41,8 @@ namespace ProjectHub.API.Mapping
             CreateMap<DeleteProjectRequest, DeleteProjectCommand>();
 
             CreateMap<UpdateTableRequest, UpdateTableCommand>();
+
+            CreateMap<UpdateRowRequest, UpdateRowCommand>();
 
         }
     }

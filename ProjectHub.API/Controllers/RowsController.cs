@@ -5,7 +5,8 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ProjectHub.API.Contracts.Rows;
 using ProjectHub.Application.Dtos; // เพิ่ม: สำหรับ Response DTO
-using ProjectHub.Application.Features.Rows.CreateRow; // เพิ่ม: สำหรับ Command
+using ProjectHub.Application.Features.Rows.CreateRow;
+using ProjectHub.Application.Features.Rows.UpdateRow; // เพิ่ม: สำหรับ Command
 
 namespace ProjectHub.API.Controllers
 {
@@ -58,19 +59,51 @@ namespace ProjectHub.API.Controllers
                 );
             }
         }
+        [HttpPut("{id}")]
+        // IActionResult: ระบุว่าคืนค่า HTTP Status Code (อาจมี Body หรือไม่มีก็ได้)
+        public async Task<IActionResult> UpdateRow(
+            // [FromRoute]: บอกให้ดึงค่า Parameter 'id' มาจาก URL Path ({id})
+            [FromRoute] int id,
+            // [FromBody]: บอกให้ดึงข้อมูลใหม่ (NewName) มาจาก Request Body (JSON)
+            [FromBody] UpdateRowRequest request,
+            CancellationToken ct
+        )
+        {
+            // --- Mapping: Request -> Command ---
+            // ใช้ AutoMapper แปลงข้อมูลจาก API Request (EditProjectRequest)
+            // ไปเป็น Application Command (EditProjectCommand)
+            var command = _mapper.Map<UpdateRowCommand>(request);
 
-        // --- (Optional) Endpoint: GET /api/rows/{id} ---
-        // [HttpGet("{id}")]
-        // public async Task<IActionResult> GetRowById(int id)
-        // {
-        //     // สร้าง GetRowByIdQuery และ Handler
-        // }
+            // *** สำคัญ: กำหนด ID ที่จะแก้ไข ให้กับ Command ***
+            // ID มาจาก URL Path ไม่ใช่ Request Body
+            command.RowId = id;
 
-        // --- (Optional) Endpoint: GET /api/tables/{tableId}/rows ---
-        // [HttpGet("/api/tables/{tableId}/rows")] // Route ที่แตกต่าง
-        // public async Task<IActionResult> GetRowsByTableId(int tableId, [FromQuery] int page = 1, [FromQuery] int pageSize = 20)
-        // {
-        //     // สร้าง GetRowsByTableIdQuery และ Handler (พร้อม Pagination)
-        // }
+            try
+            {
+                // --- Logic Execution ---
+                // ส่ง Command ไปให้ MediatR
+                // Handler (EditProjectHandler) จะทำงาน, ดึงข้อมูล, แก้ไข, บันทึก
+                // และคืนค่า DTO ที่อัปเดตแล้วกลับมา
+                RowResponseDto updatedDto = await _mediator.Send(command, ct);
+
+                // --- Response ---
+                // คืนค่า 200 OK พร้อมข้อมูล Project ที่อัปเดตแล้ว
+                return Ok(updatedDto);
+            }
+            catch (ArgumentException ex) // จับ Error จาก Handler (เช่น ไม่เจอ Project ID)
+            {
+                return NotFound(new { Error = ex.Message }); // คืน 404 Not Found
+            }
+            catch (Exception ex) // จับ Error อื่นๆ
+            {
+                // ควร Log ex
+                return StatusCode(500, new { Error = "An unexpected error occurred." }); // คืน 500
+            }
+        }
+
+
+
+
+
     }
 }

@@ -1,5 +1,5 @@
-using ProjectHub.Domain.Entities; // ใช้ Entity Rows
 using System.Threading.Tasks;
+using ProjectHub.Domain.Entities; // ใช้ Entity Rows
 
 namespace ProjectHub.Application.Repositories
 {
@@ -10,12 +10,12 @@ namespace ProjectHub.Application.Repositories
         // Input: Object Rows ที่สร้างเสร็จแล้ว (จาก Handler)
         // Output: ไม่มี (Task เฉยๆ)
         Task AddRowAsync(Rows row);
+        Task<Rows?> GetRowByIdAsync(int rowId);
 
+        Task UpdateRowAsync(Rows row);
         // --- (เมธอดอื่นๆ ที่อาจจะเพิ่มในอนาคต) ---
         // Task<IEnumerable<Rows>> GetRowsByTableIdAsync(int tableId);
-        // Task<Rows?> GetRowByIdAsync(int rowId);
-        // Task UpdateRowAsync(Rows row);
+
         // Task DeleteRowAsync(int rowId);
     }
 }
-
