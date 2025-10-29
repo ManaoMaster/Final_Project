@@ -1,11 +1,13 @@
-using System;
+using System; // For ArgumentException
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using ProjectHub.Application.Interfaces;
+using ProjectHub.Application.Repositories;
 
 namespace ProjectHub.Application.Features.Projects.DeleteProject
 {
+    // Handler for DeleteProjectCommand, returns Unit (nothing)
     public class DeleteProjectHandler : IRequestHandler<DeleteProjectCommand, Unit>
     {
         private readonly IProjectRepository _projectRepository;
@@ -20,23 +22,19 @@ namespace ProjectHub.Application.Features.Projects.DeleteProject
             CancellationToken cancellationToken
         )
         {
-            // 1. ดึงข้อมูล Project ที่ต้องการลบ
-            var projectToDelete = await _projectRepository.GetProjectByIdAsync(request.ProjectId);
-
-            // 2. ตรวจสอบว่าเจอหรือไม่
-            if (projectToDelete == null)
+            // Optional but recommended: Check if the project exists before deleting
+            // This provides a clearer error message than letting the repository handle it silently
+            var projectExists = await _projectRepository.GetProjectByIdAsync(request.ProjectId);
+            if (projectExists == null)
             {
                 throw new ArgumentException($"Project with ID {request.ProjectId} not found.");
-                // หรือใช้ NotFoundException
+                // Or use a custom NotFoundException
             }
 
-            // (Optional) ตรวจสอบ Business Rule อื่นๆ ก่อนลบได้
-            // เช่น เช็คว่า User ที่ขอลบ เป็นเจ้าของ Project หรือไม่ (ถ้ามีระบบ Auth)
+            // Call the repository to delete the project by ID
+            await _projectRepository.DeleteProjectAsync(request.ProjectId);
 
-            // 3. เรียก Repository เพื่อทำการลบ
-            await _projectRepository.DeleteProjectAsync(projectToDelete);
-
-            // 4. คืนค่า Unit.Value เพื่อบอกว่าสำเร็จ (ไม่มีข้อมูลส่งกลับ)
+            // Return Unit.Value to indicate success with no return data
             return Unit.Value;
         }
     }

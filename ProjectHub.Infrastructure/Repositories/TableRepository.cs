@@ -50,10 +50,20 @@ namespace ProjectHub.Infrastructure.Repositories
             // _context.Tables.Update(tableToUpdate);
             // await _context.SaveChangesAsync();
         }
-        public async Task DeleteTableAsync(Tables table)
+
+        public async Task DeleteTableAsync(int tableId)
         {
-            _context.Tables.Remove(table);
-            await _context.SaveChangesAsync();
+            // 1. ค้นหา Row ด้วย ID
+            var tableToDelete = await _context.Tables.FindAsync(tableId);
+
+            // 2. ถ้าเจอ ให้สั่งลบ
+            if (tableToDelete != null)
+            {
+                _context.Tables.Remove(tableToDelete);
+                await _context.SaveChangesAsync();
+                // ไม่จำเป็นต้องกังวลเรื่อง Cascade Delete ที่นี่ เพราะ Row ไม่มีข้อมูลลูก
+            }
+            // ถ้าไม่เจอ ก็ไม่ต้องทำอะไร (Handler ควรจะเช็คเจอไปก่อนแล้ว)
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.Threading.Tasks; // ใช้ Task
+using Microsoft.EntityFrameworkCore;
 using ProjectHub.Application.Repositories; // ใช้ Interface จาก Application
 using ProjectHub.Domain.Entities; // ใช้ Entity Rows
 using ProjectHub.Infrastructure.Persistence; // ใช้ AppDbContext
@@ -26,11 +27,6 @@ namespace ProjectHub.Infrastructure.Repositories
 
         // --- (Implement เมธอดอื่นๆ ของ IRowRepository ที่อาจมีในอนาคต) ---
         // public async Task<IEnumerable<Rows>> GetRowsByTableIdAsync(int tableId) { ... }
-        public async Task<Rows?> GetRowByIdAsync(int rowId)
-        {
-            // ใช้ FindAsync ซึ่งเป็นวิธีที่เร็วที่สุดในการหา Entity ตาม Primary Key
-            return await _context.Rows.FindAsync(rowId);
-        }
 
         public async Task UpdateRowAsync(Rows row)
         {
@@ -39,6 +35,26 @@ namespace ProjectHub.Infrastructure.Repositories
             // บันทึกการเปลี่ยนแปลงลง Database จริง
             await _context.SaveChangesAsync();
         }
-        // public async Task DeleteRowAsync(int rowId) { ... }
+
+        public async Task<Rows?> GetRowByIdAsync(int rowId)
+        {
+            // ใช้ FindAsync ซึ่งเป็นวิธีที่เร็วที่สุดในการหา Entity ตาม Primary Key
+            return await _context.Rows.FindAsync(rowId);
+        }
+
+        public async Task DeleteRowAsync(int rowId)
+        {
+            // 1. ค้นหา Row ด้วย ID
+            var rowToDelete = await _context.Rows.FindAsync(rowId);
+
+            // 2. ถ้าเจอ ให้สั่งลบ
+            if (rowToDelete != null)
+            {
+                _context.Rows.Remove(rowToDelete);
+                await _context.SaveChangesAsync();
+                // ไม่จำเป็นต้องกังวลเรื่อง Cascade Delete ที่นี่ เพราะ Row ไม่มีข้อมูลลูก
+            }
+            // ถ้าไม่เจอ ก็ไม่ต้องทำอะไร (Handler ควรจะเช็คเจอไปก่อนแล้ว)
+        }
     }
 }

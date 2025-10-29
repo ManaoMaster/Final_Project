@@ -14,8 +14,7 @@ namespace ProjectHub.Application.Repositories
 
         Task UpdateRowAsync(Rows row);
         // --- (เมธอดอื่นๆ ที่อาจจะเพิ่มในอนาคต) ---
-        // Task<IEnumerable<Rows>> GetRowsByTableIdAsync(int tableId);
 
-        // Task DeleteRowAsync(int rowId);
+        Task DeleteRowAsync(int rowId);
     }
 }

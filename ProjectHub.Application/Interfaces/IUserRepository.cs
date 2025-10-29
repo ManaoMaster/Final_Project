@@ -20,6 +20,10 @@ namespace ProjectHub.Application.Interfaces
         Task<bool> IsUsernameUsedByOtherAsync(int userId, string username);
         Task UpdateUserAsync(Users user);
 
+        Task DeleteUserAsync(int userId);
+
+        Task<Users?> GetUserByIdAsync(int userId);
+
 
     }
 }

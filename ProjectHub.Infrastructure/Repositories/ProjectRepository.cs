@@ -44,16 +44,25 @@ namespace ProjectHub.Infrastructure.Repositories
             .FirstOrDefaultAsync(p => p.Project_id == projectId);
         }
 
-        public async Task EditProjectAsync(Projects project)
+        public async Task UpdateProjectAsync(Projects project)
         {
             _context.Projects.Update(project);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteProjectAsync(Projects project)
+        public async Task DeleteProjectAsync(int projectId)
         {
-            _context.Projects.Remove(project);
-            await _context.SaveChangesAsync();
+            // 1. ค้นหา Row ด้วย ID
+            var projectToDelete = await _context.Projects.FindAsync(projectId);
+
+            // 2. ถ้าเจอ ให้สั่งลบ
+            if (projectToDelete != null)
+            {
+                _context.Projects.Remove(projectToDelete);
+                await _context.SaveChangesAsync();
+                // ไม่จำเป็นต้องกังวลเรื่อง Cascade Delete ที่นี่ เพราะ Row ไม่มีข้อมูลลูก
+            }
+            // ถ้าไม่เจอ ก็ไม่ต้องทำอะไร (Handler ควรจะเช็คเจอไปก่อนแล้ว)
         }
     }
 }

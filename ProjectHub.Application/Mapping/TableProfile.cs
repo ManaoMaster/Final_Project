@@ -38,13 +38,7 @@ namespace ProjectHub.Application.Mapping
                 .ForMember(d => d.Projects, m => m.Ignore())
                 .ForMember(d => d.Columns, m => m.Ignore())
                 .ForMember(d => d.Rows, m => m.Ignore());
-            CreateMap<DeleteTableCommand, Tables>()
-                .ForMember(d => d.Table_id, m => m.Ignore())
-                .ForMember(d => d.Created_at, m => m.Ignore())
-                // *** Ignore Navigation Properties เพื่อความชัดเจน ***
-                .ForMember(d => d.Projects, m => m.Ignore())
-                .ForMember(d => d.Columns, m => m.Ignore())
-                .ForMember(d => d.Rows, m => m.Ignore());
+
         }
     }
 }

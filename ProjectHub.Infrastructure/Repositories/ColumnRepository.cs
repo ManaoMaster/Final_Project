@@ -62,10 +62,19 @@ namespace ProjectHub.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteColumnAsync(Columns column)
+        public async Task DeleteColumnAsync(int columnId)
         {
-            _context.Columns.Remove(column);
-            await _context.SaveChangesAsync();
+            // 1. ค้นหา Row ด้วย ID
+            var columnToDelete = await _context.Columns.FindAsync(columnId);
+
+            // 2. ถ้าเจอ ให้สั่งลบ
+            if (columnToDelete != null)
+            {
+                _context.Columns.Remove(columnToDelete);
+                await _context.SaveChangesAsync();
+                // ไม่จำเป็นต้องกังวลเรื่อง Cascade Delete ที่นี่ เพราะ Row ไม่มีข้อมูลลูก
+            }
+            // ถ้าไม่เจอ ก็ไม่ต้องทำอะไร (Handler ควรจะเช็คเจอไปก่อนแล้ว)
         }
     }
 }

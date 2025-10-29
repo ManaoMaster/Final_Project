@@ -1,12 +1,14 @@
-using System;
+using System; // For ArgumentException
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using ProjectHub.Application.Features.Tables.DeleteTable;
 using ProjectHub.Application.Interfaces;
+using ProjectHub.Application.Repositories;
 
-namespace ProjectHub.Application.Features.Projects.DeleteProject
+namespace TableHub.Application.Features.Tables.DeleteTable
 {
+    // Handler for DeleteTableCommand, returns Unit (nothing)
     public class DeleteTableHandler : IRequestHandler<DeleteTableCommand, Unit>
     {
         private readonly ITableRepository _tableRepository;
@@ -21,23 +23,19 @@ namespace ProjectHub.Application.Features.Projects.DeleteProject
             CancellationToken cancellationToken
         )
         {
-            // 1. ดึงข้อมูล Project ที่ต้องการลบ
-            var tableToDelete = await _tableRepository.GetTableByIdAsync(request.TableId);
-
-            // 2. ตรวจสอบว่าเจอหรือไม่
-            if (tableToDelete == null)
+            // Optional but recommended: Check if the table exists before deleting
+            // This provides a clearer error message than letting the repository handle it silently
+            var tableExists = await _tableRepository.GetTableByIdAsync(request.TableId);
+            if (tableExists == null)
             {
-                throw new ArgumentException($"Project with ID {request.TableId} not found.");
-                // หรือใช้ NotFoundException
+                throw new ArgumentException($"Table with ID {request.TableId} not found.");
+                // Or use a custom NotFoundException
             }
 
-            // (Optional) ตรวจสอบ Business Rule อื่นๆ ก่อนลบได้
-            // เช่น เช็คว่า User ที่ขอลบ เป็นเจ้าของ Project หรือไม่ (ถ้ามีระบบ Auth)
+            // Call the repository to delete the table by ID
+            await _tableRepository.DeleteTableAsync(request.TableId);
 
-            // 3. เรียก Repository เพื่อทำการลบ
-            await _tableRepository.DeleteTableAsync(tableToDelete);
-
-            // 4. คืนค่า Unit.Value เพื่อบอกว่าสำเร็จ (ไม่มีข้อมูลส่งกลับ)
+            // Return Unit.Value to indicate success with no return data
             return Unit.Value;
         }
     }

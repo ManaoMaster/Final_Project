@@ -97,37 +97,33 @@ namespace ProjectHub.API.Controllers
             var result = await _mediator.Send(command, ct);
             return Ok(result);
         }
-        [HttpDelete("{id}")]
+
+        // --- Endpoint: DELETE /api/rows/{id} ---
+        [HttpDelete("{id}")] // รับ ID จาก URL Path
         public async Task<IActionResult> DeleteColumn(
-            // [FromRoute]: ดึงค่า Parameter 'id' มาจาก URL Path ({id})
-            [FromRoute] int id,
+            [FromRoute] int id, // ดึง ID จาก Path
             CancellationToken ct
-        )
+        ) // เพิ่ม ct
         {
-            // --- สร้าง Command ---
-            // สร้าง Delete Command โดยตรง พร้อมกำหนด ID ที่จะลบ
+            // สร้าง Command โดยตรงจาก ID ที่ได้จาก Route
             var command = new DeleteColumnCommand { ColumnId = id };
 
             try
             {
-                // --- Logic Execution ---
-                // ส่ง Command ไปให้ MediatR
-                // Handler (DeleteProjectHandler) จะทำงาน, ดึงข้อมูล, สั่งลบ
-                // (คืนค่า Unit.Value เพราะไม่มีข้อมูลส่งกลับ)
-                await _mediator.Send(command, ct);
+                // ส่ง Command ให้ MediatR (Handler จะคืน Unit)
+                await _mediator.Send(command, ct); // เพิ่ม ct
 
-                // --- Response ---
-                // คืนค่า 204 No Content = สำเร็จ แต่ไม่มีข้อมูลส่งกลับ
+                // คืน 204 No Content = สำเร็จ ไม่มีข้อมูลส่งกลับ
                 return NoContent();
             }
-            catch (ArgumentException ex) // จับ Error จาก Handler (เช่น ไม่เจอ Project ID)
+            catch (ArgumentException ex) // จับ Error จาก Handler (Row not found)
             {
                 return NotFound(new { Error = ex.Message }); // คืน 404 Not Found
             }
             catch (Exception ex) // จับ Error อื่นๆ
             {
-                // ควร Log ex
-                return StatusCode(500, new { Error = "An unexpected error occurred." }); // คืน 500
+                Console.WriteLine($"Error deleting row {id}: {ex}"); // Log ง่ายๆ
+                return StatusCode(500, new { Error = "An unexpected error occurred." });
             }
         }
         // --- (Optional) Endpoint: GET /api/columns/{id} ---

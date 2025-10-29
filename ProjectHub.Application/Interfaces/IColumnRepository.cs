@@ -34,6 +34,6 @@ namespace ProjectHub.Application.Interfaces // ต้องใช้ Namespace �
         Task UpdateColumnAsync(Columns column);
 
         
-        Task DeleteColumnAsync(Columns column);
+        Task DeleteColumnAsync(int columnId);
     }
 }

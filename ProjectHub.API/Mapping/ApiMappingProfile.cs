@@ -38,8 +38,6 @@ namespace ProjectHub.API.Mapping
 
             CreateMap<UpdateProjectRequest, UpdateProjectCommand>();
 
-            CreateMap<DeleteProjectRequest, DeleteProjectCommand>();
-
             CreateMap<UpdateTableRequest, UpdateTableCommand>();
 
             CreateMap<UpdateRowRequest, UpdateRowCommand>();

@@ -35,13 +35,6 @@ namespace ProjectHub.Application.Mapping
                 // *** เพิ่ม: Ignore Navigation Property เพื่อความชัดเจนและป้องกันปัญหา ***
                 .ForMember(d => d.Tables, m => m.Ignore())
                 .ForMember(d => d.Users, m => m.Ignore());
-
-            CreateMap<DeleteProjectCommand, Projects>()
-                .ForMember(d => d.Project_id, m => m.Ignore())
-                .ForMember(d => d.Created_at, m => m.Ignore())
-                // *** เพิ่ม: Ignore Navigation Property เพื่อความชัดเจนและป้องกันปัญหา ***
-                .ForMember(d => d.Tables, m => m.Ignore())
-                .ForMember(d => d.Users, m => m.Ignore());
         }
     }
 }

@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ProjectHub.API.Contracts.Rows;
 using ProjectHub.Application.Dtos; // เพิ่ม: สำหรับ Response DTO
+using ProjectHub.Application.Features.Projects.DeleteProject;
 using ProjectHub.Application.Features.Rows.CreateRow;
 using ProjectHub.Application.Features.Rows.UpdateRow; // เพิ่ม: สำหรับ Command
 
@@ -59,6 +60,7 @@ namespace ProjectHub.API.Controllers
                 );
             }
         }
+
         [HttpPut("{id}")]
         // IActionResult: ระบุว่าคืนค่า HTTP Status Code (อาจมี Body หรือไม่มีก็ได้)
         public async Task<IActionResult> UpdateRow(
@@ -101,9 +103,33 @@ namespace ProjectHub.API.Controllers
             }
         }
 
+        // --- Endpoint: DELETE /api/rows/{id} ---
+        [HttpDelete("{id}")] // รับ ID จาก URL Path
+        public async Task<IActionResult> DeleteRow(
+            [FromRoute] int id, // ดึง ID จาก Path
+            CancellationToken ct
+        ) // เพิ่ม ct
+        {
+            // สร้าง Command โดยตรงจาก ID ที่ได้จาก Route
+            var command = new DeleteRowCommand { RowId = id };
 
+            try
+            {
+                // ส่ง Command ให้ MediatR (Handler จะคืน Unit)
+                await _mediator.Send(command, ct); // เพิ่ม ct
 
-
-
+                // คืน 204 No Content = สำเร็จ ไม่มีข้อมูลส่งกลับ
+                return NoContent();
+            }
+            catch (ArgumentException ex) // จับ Error จาก Handler (Row not found)
+            {
+                return NotFound(new { Error = ex.Message }); // คืน 404 Not Found
+            }
+            catch (Exception ex) // จับ Error อื่นๆ
+            {
+                Console.WriteLine($"Error deleting row {id}: {ex}"); // Log ง่ายๆ
+                return StatusCode(500, new { Error = "An unexpected error occurred." });
+            }
+        }
     }
 }

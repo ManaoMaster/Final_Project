@@ -44,7 +44,7 @@ namespace ProjectHub.Application.Features.Projects.UpdateProject
             _mapper.Map(request, projectToUpdate);
 
             // 4. เรียก Repository เพื่อบันทึกการเปลี่ยนแปลง
-            await _projectRepository.EditProjectAsync(projectToUpdate);
+            await _projectRepository.UpdateProjectAsync(projectToUpdate);
 
             // 5. Map Entity ที่อัปเดตแล้ว กลับเป็น DTO เพื่อส่งคืน
             var responseDto = _mapper.Map<ProjectResponseDto>(projectToUpdate);

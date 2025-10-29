@@ -1,19 +1,20 @@
-using System;
+using System; // For ArgumentException
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using ProjectHub.Application.Interfaces;
-using ProjectHub.Application.Features.Columns.DeleteColumn;
+using ProjectHub.Application.Repositories;
 
-namespace ProjectHub.Application.Features.Columns.DeleteColumns
+namespace ProjectHub.Application.Features.Columns.DeleteColumn
 {
+    // Handler for DeleteColumnCommand, returns Unit (nothing)
     public class DeleteColumnHandler : IRequestHandler<DeleteColumnCommand, Unit>
     {
-        private readonly IColumnRepository _ColumnRepository;
+        private readonly IColumnRepository _columnRepository;
 
-        public DeleteColumnHandler(IColumnRepository ColumnRepository)
+        public DeleteColumnHandler(IColumnRepository columnRepository)
         {
-            _ColumnRepository = ColumnRepository;
+            _columnRepository = columnRepository;
         }
 
         public async Task<Unit> Handle(
@@ -21,23 +22,19 @@ namespace ProjectHub.Application.Features.Columns.DeleteColumns
             CancellationToken cancellationToken
         )
         {
-            // 1. ดึงข้อมูล Column ที่ต้องการลบ
-            var ColumnToDelete = await _ColumnRepository.GetColumnByIdAsync(request.ColumnId);
-
-            // 2. ตรวจสอบว่าเจอหรือไม่
-            if (ColumnToDelete == null)
+            // Optional but recommended: Check if the column exists before deleting
+            // This provides a clearer error message than letting the repository handle it silently
+            var columnExists = await _columnRepository.GetColumnByIdAsync(request.ColumnId);
+            if (columnExists == null)
             {
                 throw new ArgumentException($"Column with ID {request.ColumnId} not found.");
-                // หรือใช้ NotFoundException
+                // Or use a custom NotFoundException
             }
 
-            // (Optional) ตรวจสอบ Business Rule อื่นๆ ก่อนลบได้
-            // เช่น เช็คว่า User ที่ขอลบ เป็นเจ้าของ Column หรือไม่ (ถ้ามีระบบ Auth)
+            // Call the repository to delete the column by ID
+            await _columnRepository.DeleteColumnAsync(request.ColumnId);
 
-            // 3. เรียก Repository เพื่อทำการลบ
-            await _ColumnRepository.DeleteColumnAsync(ColumnToDelete);
-
-            // 4. คืนค่า Unit.Value เพื่อบอกว่าสำเร็จ (ไม่มีข้อมูลส่งกลับ)
+            // Return Unit.Value to indicate success with no return data
             return Unit.Value;
         }
     }
