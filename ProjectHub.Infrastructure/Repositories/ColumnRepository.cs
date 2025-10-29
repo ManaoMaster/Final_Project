@@ -61,5 +61,11 @@ namespace ProjectHub.Infrastructure.Repositories
             _context.Columns.Update(column);
             await _context.SaveChangesAsync();
         }
+
+        public async Task DeleteColumnAsync(Columns column)
+        {
+            _context.Columns.Remove(column);
+            await _context.SaveChangesAsync();
+        }
     }
 }

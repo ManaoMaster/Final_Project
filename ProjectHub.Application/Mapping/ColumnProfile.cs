@@ -1,6 +1,7 @@
 using AutoMapper;
 using ProjectHub.Application.Dtos;
 using ProjectHub.Application.Features.Columns.CreateColumn; // Command
+using ProjectHub.Application.Features.Columns.DeleteColumn;
 using ProjectHub.Application.Features.Projects.UpdateProject;
 using ProjectHub.Domain.Entities; // Entity
 
@@ -36,6 +37,12 @@ namespace ProjectHub.Application.Mapping
                 .ForMember(d => d.Is_primary, m => m.Ignore()) // Database จะสร้างให้
                 .ForMember(d => d.Is_nullable, m => m.Ignore()); // Database จะสร้างให้
             // Name ชื่อตรงกัน ไม่ต้องเขียน
+            CreateMap<DeleteColumnCommand, Columns>()
+                .ForMember(d => d.Column_id, m => m.Ignore())
+                .ForMember(d => d.Table_id, m => m.Ignore())
+                .ForMember(d => d.Data_type, m => m.Ignore())
+                .ForMember(d => d.Is_primary, m => m.Ignore())
+                .ForMember(d => d.Is_nullable, m => m.Ignore());
         }
     }
 }

@@ -32,5 +32,8 @@ namespace ProjectHub.Application.Interfaces // ต้องใช้ Namespace �
         Task<IEnumerable<Columns>> GetColumnsByTableIdAsync(int tableId);
 
         Task UpdateColumnAsync(Columns column);
+
+        
+        Task DeleteColumnAsync(Columns column);
     }
 }

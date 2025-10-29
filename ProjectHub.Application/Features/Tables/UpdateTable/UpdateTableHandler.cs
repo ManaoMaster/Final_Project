@@ -64,7 +64,7 @@ namespace ProjectHub.Application.Features.Tables.EditTable
 
             // 4. เรียก Repository เพื่อบันทึกการเปลี่ยนแปลง
             // (ถ้า GetTableByIdAsync ดึง Entity ที่ Tracked มา EF Core จะรู้ว่ามีการเปลี่ยนแปลง)
-            await _tableRepository.EditTableAsync(tableToUpdate); // เราต้องเพิ่มเมธอด UpdateTableAsync ใน Interface/Repo
+            await _tableRepository.UpdateTableAsync(tableToUpdate); // เราต้องเพิ่มเมธอด UpdateTableAsync ใน Interface/Repo
 
             // 5. Map Entity ที่อัปเดตแล้ว กลับเป็น DTO เพื่อส่งคืน
             return _mapper.Map<TableResponseDto>(tableToUpdate);

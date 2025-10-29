@@ -26,7 +26,7 @@ namespace ProjectHub.Application.Features.Columns.UpdateColumn
         )
         {
             // 1. ดึงข้อมูล Project เดิมจาก ID
-            var projectToUpdate = await _columnRepository.GetColumnByIdAsync(request.ColumnId);
+            var columnToUpdate = await _columnRepository.GetColumnByIdAsync(request.ColumnId);
 
             // 2. ตรวจสอบว่าเจอหรือไม่
             if (columnToUpdate == null)
@@ -47,7 +47,7 @@ namespace ProjectHub.Application.Features.Columns.UpdateColumn
             await _columnRepository.UpdateColumnAsync(columnToUpdate);
 
             // 5. Map Entity ที่อัปเดตแล้ว กลับเป็น DTO เพื่อส่งคืน
-            var responseDto = _mapper.Map<ProjectResponseDto>(columnToUpdate);
+            var responseDto = _mapper.Map<ColumnResponseDto>(columnToUpdate);
 
             return responseDto;
         }
