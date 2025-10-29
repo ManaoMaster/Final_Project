@@ -78,3 +78,23 @@ C:\school\final_project\New folder\Final_Project\ProjectHub.Infrastructure\obj\D
 C:\school\final_project\New folder\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ProjectHub.Infrastructure.pdb
 C:\school\final_project\New folder\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ProjectHub.Infrastructure.genruntimeconfig.cache
 C:\school\final_project\New folder\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ref\ProjectHub.Infrastructure.dll
+D:\a\Final_Project\ProjectHub.Infrastructure\bin\Debug\net9.0\ProjectHub.Infrastructure.deps.json
+D:\a\Final_Project\ProjectHub.Infrastructure\bin\Debug\net9.0\ProjectHub.Infrastructure.runtimeconfig.json
+D:\a\Final_Project\ProjectHub.Infrastructure\bin\Debug\net9.0\ProjectHub.Infrastructure.dll
+D:\a\Final_Project\ProjectHub.Infrastructure\bin\Debug\net9.0\ProjectHub.Infrastructure.pdb
+D:\a\Final_Project\ProjectHub.Infrastructure\bin\Debug\net9.0\ProjectHub.Application.dll
+D:\a\Final_Project\ProjectHub.Infrastructure\bin\Debug\net9.0\ProjectHub.Domain.dll
+D:\a\Final_Project\ProjectHub.Infrastructure\bin\Debug\net9.0\ProjectHub.Application.pdb
+D:\a\Final_Project\ProjectHub.Infrastructure\bin\Debug\net9.0\ProjectHub.Domain.pdb
+D:\a\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ProjectHub.Infrastructure.csproj.AssemblyReference.cache
+D:\a\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ProjectHub.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+D:\a\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ProjectHub.Infrastructure.AssemblyInfoInputs.cache
+D:\a\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ProjectHub.Infrastructure.AssemblyInfo.cs
+D:\a\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ProjectHub.Infrastructure.csproj.CoreCompileInputs.cache
+D:\a\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ProjectHub.Infrastructure.sourcelink.json
+D:\a\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ProjectH.1D8C29F7.Up2Date
+D:\a\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ProjectHub.Infrastructure.dll
+D:\a\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\refint\ProjectHub.Infrastructure.dll
+D:\a\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ProjectHub.Infrastructure.pdb
+D:\a\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ProjectHub.Infrastructure.genruntimeconfig.cache
+D:\a\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ref\ProjectHub.Infrastructure.dll

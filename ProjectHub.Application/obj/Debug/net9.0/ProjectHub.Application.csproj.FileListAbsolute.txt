@@ -62,3 +62,19 @@ C:\school\final_project\New folder\Final_Project\ProjectHub.Application\obj\Debu
 C:\school\final_project\New folder\Final_Project\ProjectHub.Application\obj\Debug\net9.0\refint\ProjectHub.Application.dll
 C:\school\final_project\New folder\Final_Project\ProjectHub.Application\obj\Debug\net9.0\ProjectHub.Application.pdb
 C:\school\final_project\New folder\Final_Project\ProjectHub.Application\obj\Debug\net9.0\ref\ProjectHub.Application.dll
+D:\a\Final_Project\ProjectHub.Application\bin\Debug\net9.0\ProjectHub.Application.deps.json
+D:\a\Final_Project\ProjectHub.Application\bin\Debug\net9.0\ProjectHub.Application.dll
+D:\a\Final_Project\ProjectHub.Application\bin\Debug\net9.0\ProjectHub.Application.pdb
+D:\a\Final_Project\ProjectHub.Application\bin\Debug\net9.0\ProjectHub.Domain.dll
+D:\a\Final_Project\ProjectHub.Application\bin\Debug\net9.0\ProjectHub.Domain.pdb
+D:\a\Final_Project\ProjectHub.Application\obj\Debug\net9.0\ProjectHub.Application.csproj.AssemblyReference.cache
+D:\a\Final_Project\ProjectHub.Application\obj\Debug\net9.0\ProjectHub.Application.GeneratedMSBuildEditorConfig.editorconfig
+D:\a\Final_Project\ProjectHub.Application\obj\Debug\net9.0\ProjectHub.Application.AssemblyInfoInputs.cache
+D:\a\Final_Project\ProjectHub.Application\obj\Debug\net9.0\ProjectHub.Application.AssemblyInfo.cs
+D:\a\Final_Project\ProjectHub.Application\obj\Debug\net9.0\ProjectHub.Application.csproj.CoreCompileInputs.cache
+D:\a\Final_Project\ProjectHub.Application\obj\Debug\net9.0\ProjectHub.Application.sourcelink.json
+D:\a\Final_Project\ProjectHub.Application\obj\Debug\net9.0\ProjectH.533F2EFC.Up2Date
+D:\a\Final_Project\ProjectHub.Application\obj\Debug\net9.0\ProjectHub.Application.dll
+D:\a\Final_Project\ProjectHub.Application\obj\Debug\net9.0\refint\ProjectHub.Application.dll
+D:\a\Final_Project\ProjectHub.Application\obj\Debug\net9.0\ProjectHub.Application.pdb
+D:\a\Final_Project\ProjectHub.Application\obj\Debug\net9.0\ref\ProjectHub.Application.dll

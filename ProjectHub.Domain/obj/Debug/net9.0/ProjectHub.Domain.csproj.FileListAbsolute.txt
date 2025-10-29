@@ -57,3 +57,15 @@ C:\school\final_project\New folder\Final_Project\ProjectHub.Domain\obj\Debug\net
 C:\school\final_project\New folder\Final_Project\ProjectHub.Domain\obj\Debug\net9.0\refint\ProjectHub.Domain.dll
 C:\school\final_project\New folder\Final_Project\ProjectHub.Domain\obj\Debug\net9.0\ProjectHub.Domain.pdb
 C:\school\final_project\New folder\Final_Project\ProjectHub.Domain\obj\Debug\net9.0\ref\ProjectHub.Domain.dll
+D:\a\Final_Project\ProjectHub.Domain\bin\Debug\net9.0\ProjectHub.Domain.deps.json
+D:\a\Final_Project\ProjectHub.Domain\bin\Debug\net9.0\ProjectHub.Domain.dll
+D:\a\Final_Project\ProjectHub.Domain\bin\Debug\net9.0\ProjectHub.Domain.pdb
+D:\a\Final_Project\ProjectHub.Domain\obj\Debug\net9.0\ProjectHub.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\a\Final_Project\ProjectHub.Domain\obj\Debug\net9.0\ProjectHub.Domain.AssemblyInfoInputs.cache
+D:\a\Final_Project\ProjectHub.Domain\obj\Debug\net9.0\ProjectHub.Domain.AssemblyInfo.cs
+D:\a\Final_Project\ProjectHub.Domain\obj\Debug\net9.0\ProjectHub.Domain.csproj.CoreCompileInputs.cache
+D:\a\Final_Project\ProjectHub.Domain\obj\Debug\net9.0\ProjectHub.Domain.sourcelink.json
+D:\a\Final_Project\ProjectHub.Domain\obj\Debug\net9.0\ProjectHub.Domain.dll
+D:\a\Final_Project\ProjectHub.Domain\obj\Debug\net9.0\refint\ProjectHub.Domain.dll
+D:\a\Final_Project\ProjectHub.Domain\obj\Debug\net9.0\ProjectHub.Domain.pdb
+D:\a\Final_Project\ProjectHub.Domain\obj\Debug\net9.0\ref\ProjectHub.Domain.dll
