@@ -3,8 +3,10 @@ using System.Threading.Tasks;
 using AutoMapper; // เพิ่ม: ถ้าใช้ AutoMapper ใน API
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using ProjectHub.API.Contracts.Columns;
 using ProjectHub.Application.Dtos;
-using ProjectHub.Application.Features.Columns.CreateColumn; // เพิ่ม: สำหรับ Command
+using ProjectHub.Application.Features.Columns.CreateColumn;
+using ProjectHub.Application.Features.Projects.UpdateProject; // เพิ่ม: สำหรับ Command
 
 namespace ProjectHub.API.Controllers
 {
@@ -29,6 +31,7 @@ namespace ProjectHub.API.Controllers
             [FromRoute] int TableId, // สมมติว่า TableId มาจาก Route Parameter
             [FromBody] CreateColumnRequestPayload Payload // ข้อมูล Column มาจาก Body
         );
+
         public record CreateColumnRequestPayload(
             string Name,
             string DataType,
@@ -36,20 +39,22 @@ namespace ProjectHub.API.Controllers
             bool IsNullable = true // กำหนด Default
         );
 
-
         // --- Endpoint: POST /api/columns/{tableId} ---
         [HttpPost("{tableId}")] // รับ TableId จาก URL
-        public async Task<IActionResult> CreateColumn([FromRoute] int tableId, [FromBody] CreateColumnRequestPayload payload)
+        public async Task<IActionResult> CreateColumn(
+            [FromRoute] int tableId,
+            [FromBody] CreateColumnRequestPayload payload
+        )
         {
             // 1. สร้าง Command จาก Request DTO และ Route Parameter
-             var command = new CreateColumnCommand
-             {
-                 TableId = tableId, // มาจาก Route
-                 Name = payload.Name,
-                 DataType = payload.DataType,
-                 IsPrimary = payload.IsPrimary,
-                 IsNullable = payload.IsNullable
-             };
+            var command = new CreateColumnCommand
+            {
+                TableId = tableId, // มาจาก Route
+                Name = payload.Name,
+                DataType = payload.DataType,
+                IsPrimary = payload.IsPrimary,
+                IsNullable = payload.IsNullable,
+            };
 
             // // หรือถ้าใช้ AutoMapper (ต้องสร้าง Request DTO ที่สมบูรณ์ก่อน)
             // var command = _mapper.Map<CreateColumnCommand>(request);
@@ -77,6 +82,19 @@ namespace ProjectHub.API.Controllers
                 // Log the exception ex
                 return StatusCode(500, new { Error = "An unexpected error occurred." });
             }
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateColumn(
+            [FromRoute] int id,
+            [FromBody] UpdateColumnRequest request,
+            CancellationToken ct
+        )
+        {
+            var command = _mapper.Map<UpdateColumnCommand>(request);
+            command.ColumnId = id;
+            var result = await _mediator.Send(command, ct);
+            return Ok(result);
         }
 
         // --- (Optional) Endpoint: GET /api/columns/{id} ---

@@ -30,5 +30,7 @@ namespace ProjectHub.Application.Interfaces // ต้องใช้ Namespace �
         // Input: ID ของ Table ที่ต้องการ
         // Output: List ของ Object Columns หรือ null ถ้าไม่เจอ
         Task<IEnumerable<Columns>> GetColumnsByTableIdAsync(int tableId);
+
+        Task UpdateColumnAsync(Columns column);
     }
 }

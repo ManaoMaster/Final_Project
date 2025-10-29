@@ -1,6 +1,7 @@
 using AutoMapper;
 using ProjectHub.Application.Dtos;
 using ProjectHub.Application.Features.Columns.CreateColumn; // Command
+using ProjectHub.Application.Features.Projects.UpdateProject;
 using ProjectHub.Domain.Entities; // Entity
 
 namespace ProjectHub.Application.Mapping
@@ -16,7 +17,7 @@ namespace ProjectHub.Application.Mapping
                 .ForMember(d => d.DataType, m => m.MapFrom(s => s.Data_type)) // ชื่อไม่ตรง
                 .ForMember(d => d.IsPrimary, m => m.MapFrom(s => s.Is_primary)) // ชื่อไม่ตรง
                 .ForMember(d => d.IsNullable, m => m.MapFrom(s => s.Is_nullable)); // ชื่อไม่ตรง
-                // Name ชื่อตรงกัน ไม่ต้องเขียน
+            // Name ชื่อตรงกัน ไม่ต้องเขียน
 
             // Command -> Domain (Entity) (ใช้ d, s)
             CreateMap<CreateColumnCommand, Columns>()
@@ -28,6 +29,13 @@ namespace ProjectHub.Application.Mapping
                 // Name ชื่อตรงกัน ไม่ต้องเขียน
                 // Ignore Navigation Property
                 .ForMember(d => d.Tables, m => m.Ignore());
+            CreateMap<UpdateColumnCommand, Columns>()
+                .ForMember(d => d.Column_id, m => m.Ignore()) // Database จะสร้างให้
+                .ForMember(d => d.Table_id, m => m.Ignore()) // Database จะสร้างให้
+                .ForMember(d => d.Data_type, m => m.Ignore()) // Database จะสร้างให้
+                .ForMember(d => d.Is_primary, m => m.Ignore()) // Database จะสร้างให้
+                .ForMember(d => d.Is_nullable, m => m.Ignore()); // Database จะสร้างให้
+            // Name ชื่อตรงกัน ไม่ต้องเขียน
         }
     }
 }

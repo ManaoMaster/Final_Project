@@ -39,7 +39,7 @@ namespace ProjectHub.Infrastructure.Repositories
         }
 
         // *** เพิ่ม: Implementation ของ UpdateTableAsync ***
-        public async Task EditTableAsync(Tables tableToUpdate)
+        public async Task UpdateTableAsync(Tables tableToUpdate)
         {
             // เนื่องจาก tableToUpdate ถูกดึงมาจาก Context (ผ่าน GetTableByIdAsync)
             // EF Core จะ Track การเปลี่ยนแปลง Property (เช่น Name) โดยอัตโนมัติ

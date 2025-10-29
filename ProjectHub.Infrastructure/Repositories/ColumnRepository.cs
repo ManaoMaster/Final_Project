@@ -2,7 +2,7 @@ using System.Linq; // เพิ่ม using นี้สำหรับ .AnyAsyn
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore; // เพิ่ม using นี้สำหรับ EF Core
 using ProjectHub.Application.Interfaces;
-using ProjectHub.Domain.Entities;         // ใช้ Entity Columns
+using ProjectHub.Domain.Entities; // ใช้ Entity Columns
 using ProjectHub.Infrastructure.Persistence; // ใช้ DbContext
 
 namespace ProjectHub.Infrastructure.Repositories
@@ -20,15 +20,17 @@ namespace ProjectHub.Infrastructure.Repositories
         public async Task<bool> IsColumnNameUniqueForTableAsync(int tableId, string columnName)
         {
             // ใช้ EF Core query กับ DbContext เพื่อเช็คชื่อซ้ำใน Table เดียวกัน
-            return await _context.Columns
-                .AnyAsync(c => c.Table_id == tableId && c.Name == columnName);
+            return await _context.Columns.AnyAsync(c =>
+                c.Table_id == tableId && c.Name == columnName
+            );
         }
 
         public async Task<bool> HasPrimaryKeyAsync(int tableId)
         {
             // ใช้ EF Core query เพื่อเช็คว่ามี Column ไหนใน Table นี้ที่เป็น Primary Key แล้ว
-            return await _context.Columns
-                .AnyAsync(c => c.Table_id == tableId && c.Is_primary == true);
+            return await _context.Columns.AnyAsync(c =>
+                c.Table_id == tableId && c.Is_primary == true
+            );
         }
 
         public async Task AddColumnAsync(Columns column)
@@ -51,9 +53,13 @@ namespace ProjectHub.Infrastructure.Repositories
         {
             // ใช้ Where เพื่อกรอง Columns ที่มี Table_id ตรงกัน
             // ToListAsync เพื่อดึงข้อมูลทั้งหมดมาเป็น List ใน Memory
-            return await _context.Columns
-                                 .Where(c => c.Table_id == tableId)
-                                 .ToListAsync();
+            return await _context.Columns.Where(c => c.Table_id == tableId).ToListAsync();
+        }
+
+        public async Task UpdateColumnAsync(Columns column)
+        {
+            _context.Columns.Update(column);
+            await _context.SaveChangesAsync();
         }
     }
 }
