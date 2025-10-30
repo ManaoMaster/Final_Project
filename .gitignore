@@ -1,5 +1,7 @@
 .vs/
-
+# .NET Build Artifacts
+[Oo]bj/
+[Bb]in/
 
 # SQLite database files
 *.db
