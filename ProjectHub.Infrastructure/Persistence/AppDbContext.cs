@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿// ใน ProjectHub.Infrastructure/Persistence/AppDbContext.cs
+using Microsoft.EntityFrameworkCore;
 using ProjectHub.Domain.Entities;
 
 namespace ProjectHub.Infrastructure.Persistence
@@ -16,44 +17,44 @@ namespace ProjectHub.Infrastructure.Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder); // เรียก base ก่อนเสมอ
+            base.OnModelCreating(modelBuilder); // เรียก base ก่อน
 
-            // กำหนด Cascade Delete
+            // --- 1. บอก EF Core ให้ใช้ Type "jsonb" สำหรับคอลัมน์ 'Data' ---
+            modelBuilder.Entity<Rows>().Property(r => r.Data).HasColumnType("jsonb"); // <-- นี่คือหัวใจของ "ระดับ 2"
 
-            // 1. ลบ User -> ลบ Projects ที่เกี่ยวข้อง (เพิ่มเข้ามาใหม่)
+            // --- 2. การตั้งค่า Cascade Delete (เหมือนเดิม) ---
+
+            // ลบ User -> ลบ Projects
             modelBuilder
                 .Entity<Users>()
-                .HasMany(u => u.Projects) // User มีหลาย Projects
-                .WithOne(p => p.Users) // Project มี User เดียว
-                .HasForeignKey(p => p.User_id) // Foreign Key คือ User_id ใน Projects
-                .OnDelete(DeleteBehavior.Cascade); // <-- สั่งให้ Cascade Delete (ลบ User จะลบ Project ด้วย)
-            // หรือใช้ .OnDelete(DeleteBehavior.Restrict) ถ้าไม่ต้องการให้ลบ User ที่ยังมี Project อยู่
+                .HasMany(u => u.Projects)
+                .WithOne(p => p.Users)
+                .HasForeignKey(p => p.User_id)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            // 2. ลบ Project -> ลบ Tables ที่เกี่ยวข้อง
+            // ลบ Project -> ลบ Tables
             modelBuilder
                 .Entity<Projects>()
-                .HasMany(p => p.Tables) // Project มีหลาย Tables
-                .WithOne(t => t.Projects) // Table มี Project เดียว
-                .HasForeignKey(t => t.Project_id) // Foreign Key คือ Project_id
-                .OnDelete(DeleteBehavior.Cascade); // <-- สั่งให้ Cascade Delete
+                .HasMany(p => p.Tables)
+                .WithOne(t => t.Projects)
+                .HasForeignKey(t => t.Project_id)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            // 3. ลบ Table -> ลบ Columns ที่เกี่ยวข้อง
+            // ลบ Table -> ลบ Columns
             modelBuilder
                 .Entity<Tables>()
-                .HasMany(t => t.Columns) // Table มีหลาย Columns
-                .WithOne(c => c.Tables) // Column มี Table เดียว
-                .HasForeignKey(c => c.Table_id) // Foreign Key คือ Table_id
-                .OnDelete(DeleteBehavior.Cascade); // <-- สั่งให้ Cascade Delete
+                .HasMany(t => t.Columns)
+                .WithOne(c => c.Tables)
+                .HasForeignKey(c => c.Table_id)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            // 4. ลบ Table -> ลบ Rows ที่เกี่ยวข้อง
+            // ลบ Table -> ลบ Rows
             modelBuilder
                 .Entity<Tables>()
-                .HasMany(t => t.Rows) // Table มีหลาย Rows
-                .WithOne(r => r.Table) // Row มี Table เดียว
-                .HasForeignKey(r => r.Table_id) // Foreign Key คือ Table_id
-                .OnDelete(DeleteBehavior.Cascade); // <-- สั่งให้ Cascade Delete
-
-            // คุณอาจจะต้องกำหนด Relationship อื่นๆ เพิ่มเติมถ้าจำเป็น
+                .HasMany(t => t.Rows)
+                .WithOne(r => r.Table)
+                .HasForeignKey(r => r.Table_id)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

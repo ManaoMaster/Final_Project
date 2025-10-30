@@ -1,36 +1,44 @@
+// ใน ProjectHub.Infrastructure/Persistence/DesignTimeDbContextFactory.cs
+using System;
+using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Configuration; // เพิ่ม Using นี้
-using System.IO; // เพิ่ม Using นี้
+using Microsoft.Extensions.Configuration;
 
-namespace ProjectHub.Infrastructure.Persistence;
-
-public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
+namespace ProjectHub.Infrastructure.Persistence
 {
-    public AppDbContext CreateDbContext(string[] args)
+    public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
     {
-        // --- แก้ไข: เปลี่ยน Logic การค้นหา Connection String ---
+        public AppDbContext CreateDbContext(string[] args)
+        {
+            // Logic การหา Solution Root และ API Path
+            string basePath = Directory.GetCurrentDirectory(); // "...\ProjectHub.Infrastructure"
+            string solutionRoot = Directory.GetParent(basePath)!.FullName; // "...\Final_Project"
+            string apiProjectPath = Path.Combine(solutionRoot, "ProjectHub.API");
 
-        // 1. กำหนดค่า Path ไปยัง API Project (ที่ appsettings.json อาศัยอยู่)
-        // Path นี้คือการเดินย้อนกลับจาก Infrastructure -> FINAL_PROJECT -> ProjectHub.API
-        string apiProjectPath = Path.Combine(Directory.GetCurrentDirectory(), "../ProjectHub.API");
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+                .SetBasePath(apiProjectPath) // อ่านจาก API Project
+                .AddJsonFile("appsettings.json")
+                .AddJsonFile("appsettings.Development.json", optional: true)
+                .Build();
 
-        // 2. อ่าน appsettings.json จาก API Project
-        IConfigurationRoot configuration = new ConfigurationBuilder()
-            .SetBasePath(apiProjectPath)
-            .AddJsonFile("appsettings.json")
-            .Build();
+            // *** 1. อ่าน Connection String ใหม่ (ของ PostgreSQL) ***
+            // (เราจะใช้ชื่อใหม่ "PostgresConnection" เพื่อความชัดเจน)
+            var connectionString = configuration.GetConnectionString("PostgresConnection");
 
-        // 3. ดึง Connection String (เหมือนใน Program.cs)
-        var connectionString =
-            configuration.GetConnectionString("DefaultConnection")
-            // *** ใช้ Fallback Path เดียวกันกับ Program.cs ***
-            ?? "Data Source=../ProjectHub.db"; 
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new InvalidOperationException(
+                    "Connection string 'PostgresConnection' not found in appsettings.json of API project."
+                );
+            }
 
-        // 4. สร้าง Options Builder
-        var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-        optionsBuilder.UseSqlite(connectionString);
+            var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
 
-        return new AppDbContext(optionsBuilder.Options);
+            // *** 2. เปลี่ยนจาก UseSqlite เป็น UseNpgsql ***
+            optionsBuilder.UseNpgsql(connectionString);
+
+            return new AppDbContext(optionsBuilder.Options);
+        }
     }
 }
