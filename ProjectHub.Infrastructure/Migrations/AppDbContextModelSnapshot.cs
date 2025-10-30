@@ -79,6 +79,39 @@ namespace ProjectHub.Infrastructure.Migrations
                     b.ToTable("Projects");
                 });
 
+            modelBuilder.Entity("ProjectHub.Domain.Entities.Relationships", b =>
+                {
+                    b.Property<int>("RelationshipId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("RelationshipId"));
+
+                    b.Property<int>("ForeignColumnId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ForeignTableId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PrimaryColumnId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PrimaryTableId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("RelationshipId");
+
+                    b.HasIndex("ForeignColumnId");
+
+                    b.HasIndex("ForeignTableId");
+
+                    b.HasIndex("PrimaryColumnId");
+
+                    b.HasIndex("PrimaryTableId");
+
+                    b.ToTable("Relationships");
+                });
+
             modelBuilder.Entity("ProjectHub.Domain.Entities.Rows", b =>
                 {
                     b.Property<int>("Row_id")
@@ -177,6 +210,41 @@ namespace ProjectHub.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("ProjectHub.Domain.Entities.Relationships", b =>
+                {
+                    b.HasOne("ProjectHub.Domain.Entities.Columns", "ForeignColumn")
+                        .WithMany()
+                        .HasForeignKey("ForeignColumnId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("ProjectHub.Domain.Entities.Tables", "ForeignTable")
+                        .WithMany()
+                        .HasForeignKey("ForeignTableId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("ProjectHub.Domain.Entities.Columns", "PrimaryColumn")
+                        .WithMany()
+                        .HasForeignKey("PrimaryColumnId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ProjectHub.Domain.Entities.Tables", "PrimaryTable")
+                        .WithMany()
+                        .HasForeignKey("PrimaryTableId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ForeignColumn");
+
+                    b.Navigation("ForeignTable");
+
+                    b.Navigation("PrimaryColumn");
+
+                    b.Navigation("PrimaryTable");
                 });
 
             modelBuilder.Entity("ProjectHub.Domain.Entities.Rows", b =>

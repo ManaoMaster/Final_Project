@@ -60,6 +60,7 @@ builder.Services.AddScoped<ITableRepository, TableRepository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>(); // <-- เอา Comment ออก
 builder.Services.AddScoped<IColumnRepository, ColumnRepository>();
 builder.Services.AddScoped<IRowRepository, RowRepository>();
+builder.Services.AddScoped<IRelationshipRepository, RelationshipRepository>();
 
 // --- 5. ลงทะเบียน Controllers ---
 builder.Services.AddControllers();

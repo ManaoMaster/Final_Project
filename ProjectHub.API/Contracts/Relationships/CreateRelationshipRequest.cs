@@ -1,0 +1,13 @@
+using System.ComponentModel.DataAnnotations;
+
+
+
+namespace ProjectHub.API.Contracts.Relationships
+{
+    public record CreateRelationshipRequest(
+        int PrimaryTableId,
+        int PrimaryColumnId,
+        int ForeignTableId,
+        int ForeignColumnId
+    );
+}
