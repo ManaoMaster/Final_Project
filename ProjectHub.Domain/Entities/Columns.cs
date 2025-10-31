@@ -13,7 +13,9 @@ namespace ProjectHub.Domain.Entities
         public Boolean Is_primary { get; set; }
         public Boolean Is_nullable { get; set; }
 
-        [ForeignKey("Table_id")] 
+        public string? FormulaDefinition { get; set; }
+
+        [ForeignKey("Table_id")]
         public Tables? Tables { get; set; }
     }
 }

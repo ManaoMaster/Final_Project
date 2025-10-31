@@ -13,6 +13,7 @@ using ProjectHub.Application.Features.Projects.CreateProject;
 using ProjectHub.Application.Features.Projects.DeleteProject;
 using ProjectHub.Application.Features.Projects.UpdateProject;
 using ProjectHub.Application.Features.Relationships.CreateRelationship;
+using ProjectHub.Application.Features.Relationships.UpdateRelationship;
 using ProjectHub.Application.Features.Rows.CreateRow;
 using ProjectHub.Application.Features.Rows.UpdateRow;
 using ProjectHub.Application.Features.Tables.CreateTable;
@@ -43,8 +44,10 @@ namespace ProjectHub.API.Mapping
             CreateMap<UpdateTableRequest, UpdateTableCommand>();
 
             CreateMap<UpdateRowRequest, UpdateRowCommand>();
-            
+
             CreateMap<CreateRelationshipRequest, CreateRelationshipCommand>();
+
+            CreateMap<UpdateRelationshipRequest, UpdateRelationshipCommand>();
         }
     }
 }
