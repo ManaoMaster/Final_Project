@@ -8,6 +8,9 @@ namespace ProjectHub.Application.Features.Relationships.CreateRelationship
     // คืนค่าเป็น DTO ที่เพิ่งสร้าง
     public class CreateRelationshipCommand : IRequest<RelationshipResponseDto>
     {
+        public string? DisplayName { get; set; }
+        public string? Notes { get; set; }
+
         [Required]
         public int PrimaryTableId { get; set; }
 

@@ -62,6 +62,10 @@
               "target": "Package",
               "version": "[4.0.3, )"
             },
+            "Dapper": {
+              "target": "Package",
+              "version": "[2.1.66, )"
+            },
             "MediatR": {
               "target": "Package",
               "version": "[12.1.1, )"

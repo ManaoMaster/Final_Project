@@ -1,6 +1,7 @@
 using AutoMapper;
 using ProjectHub.Application.DTOs;
 using ProjectHub.Application.Features.Relationships.CreateRelationship;
+using ProjectHub.Application.Features.Relationships.UpdateRelationship;
 using ProjectHub.Domain.Entities;
 
 namespace ProjectHub.Application.Mapping
@@ -16,12 +17,14 @@ namespace ProjectHub.Application.Mapping
             // Command -> Domain (Entity)
             CreateMap<CreateRelationshipCommand, Relationships>()
                 .ForMember(d => d.RelationshipId, m => m.Ignore()) // Database จะสร้างให้
-                // Property อื่นๆ (Id) ชื่อตรงกัน AutoMapper จัดการให้
-                // Ignore Navigation Properties
+                                                                   // Property อื่นๆ (Id) ชื่อตรงกัน AutoMapper จัดการให้
+                                                                   // Ignore Navigation Properties
                 .ForMember(d => d.PrimaryTable, m => m.Ignore())
                 .ForMember(d => d.PrimaryColumn, m => m.Ignore())
                 .ForMember(d => d.ForeignTable, m => m.Ignore())
                 .ForMember(d => d.ForeignColumn, m => m.Ignore());
+                
+            CreateMap<UpdateRelationshipCommand, Relationships>();    
         }
     }
 }

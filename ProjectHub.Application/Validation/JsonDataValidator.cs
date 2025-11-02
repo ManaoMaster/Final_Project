@@ -36,12 +36,15 @@ namespace ProjectHub.Application.Validation
             foreach (var column in schema)
             {
                 // Check if property exists in JSON, consider case-insensitivity
-                var propertyExists = jsonData.RootElement.EnumerateObject()
-                                        .Any(p => p.Name.Equals(column.Name, StringComparison.OrdinalIgnoreCase));
+                var propertyExists = jsonData
+                    .RootElement.EnumerateObject()
+                    .Any(p => p.Name.Equals(column.Name, StringComparison.OrdinalIgnoreCase));
 
                 if (!column.Is_nullable && !propertyExists)
                 {
-                    throw new ArgumentException($"Required column '{column.Name}' is missing in data.");
+                    throw new ArgumentException(
+                        $"Required column '{column.Name}' is missing in data."
+                    );
                 }
             }
 
@@ -53,12 +56,15 @@ namespace ProjectHub.Application.Validation
 
                 // Find the schema definition for this column, ignoring case
                 var columnSchema = schema.FirstOrDefault(c =>
-                    c.Name.Equals(columnName, StringComparison.OrdinalIgnoreCase));
+                    c.Name.Equals(columnName, StringComparison.OrdinalIgnoreCase)
+                );
 
                 if (columnSchema == null)
                 {
                     // Allow extra fields or throw error? For now, be strict.
-                    throw new ArgumentException($"Column '{columnName}' does not exist in the table schema.");
+                    throw new ArgumentException(
+                        $"Column '{columnName}' does not exist in the table schema."
+                    );
                 }
 
                 // Check for null if column is not nullable
@@ -74,11 +80,14 @@ namespace ProjectHub.Application.Validation
                     bool typeMatch = columnSchema.Data_type?.ToUpperInvariant() switch
                     {
                         "TEXT" => valueElement.ValueKind == JsonValueKind.String,
-                        "INTEGER" => valueElement.ValueKind == JsonValueKind.Number && valueElement.TryGetInt64(out _),
+                        "INTEGER" => valueElement.ValueKind == JsonValueKind.Number
+                            && valueElement.TryGetInt64(out _),
                         "REAL" => valueElement.ValueKind == JsonValueKind.Number,
-                        "BOOLEAN" => valueElement.ValueKind == JsonValueKind.True || valueElement.ValueKind == JsonValueKind.False,
+                        "BOOLEAN" => valueElement.ValueKind == JsonValueKind.True
+                            || valueElement.ValueKind == JsonValueKind.False,
                         "STRING" => valueElement.ValueKind == JsonValueKind.String,
-                        "INT" => valueElement.ValueKind == JsonValueKind.Number && valueElement.TryGetInt64(out _),
+                        "INT" => valueElement.ValueKind == JsonValueKind.Number
+                            && valueElement.TryGetInt64(out _),
                         // Add other specific types (e.g., DATETIME)
                         _ => false, // Default to false if type is unknown/unsupported
                     };
@@ -86,12 +95,26 @@ namespace ProjectHub.Application.Validation
                     if (!typeMatch)
                     {
                         // Throw specific error if the data type string itself is unsupported
-                        if (!new[] { "TEXT", "INTEGER", "REAL", "BOOLEAN", "STRING", "INT" }.Contains(columnSchema.Data_type?.ToUpperInvariant()))
+                        if (
+                            !new[]
+                            {
+                                "TEXT",
+                                "INTEGER",
+                                "REAL",
+                                "BOOLEAN",
+                                "STRING",
+                                "INT",
+                            }.Contains(columnSchema.Data_type?.ToUpperInvariant())
+                        )
                         {
-                             throw new ArgumentException($"Unsupported data type '{columnSchema.Data_type}' defined in schema for column '{columnSchema.Name}'.");
+                            throw new ArgumentException(
+                                $"Unsupported data type '{columnSchema.Data_type}' defined in schema for column '{columnSchema.Name}'."
+                            );
                         }
                         // Otherwise, it's a value mismatch
-                       throw new ArgumentException($"Data type mismatch for column '{columnSchema.Name}'. Expected '{columnSchema.Data_type}' but received value '{valueElement.ToString()}' which is of type '{valueElement.ValueKind}'.");
+                        throw new ArgumentException(
+                            $"Data type mismatch for column '{columnSchema.Name}'. Expected '{columnSchema.Data_type}' but received value '{valueElement.ToString()}' which is of type '{valueElement.ValueKind}'."
+                        );
                     }
                 }
             }

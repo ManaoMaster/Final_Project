@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "qQaZNFmltqY=",
+  "dgSpecHash": "hyGkVjlr7o8=",
   "success": true,
   "projectFilePath": "C:\\school\\final_project\\Final_Project\\ProjectHub.API\\ProjectHub.API.csproj",
   "expectedPackageFiles": [
@@ -80,5 +80,15 @@
     "C:\\Users\\ghost\\.nuget\\packages\\system.text.json\\9.0.10\\system.text.json.9.0.10.nupkg.sha512",
     "C:\\Users\\ghost\\.nuget\\packages\\system.threading.channels\\7.0.0\\system.threading.channels.7.0.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "message": "Problem reading the cache file C:\\school\\final_project\\Final_Project\\ProjectHub.API\\obj\\project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0.",
+      "projectPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.API\\ProjectHub.API.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\school\\final_project\\Final_Project\\ProjectHub.API\\ProjectHub.API.csproj",
+      "targetGraphs": []
+    }
+  ]
 }

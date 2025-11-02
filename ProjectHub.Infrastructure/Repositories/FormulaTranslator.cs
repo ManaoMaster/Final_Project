@@ -8,7 +8,10 @@ namespace ProjectHub.Application.Services
 {
     public class FormulaTranslator : IFormulaTranslator
     {
+<<<<<<< HEAD
         // (เราจะใช้ DataColumnName = "Data" ตามที่คุณบอกว่าใช้ jsonb)
+=======
+>>>>>>> feature/create-calculation
         private string _dataColumn = "Data";
 
         public string Translate(string jsonAst, string dataColumnName = "Data")
@@ -50,20 +53,35 @@ namespace ProjectHub.Application.Services
             {
                 case "operator":
                     string op = node.GetProperty("value").GetString() ?? "+";
+<<<<<<< HEAD
                     // (เรียกตัวเองซ้ำเพื่อเจาะลงไปใน "left" และ "right")
                     string left = ParseNode(node.GetProperty("left"));
                     string right = ParseNode(node.GetProperty("right"));
                     // (สร้าง SQL โดยใส่วงเล็บให้ถูกต้อง)
+=======
+                    string left = ParseNode(node.GetProperty("left"));
+                    string right = ParseNode(node.GetProperty("right"));
+>>>>>>> feature/create-calculation
                     return $"({left} {op} {right})";
 
                 case "column":
                     string colName = node.GetProperty("name").GetString() ?? "";
+<<<<<<< HEAD
                     // *** นี่คือส่วนที่แปลง "name" เป็น SQL ครับ ***
                     // (Data->>'salary')::numeric
                     return $"({_dataColumn}->>'{colName}')::numeric";
 
                 case "literal":
                     // (ส่งค่าตัวเลข/ข้อความ กลับไปตรงๆ)
+=======
+                    
+                    // --- *** นี่คือจุดที่แก้ไขครับ *** ---
+                    // เพิ่ม \" (ฟันหนู) รอบ _dataColumn
+                    // เพื่อให้ SQL ที่ได้เป็น ("Data"->>'salary')::numeric
+                    return $"(\"{_dataColumn}\"->>'{colName}')::numeric";
+
+                case "literal":
+>>>>>>> feature/create-calculation
                     return node.GetProperty("value").GetRawText();
 
                 default:
