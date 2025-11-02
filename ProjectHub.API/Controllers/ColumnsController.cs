@@ -1,84 +1,61 @@
 using System;
 using System.Threading.Tasks;
-using AutoMapper; // เพิ่ม: ถ้าใช้ AutoMapper ใน API
+using AutoMapper; 
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ProjectHub.API.Contracts.Columns;
+using ProjectHub.API.Contracts.Columns; // <-- 1. ใช้ DTO ที่ถูกต้องจาก Contracts
 using ProjectHub.Application.Dtos;
 using ProjectHub.Application.Features.Columns.CreateColumn;
 using ProjectHub.Application.Features.Columns.DeleteColumn;
-using ProjectHub.Application.Features.Projects.UpdateProject; // เพิ่ม: สำหรับ Command
+using ProjectHub.Application.Features.Columns.UpdateColumn; // <-- 2. เพิ่ม Using นี้สำหรับ Update
+using System.Threading;
+using ProjectHub.Application.Features.Projects.UpdateProject; // <-- 3. เพิ่ม Using นี้สำหรับ CancellationToken
 
 namespace ProjectHub.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")] // ใช้ /api/columns
+    [Route("api/[controller]")] 
     public class ColumnsController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly IMapper _mapper; // เพิ่ม: ถ้าใช้ AutoMapper
+        private readonly IMapper _mapper; 
 
-        // Inject IMediator และ IMapper
         public ColumnsController(IMediator mediator, IMapper mapper)
         {
             _mediator = mediator;
-            _mapper = mapper; // เพิ่ม
+            _mapper = mapper; 
         }
 
-        // --- DTO สำหรับรับ Request Body ---
-        // ควรสร้างไฟล์แยกใน ProjectHub.API/Contracts/Columns/CreateColumnRequest.cs
-        // แต่เพื่อความง่าย ใส่เป็น record ที่นี่ก่อนได้
-        public record CreateColumnRequest(
-            [FromRoute] int TableId, // สมมติว่า TableId มาจาก Route Parameter
-            [FromBody] CreateColumnRequestPayload Payload // ข้อมูล Column มาจาก Body
-        );
+        // --- (ลบ record CreateColumnRequest และ CreateColumnRequestPayload ที่ซ้ำซ้อนทิ้งไป) ---
 
-        public record CreateColumnRequestPayload(
-            string Name,
-            string DataType,
-            bool IsPrimary = false, // กำหนด Default
-            bool IsNullable = true // กำหนด Default
-        );
-
-        // --- Endpoint: POST /api/columns/{tableId} ---
-        [HttpPost("{tableId}")] // รับ TableId จาก URL
+        // --- Endpoint: POST /api/columns ---
+        // (เราไม่ต้องใช้ {tableId} ใน Route แล้ว เพราะมันอยู่ใน Request Body)
+        [HttpPost] 
         public async Task<IActionResult> CreateColumn(
-            [FromRoute] int tableId,
-            [FromBody] CreateColumnRequestPayload payload
+            [FromBody] CreateColumnRequest request, // <-- 4. เปลี่ยนมารับ DTO ที่ถูกต้อง
+            CancellationToken ct // <-- เพิ่ม ct
         )
         {
-            // 1. สร้าง Command จาก Request DTO และ Route Parameter
-            var command = new CreateColumnCommand
-            {
-                TableId = tableId, // มาจาก Route
-                Name = payload.Name,
-                DataType = payload.DataType,
-                IsPrimary = payload.IsPrimary,
-                IsNullable = payload.IsNullable,
-            };
-
-            // // หรือถ้าใช้ AutoMapper (ต้องสร้าง Request DTO ที่สมบูรณ์ก่อน)
-            // var command = _mapper.Map<CreateColumnCommand>(request);
+            // 5. ใช้ AutoMapper (แบบนี้ FormulaDefinition จะถูกแมปไปด้วย)
+            var command = _mapper.Map<CreateColumnCommand>(request);
 
             try
             {
-                // 2. ส่ง Command ไปยัง MediatR (ซึ่งจะหา Handler มาทำงาน)
-                ColumnResponseDto responseDto = await _mediator.Send(command);
+                // 6. ส่ง Command ไปยัง MediatR
+                ColumnResponseDto responseDto = await _mediator.Send(command, ct); // <-- ส่ง ct
 
-                // 3. คืนค่า 201 Created พร้อม DTO ที่ได้กลับมา
-                // (ใช้ GetById endpoint ถ้ามี, ถ้าไม่มี ใช้ null ไปก่อน)
+                // 7. คืนค่า 201 Created
                 return CreatedAtAction(
-                    null, // nameof(GetColumnById) ถ้ามี Endpoint นี้
+                    null, 
                     new { id = responseDto.ColumnId },
                     responseDto
                 );
             }
             catch (ArgumentException ex)
             {
-                // จับ Error จาก Business Logic (เช่น ชื่อซ้ำ, Table ไม่เจอ)
                 return BadRequest(new { Error = ex.Message });
             }
-            catch (Exception ex) // จับ Error อื่นๆ ที่ไม่คาดคิด
+            catch (Exception ex) 
             {
                 // Log the exception ex
                 return StatusCode(500, new { Error = "An unexpected error occurred." });
@@ -88,52 +65,42 @@ namespace ProjectHub.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateColumn(
             [FromRoute] int id,
-            [FromBody] UpdateColumnRequest request,
+            [FromBody] UpdateColumnRequest request, // (DTO นี้ต้องมีอยู่ใน Contracts/Columns)
             CancellationToken ct
         )
         {
             var command = _mapper.Map<UpdateColumnCommand>(request);
             command.ColumnId = id;
             var result = await _mediator.Send(command, ct);
-            return Ok(result);
+            return Ok(result); // (สมมติว่า Handler คืน DTO ที่อัปเดตแล้ว)
         }
 
-        // --- Endpoint: DELETE /api/rows/{id} ---
-        [HttpDelete("{id}")] // รับ ID จาก URL Path
+        // --- Endpoint: DELETE /api/columns/{id} ---
+        [HttpDelete("{id}")] 
         public async Task<IActionResult> DeleteColumn(
-            [FromRoute] int id, // ดึง ID จาก Path
+            [FromRoute] int id, 
             CancellationToken ct
-        ) // เพิ่ม ct
+        ) 
         {
-            // สร้าง Command โดยตรงจาก ID ที่ได้จาก Route
             var command = new DeleteColumnCommand { ColumnId = id };
 
             try
             {
-                // ส่ง Command ให้ MediatR (Handler จะคืน Unit)
-                await _mediator.Send(command, ct); // เพิ่ม ct
-
-                // คืน 204 No Content = สำเร็จ ไม่มีข้อมูลส่งกลับ
+                await _mediator.Send(command, ct); 
                 return NoContent();
             }
-            catch (ArgumentException ex) // จับ Error จาก Handler (Row not found)
+            catch (ArgumentException ex) 
             {
-                return NotFound(new { Error = ex.Message }); // คืน 404 Not Found
+                return NotFound(new { Error = ex.Message }); 
             }
-            catch (Exception ex) // จับ Error อื่นๆ
+            catch (Exception ex) 
             {
-                Console.WriteLine($"Error deleting row {id}: {ex}"); // Log ง่ายๆ
+                Console.WriteLine($"Error deleting column {id}: {ex}"); // (แก้จาก row เป็น column)
                 return StatusCode(500, new { Error = "An unexpected error occurred." });
             }
         }
+        
         // --- (Optional) Endpoint: GET /api/columns/{id} ---
-        // [HttpGet("{id}")]
-        // public async Task<IActionResult> GetColumnById(int id)
-        // {
-        //     // สร้าง GetColumnByIdQuery และ Handler
-        //     // var query = new GetColumnByIdQuery { ColumnId = id };
-        //     // var result = await _mediator.Send(query);
-        //     // return result != null ? Ok(result) : NotFound();
-        // }
+        // (ยังไม่ได้สร้าง Handler)
     }
 }

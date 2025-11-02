@@ -6,6 +6,9 @@ namespace ProjectHub.Application.Features.Rows.GetRowsByTableId
     /// <summary>
     /// Query สำหรับดึงข้อมูลแถวทั้งหมดใน Table ที่ระบุ
     /// </summary>
+    //
+    // *** แก้จาก <IEnumerable<dynamic>> เป็น <IEnumerable<IDictionary<string, object>>> ***
+    //
     public class GetRowsByTableIdQuery : IRequest<IEnumerable<IDictionary<string, object>>>
     {
         /// <summary>

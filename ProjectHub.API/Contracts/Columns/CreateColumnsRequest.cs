@@ -6,8 +6,6 @@ namespace ProjectHub.API.Contracts.Columns
         string DataType,
         bool IsNullable,
         bool IsPrimaryKey,
-
-        // --- *** เพิ่มตัวนี้เข้าไปครับ *** ---
         string FormulaDefinition
     );
 }
