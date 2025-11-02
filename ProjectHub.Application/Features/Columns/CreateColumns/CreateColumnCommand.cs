@@ -1,24 +1,20 @@
 using MediatR;
 using ProjectHub.Application.Dtos;
-using System.ComponentModel.DataAnnotations; // ต้องใช้ [Required]
 
 namespace ProjectHub.Application.Features.Columns.CreateColumn
 {
     public class CreateColumnCommand : IRequest<ColumnResponseDto>
     {
-        [Required]
-        public int TableId { get; set; }
-
-        [Required]
-        [MaxLength(100)] // เพิ่ม Validation เบื้องต้น
+        // (Property พื้นฐานที่ Handler เรียกใช้)
+        public int TableId { get; set; } 
         public string Name { get; set; } = string.Empty;
-
-        [Required]
-        [MaxLength(50)] // เพิ่ม Validation เบื้องต้น
         public string DataType { get; set; } = string.Empty;
+        public bool IsPrimary { get; set; }
 
-        public bool IsPrimary { get; set; } = false; // Default เป็น false
+        // (Property ที่จำเป็นสำหรับ Logic ของคุณ)
+        public bool IsNullable { get; set; } // (Entity Columns.cs มี )
 
-        public bool IsNullable { get; set; } = true; // Default เป็น true
+        // --- *** นี่คือ Property ที่ขาดไป (และทำให้เกิด Error) *** ---
+        public string? FormulaDefinition { get; set; }
     }
 }

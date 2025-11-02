@@ -33,6 +33,19 @@
           }
         }
       },
+      "Dapper/2.1.66": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/Dapper.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Dapper.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Humanizer.Core/2.14.1": {
         "type": "package",
         "compile": {
@@ -1553,6 +1566,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
         "dependencies": {
+          "Dapper": "2.1.66",
           "MediatR": "12.1.1",
           "Microsoft.EntityFrameworkCore.Sqlite": "9.0.10",
           "Microsoft.Extensions.Configuration": "9.0.10",
@@ -1620,6 +1634,25 @@
         "lib/netstandard2.0/BCrypt.Net-Next.xml",
         "lib/netstandard2.1/BCrypt.Net-Next.dll",
         "lib/netstandard2.1/BCrypt.Net-Next.xml",
+        "readme.md"
+      ]
+    },
+    "Dapper/2.1.66": {
+      "sha512": "/q77jUgDOS+bzkmk3Vy9SiWMaetTw+NOoPAV0xPBsGVAyljd5S6P+4RUW7R3ZUGGr9lDRyPKgAMj2UAOwvqZYw==",
+      "type": "package",
+      "path": "dapper/2.1.66",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Dapper.png",
+        "dapper.2.1.66.nupkg.sha512",
+        "dapper.nuspec",
+        "lib/net461/Dapper.dll",
+        "lib/net461/Dapper.xml",
+        "lib/net8.0/Dapper.dll",
+        "lib/net8.0/Dapper.xml",
+        "lib/netstandard2.0/Dapper.dll",
+        "lib/netstandard2.0/Dapper.xml",
         "readme.md"
       ]
     },
@@ -4429,11 +4462,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\school\\final_project\\New folder (2)\\Final_Project\\ProjectHub.API\\ProjectHub.API.csproj",
+      "projectUniqueName": "C:\\school\\final_project\\Final_Project\\ProjectHub.API\\ProjectHub.API.csproj",
       "projectName": "ProjectHub.API",
-      "projectPath": "C:\\school\\final_project\\New folder (2)\\Final_Project\\ProjectHub.API\\ProjectHub.API.csproj",
+      "projectPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.API\\ProjectHub.API.csproj",
       "packagesPath": "C:\\Users\\ghost\\.nuget\\packages\\",
-      "outputPath": "C:\\school\\final_project\\New folder (2)\\Final_Project\\ProjectHub.API\\obj\\",
+      "outputPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.API\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -4454,14 +4487,14 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "C:\\school\\final_project\\New folder (2)\\Final_Project\\ProjectHub.Application\\ProjectHub.Application.csproj": {
-              "projectPath": "C:\\school\\final_project\\New folder (2)\\Final_Project\\ProjectHub.Application\\ProjectHub.Application.csproj"
+            "C:\\school\\final_project\\Final_Project\\ProjectHub.Application\\ProjectHub.Application.csproj": {
+              "projectPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Application\\ProjectHub.Application.csproj"
             },
-            "C:\\school\\final_project\\New folder (2)\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj": {
-              "projectPath": "C:\\school\\final_project\\New folder (2)\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj"
+            "C:\\school\\final_project\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj": {
+              "projectPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj"
             },
-            "C:\\school\\final_project\\New folder (2)\\Final_Project\\ProjectHub.Infrastructure\\ProjectHub.Infrastructure.csproj": {
-              "projectPath": "C:\\school\\final_project\\New folder (2)\\Final_Project\\ProjectHub.Infrastructure\\ProjectHub.Infrastructure.csproj"
+            "C:\\school\\final_project\\Final_Project\\ProjectHub.Infrastructure\\ProjectHub.Infrastructure.csproj": {
+              "projectPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Infrastructure\\ProjectHub.Infrastructure.csproj"
             }
           }
         }
@@ -4542,7 +4575,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

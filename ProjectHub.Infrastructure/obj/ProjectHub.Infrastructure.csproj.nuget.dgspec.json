@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\school\\final_project\\New folder (2)\\Final_Project\\ProjectHub.Infrastructure\\ProjectHub.Infrastructure.csproj": {}
+    "C:\\school\\final_project\\Final_Project\\ProjectHub.Infrastructure\\ProjectHub.Infrastructure.csproj": {}
   },
   "projects": {
-    "C:\\school\\final_project\\New folder (2)\\Final_Project\\ProjectHub.Application\\ProjectHub.Application.csproj": {
+    "C:\\school\\final_project\\Final_Project\\ProjectHub.Application\\ProjectHub.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\school\\final_project\\New folder (2)\\Final_Project\\ProjectHub.Application\\ProjectHub.Application.csproj",
+        "projectUniqueName": "C:\\school\\final_project\\Final_Project\\ProjectHub.Application\\ProjectHub.Application.csproj",
         "projectName": "ProjectHub.Application",
-        "projectPath": "C:\\school\\final_project\\New folder (2)\\Final_Project\\ProjectHub.Application\\ProjectHub.Application.csproj",
+        "projectPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Application\\ProjectHub.Application.csproj",
         "packagesPath": "C:\\Users\\ghost\\.nuget\\packages\\",
-        "outputPath": "C:\\school\\final_project\\New folder (2)\\Final_Project\\ProjectHub.Application\\obj\\",
+        "outputPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Application\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -32,8 +32,8 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\school\\final_project\\New folder (2)\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj": {
-                "projectPath": "C:\\school\\final_project\\New folder (2)\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj"
+              "C:\\school\\final_project\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj": {
+                "projectPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj"
               }
             }
           }
@@ -83,18 +83,18 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\school\\final_project\\New folder (2)\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj": {
+    "C:\\school\\final_project\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\school\\final_project\\New folder (2)\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj",
+        "projectUniqueName": "C:\\school\\final_project\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj",
         "projectName": "ProjectHub.Domain",
-        "projectPath": "C:\\school\\final_project\\New folder (2)\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj",
+        "projectPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj",
         "packagesPath": "C:\\Users\\ghost\\.nuget\\packages\\",
-        "outputPath": "C:\\school\\final_project\\New folder (2)\\Final_Project\\ProjectHub.Domain\\obj\\",
+        "outputPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -148,18 +148,18 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\school\\final_project\\New folder (2)\\Final_Project\\ProjectHub.Infrastructure\\ProjectHub.Infrastructure.csproj": {
+    "C:\\school\\final_project\\Final_Project\\ProjectHub.Infrastructure\\ProjectHub.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\school\\final_project\\New folder (2)\\Final_Project\\ProjectHub.Infrastructure\\ProjectHub.Infrastructure.csproj",
+        "projectUniqueName": "C:\\school\\final_project\\Final_Project\\ProjectHub.Infrastructure\\ProjectHub.Infrastructure.csproj",
         "projectName": "ProjectHub.Infrastructure",
-        "projectPath": "C:\\school\\final_project\\New folder (2)\\Final_Project\\ProjectHub.Infrastructure\\ProjectHub.Infrastructure.csproj",
+        "projectPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Infrastructure\\ProjectHub.Infrastructure.csproj",
         "packagesPath": "C:\\Users\\ghost\\.nuget\\packages\\",
-        "outputPath": "C:\\school\\final_project\\New folder (2)\\Final_Project\\ProjectHub.Infrastructure\\obj\\",
+        "outputPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -180,11 +180,11 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\school\\final_project\\New folder (2)\\Final_Project\\ProjectHub.Application\\ProjectHub.Application.csproj": {
-                "projectPath": "C:\\school\\final_project\\New folder (2)\\Final_Project\\ProjectHub.Application\\ProjectHub.Application.csproj"
+              "C:\\school\\final_project\\Final_Project\\ProjectHub.Application\\ProjectHub.Application.csproj": {
+                "projectPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Application\\ProjectHub.Application.csproj"
               },
-              "C:\\school\\final_project\\New folder (2)\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj": {
-                "projectPath": "C:\\school\\final_project\\New folder (2)\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj"
+              "C:\\school\\final_project\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj": {
+                "projectPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj"
               }
             }
           }
@@ -205,6 +205,10 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "Dapper": {
+              "target": "Package",
+              "version": "[2.1.66, )"
+            },
             "MediatR": {
               "target": "Package",
               "version": "[12.1.1, )"
@@ -258,7 +262,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

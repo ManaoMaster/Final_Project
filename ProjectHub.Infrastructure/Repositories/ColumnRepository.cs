@@ -24,7 +24,11 @@ namespace ProjectHub.Infrastructure.Repositories
                 c.Table_id == tableId && c.Name == columnName
             );
         }
-
+        public async Task<Columns?> GetColumnByNameAsync(int tableId, string name)
+        {
+            return await _context.Columns
+                .FirstOrDefaultAsync(c => c.Table_id == tableId && c.Name == name);
+        }
         public async Task<bool> HasPrimaryKeyAsync(int tableId)
         {
             // ใช้ EF Core query เพื่อเช็คว่ามี Column ไหนใน Table นี้ที่เป็น Primary Key แล้ว

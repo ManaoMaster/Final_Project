@@ -20,6 +20,9 @@ using ProjectHub.Application.Repositories;
 using ProjectHub.Infrastructure.Auth;
 using ProjectHub.Infrastructure.Persistence;
 using ProjectHub.Infrastructure.Repositories;
+using Npgsql;
+using ProjectHub.Application.Services;
+using System.Data; // <-- เพิ่ม using สำหรับ Dapper
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,6 +64,10 @@ builder.Services.AddScoped<IProjectRepository, ProjectRepository>(); // <-- เ�
 builder.Services.AddScoped<IColumnRepository, ColumnRepository>();
 builder.Services.AddScoped<IRowRepository, RowRepository>();
 builder.Services.AddScoped<IRelationshipRepository, RelationshipRepository>();
+builder.Services.AddScoped<IFormulaTranslator, FormulaTranslator>();
+builder.Services.AddScoped<IDbConnection>(sp => 
+    new NpgsqlConnection(builder.Configuration.GetConnectionString("PostgresConnection"))
+);
 
 // --- 5. ลงทะเบียน Controllers ---
 builder.Services.AddControllers();

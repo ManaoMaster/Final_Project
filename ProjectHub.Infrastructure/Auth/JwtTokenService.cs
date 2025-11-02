@@ -51,6 +51,8 @@ namespace ProjectHub.Infrastructure.Auth
                 AccessToken = new JwtSecurityTokenHandler().WriteToken(token),
                 ExpiresAt = expires
             };
+
+            
         }
     }
 }

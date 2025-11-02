@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "fG5bqoY1ctg=",
+  "dgSpecHash": "qQaZNFmltqY=",
   "success": true,
-  "projectFilePath": "C:\\school\\final_project\\New folder (2)\\Final_Project\\ProjectHub.API\\ProjectHub.API.csproj",
+  "projectFilePath": "C:\\school\\final_project\\Final_Project\\ProjectHub.API\\ProjectHub.API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ghost\\.nuget\\packages\\automapper\\15.1.0\\automapper.15.1.0.nupkg.sha512",
     "C:\\Users\\ghost\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
+    "C:\\Users\\ghost\\.nuget\\packages\\dapper\\2.1.66\\dapper.2.1.66.nupkg.sha512",
     "C:\\Users\\ghost\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\ghost\\.nuget\\packages\\mediatr\\12.1.1\\mediatr.12.1.1.nupkg.sha512",
     "C:\\Users\\ghost\\.nuget\\packages\\mediatr.contracts\\2.0.1\\mediatr.contracts.2.0.1.nupkg.sha512",

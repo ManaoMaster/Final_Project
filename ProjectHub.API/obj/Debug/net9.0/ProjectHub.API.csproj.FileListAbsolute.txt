@@ -1055,3 +1055,12 @@ C:\school\final_project\New folder (2)\Final_Project\ProjectHub.API\obj\Debug\ne
 C:\school\final_project\New folder (2)\Final_Project\ProjectHub.API\obj\Debug\net9.0\ref\ProjectHub.API.dll
 C:\school\final_project\New folder (2)\Final_Project\ProjectHub.API\bin\Debug\net9.0\Npgsql.dll
 C:\school\final_project\New folder (2)\Final_Project\ProjectHub.API\bin\Debug\net9.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
+C:\school\final_project\Final_Project\ProjectHub.API\bin\Debug\net9.0\appsettings.Development.json
+C:\school\final_project\Final_Project\ProjectHub.API\bin\Debug\net9.0\BCrypt.Net-Next.dll
+C:\school\final_project\Final_Project\ProjectHub.API\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\school\final_project\Final_Project\ProjectHub.API\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.dll
+C:\school\final_project\Final_Project\ProjectHub.API\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\school\final_project\Final_Project\ProjectHub.API\bin\Debug\net9.0\Npgsql.dll
+C:\school\final_project\Final_Project\ProjectHub.API\bin\Debug\net9.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
+C:\school\final_project\Final_Project\ProjectHub.API\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
+C:\school\final_project\Final_Project\ProjectHub.API\bin\Debug\net9.0\System.Text.Json.dll
