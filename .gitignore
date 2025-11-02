@@ -1,9 +1,13 @@
-.vs/
-# .NET Build Artifacts
-[Oo]bj/
+# C# compiled files
 [Bb]in/
+[Oo]bj/
 
-# SQLite database files
-*.db
-*.db-shm
-*.db-wal
+# User-specific files
+*.user
+*.suo
+
+# IDE files
+.vs/
+
+# Secrets (Best practice)
+appsettings.Development.json
