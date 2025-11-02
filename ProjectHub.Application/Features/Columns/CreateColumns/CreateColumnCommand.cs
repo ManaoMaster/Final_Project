@@ -14,12 +14,8 @@ namespace ProjectHub.Application.Features.Columns.CreateColumn
         // (Property ที่จำเป็นสำหรับ Logic ของคุณ)
         public bool IsNullable { get; set; } // (Entity Columns.cs มี )
 
-<<<<<<< HEAD
-        // --- *** นี่คือ Property ที่ขาดไป (และทำให้เกิด Error) *** ---
-=======
-        public bool IsNullable { get; set; } = true; // Default เป็น true
 
->>>>>>> feature/create-calculation
+
         public string? FormulaDefinition { get; set; }
     }
 }

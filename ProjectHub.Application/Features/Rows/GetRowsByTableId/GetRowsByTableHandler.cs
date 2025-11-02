@@ -47,7 +47,7 @@ namespace ProjectHub.Application.Features.Rows.GetRowsByTableId
                 // ... (try...catch... เหมือนเดิม) ...
                 try
                 {
-                    string sqlSnippet = _formulaTranslator.Translate(col.FormulaDefinition, "Data");
+                    string sqlSnippet = _formulaTranslator.Translate(col.FormulaDefinition!, "Data");
                     selectClauses.Add($"({sqlSnippet}) AS \"{col.Name}\"");
                 }
                 catch (Exception ex)
