@@ -78,19 +78,3 @@ C:\school\final_project\New folder (2)\Final_Project\ProjectHub.Application\obj\
 C:\school\final_project\New folder (2)\Final_Project\ProjectHub.Application\obj\Debug\net9.0\refint\ProjectHub.Application.dll
 C:\school\final_project\New folder (2)\Final_Project\ProjectHub.Application\obj\Debug\net9.0\ProjectHub.Application.pdb
 C:\school\final_project\New folder (2)\Final_Project\ProjectHub.Application\obj\Debug\net9.0\ref\ProjectHub.Application.dll
-C:\school\final_project\Final_Project\ProjectHub.Application\bin\Debug\net9.0\ProjectHub.Application.deps.json
-C:\school\final_project\Final_Project\ProjectHub.Application\bin\Debug\net9.0\ProjectHub.Application.dll
-C:\school\final_project\Final_Project\ProjectHub.Application\bin\Debug\net9.0\ProjectHub.Application.pdb
-C:\school\final_project\Final_Project\ProjectHub.Application\bin\Debug\net9.0\ProjectHub.Domain.dll
-C:\school\final_project\Final_Project\ProjectHub.Application\bin\Debug\net9.0\ProjectHub.Domain.pdb
-C:\school\final_project\Final_Project\ProjectHub.Application\obj\Debug\net9.0\ProjectHub.Application.csproj.AssemblyReference.cache
-C:\school\final_project\Final_Project\ProjectHub.Application\obj\Debug\net9.0\ProjectHub.Application.GeneratedMSBuildEditorConfig.editorconfig
-C:\school\final_project\Final_Project\ProjectHub.Application\obj\Debug\net9.0\ProjectHub.Application.AssemblyInfoInputs.cache
-C:\school\final_project\Final_Project\ProjectHub.Application\obj\Debug\net9.0\ProjectHub.Application.AssemblyInfo.cs
-C:\school\final_project\Final_Project\ProjectHub.Application\obj\Debug\net9.0\ProjectHub.Application.csproj.CoreCompileInputs.cache
-C:\school\final_project\Final_Project\ProjectHub.Application\obj\Debug\net9.0\ProjectHub.Application.sourcelink.json
-C:\school\final_project\Final_Project\ProjectHub.Application\obj\Debug\net9.0\ProjectH.533F2EFC.Up2Date
-C:\school\final_project\Final_Project\ProjectHub.Application\obj\Debug\net9.0\ProjectHub.Application.dll
-C:\school\final_project\Final_Project\ProjectHub.Application\obj\Debug\net9.0\refint\ProjectHub.Application.dll
-C:\school\final_project\Final_Project\ProjectHub.Application\obj\Debug\net9.0\ProjectHub.Application.pdb
-C:\school\final_project\Final_Project\ProjectHub.Application\obj\Debug\net9.0\ref\ProjectHub.Application.dll
