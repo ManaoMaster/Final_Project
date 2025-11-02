@@ -20,5 +20,7 @@ namespace ProjectHub.Application.Features.Columns.CreateColumn
         public bool IsPrimary { get; set; } = false; // Default เป็น false
 
         public bool IsNullable { get; set; } = true; // Default เป็น true
+
+        public string? FormulaDefinition { get; set; }
     }
 }

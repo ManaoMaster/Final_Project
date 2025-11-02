@@ -27,6 +27,7 @@ namespace ProjectHub.Application.Mapping
                 .ForMember(d => d.Data_type, m => m.MapFrom(s => s.DataType)) // ชื่อไม่ตรง
                 .ForMember(d => d.Is_primary, m => m.MapFrom(s => s.IsPrimary)) // ชื่อไม่ตรง
                 .ForMember(d => d.Is_nullable, m => m.MapFrom(s => s.IsNullable)) // ชื่อไม่ตรง
+                .ForMember(d => d.FormulaDefinition, m => m.MapFrom(s => s.FormulaDefinition))
                 // Name ชื่อตรงกัน ไม่ต้องเขียน
                 // Ignore Navigation Property
                 .ForMember(d => d.Tables, m => m.Ignore());

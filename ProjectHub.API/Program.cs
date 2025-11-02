@@ -1,3 +1,4 @@
+using System.Data;
 using System.Reflection;
 using System.Security.Claims;
 using System.Text;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Npgsql;
 using ProjectHub.API.Mapping;
 using ProjectHub.Application.Features.Users.Login;
 using ProjectHub.Application.Features.Users.Register;
@@ -17,6 +19,7 @@ using ProjectHub.Application.Interfaces;
 // using ProjectHub.Application.Interfaces; // <-- Namespace นี้อาจจะเก่า/ไม่ได้ใช้
 using ProjectHub.Application.Mapping;
 using ProjectHub.Application.Repositories;
+using ProjectHub.Application.Services;
 using ProjectHub.Infrastructure.Auth;
 using ProjectHub.Infrastructure.Persistence;
 using ProjectHub.Infrastructure.Repositories;
@@ -61,6 +64,11 @@ builder.Services.AddScoped<IProjectRepository, ProjectRepository>(); // <-- เ�
 builder.Services.AddScoped<IColumnRepository, ColumnRepository>();
 builder.Services.AddScoped<IRowRepository, RowRepository>();
 builder.Services.AddScoped<IRelationshipRepository, RelationshipRepository>();
+builder.Services.AddScoped<IFormulaTranslator, FormulaTranslator>(); //
+
+builder.Services.AddScoped<IDbConnection>(sp => 
+    new NpgsqlConnection(builder.Configuration.GetConnectionString("PostgresConnection"))
+);
 
 // --- 5. ลงทะเบียน Controllers ---
 builder.Services.AddControllers();

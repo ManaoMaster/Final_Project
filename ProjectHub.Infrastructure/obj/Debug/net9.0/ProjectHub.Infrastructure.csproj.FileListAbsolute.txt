@@ -1,23 +1,3 @@
-C:\school\final_project\Final_Project\ProjectHub.Infrastructure\bin\Debug\net9.0\ProjectHub.Infrastructure.deps.json
-C:\school\final_project\Final_Project\ProjectHub.Infrastructure\bin\Debug\net9.0\ProjectHub.Infrastructure.runtimeconfig.json
-C:\school\final_project\Final_Project\ProjectHub.Infrastructure\bin\Debug\net9.0\ProjectHub.Infrastructure.dll
-C:\school\final_project\Final_Project\ProjectHub.Infrastructure\bin\Debug\net9.0\ProjectHub.Infrastructure.pdb
-C:\school\final_project\Final_Project\ProjectHub.Infrastructure\bin\Debug\net9.0\ProjectHub.Application.dll
-C:\school\final_project\Final_Project\ProjectHub.Infrastructure\bin\Debug\net9.0\ProjectHub.Domain.dll
-C:\school\final_project\Final_Project\ProjectHub.Infrastructure\bin\Debug\net9.0\ProjectHub.Domain.pdb
-C:\school\final_project\Final_Project\ProjectHub.Infrastructure\bin\Debug\net9.0\ProjectHub.Application.pdb
-C:\school\final_project\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ProjectHub.Infrastructure.csproj.AssemblyReference.cache
-C:\school\final_project\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ProjectHub.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
-C:\school\final_project\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ProjectHub.Infrastructure.AssemblyInfoInputs.cache
-C:\school\final_project\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ProjectHub.Infrastructure.AssemblyInfo.cs
-C:\school\final_project\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ProjectHub.Infrastructure.csproj.CoreCompileInputs.cache
-C:\school\final_project\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ProjectHub.Infrastructure.sourcelink.json
-C:\school\final_project\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ProjectH.1D8C29F7.Up2Date
-C:\school\final_project\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ProjectHub.Infrastructure.dll
-C:\school\final_project\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\refint\ProjectHub.Infrastructure.dll
-C:\school\final_project\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ProjectHub.Infrastructure.pdb
-C:\school\final_project\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ProjectHub.Infrastructure.genruntimeconfig.cache
-C:\school\final_project\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ref\ProjectHub.Infrastructure.dll
 C:\Users\Acer\source\repos\Final_Project\ProjectHub.Infrastructure\bin\Debug\net9.0\ProjectHub.Infrastructure.deps.json
 C:\Users\Acer\source\repos\Final_Project\ProjectHub.Infrastructure\bin\Debug\net9.0\ProjectHub.Infrastructure.runtimeconfig.json
 C:\Users\Acer\Source\Repos\Final_Project\ProjectHub.Infrastructure\bin\Debug\net9.0\ProjectHub.Infrastructure.dll
@@ -118,3 +98,23 @@ C:\school\final_project\New folder (2)\Final_Project\ProjectHub.Infrastructure\o
 C:\school\final_project\New folder (2)\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ProjectHub.Infrastructure.pdb
 C:\school\final_project\New folder (2)\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ProjectHub.Infrastructure.genruntimeconfig.cache
 C:\school\final_project\New folder (2)\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ref\ProjectHub.Infrastructure.dll
+C:\school\final_project\Final_Project\ProjectHub.Infrastructure\bin\Debug\net9.0\ProjectHub.Infrastructure.deps.json
+C:\school\final_project\Final_Project\ProjectHub.Infrastructure\bin\Debug\net9.0\ProjectHub.Infrastructure.runtimeconfig.json
+C:\school\final_project\Final_Project\ProjectHub.Infrastructure\bin\Debug\net9.0\ProjectHub.Infrastructure.dll
+C:\school\final_project\Final_Project\ProjectHub.Infrastructure\bin\Debug\net9.0\ProjectHub.Infrastructure.pdb
+C:\school\final_project\Final_Project\ProjectHub.Infrastructure\bin\Debug\net9.0\ProjectHub.Application.dll
+C:\school\final_project\Final_Project\ProjectHub.Infrastructure\bin\Debug\net9.0\ProjectHub.Domain.dll
+C:\school\final_project\Final_Project\ProjectHub.Infrastructure\bin\Debug\net9.0\ProjectHub.Application.pdb
+C:\school\final_project\Final_Project\ProjectHub.Infrastructure\bin\Debug\net9.0\ProjectHub.Domain.pdb
+C:\school\final_project\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ProjectHub.Infrastructure.csproj.AssemblyReference.cache
+C:\school\final_project\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ProjectHub.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\school\final_project\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ProjectHub.Infrastructure.AssemblyInfoInputs.cache
+C:\school\final_project\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ProjectHub.Infrastructure.AssemblyInfo.cs
+C:\school\final_project\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ProjectHub.Infrastructure.csproj.CoreCompileInputs.cache
+C:\school\final_project\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ProjectHub.Infrastructure.sourcelink.json
+C:\school\final_project\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ProjectH.1D8C29F7.Up2Date
+C:\school\final_project\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ProjectHub.Infrastructure.dll
+C:\school\final_project\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\refint\ProjectHub.Infrastructure.dll
+C:\school\final_project\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ProjectHub.Infrastructure.pdb
+C:\school\final_project\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ProjectHub.Infrastructure.genruntimeconfig.cache
+C:\school\final_project\Final_Project\ProjectHub.Infrastructure\obj\Debug\net9.0\ref\ProjectHub.Infrastructure.dll

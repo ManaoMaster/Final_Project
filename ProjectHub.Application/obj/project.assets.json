@@ -33,6 +33,19 @@
           }
         }
       },
+      "Dapper/2.1.66": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/Dapper.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Dapper.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "MediatR/12.1.1": {
         "type": "package",
         "dependencies": {
@@ -257,6 +270,25 @@
         "lib/netstandard2.0/BCrypt.Net-Next.xml",
         "lib/netstandard2.1/BCrypt.Net-Next.dll",
         "lib/netstandard2.1/BCrypt.Net-Next.xml",
+        "readme.md"
+      ]
+    },
+    "Dapper/2.1.66": {
+      "sha512": "/q77jUgDOS+bzkmk3Vy9SiWMaetTw+NOoPAV0xPBsGVAyljd5S6P+4RUW7R3ZUGGr9lDRyPKgAMj2UAOwvqZYw==",
+      "type": "package",
+      "path": "dapper/2.1.66",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Dapper.png",
+        "dapper.2.1.66.nupkg.sha512",
+        "dapper.nuspec",
+        "lib/net461/Dapper.dll",
+        "lib/net461/Dapper.xml",
+        "lib/net8.0/Dapper.dll",
+        "lib/net8.0/Dapper.xml",
+        "lib/netstandard2.0/Dapper.dll",
+        "lib/netstandard2.0/Dapper.xml",
         "readme.md"
       ]
     },
@@ -578,6 +610,7 @@
     "net9.0": [
       "AutoMapper >= 15.1.0",
       "BCrypt.Net-Next >= 4.0.3",
+      "Dapper >= 2.1.66",
       "MediatR >= 12.1.1",
       "ProjectHub.Domain >= 1.0.0"
     ]
@@ -589,11 +622,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\school\\final_project\\New folder (2)\\Final_Project\\ProjectHub.Application\\ProjectHub.Application.csproj",
+      "projectUniqueName": "C:\\school\\final_project\\Final_Project\\ProjectHub.Application\\ProjectHub.Application.csproj",
       "projectName": "ProjectHub.Application",
-      "projectPath": "C:\\school\\final_project\\New folder (2)\\Final_Project\\ProjectHub.Application\\ProjectHub.Application.csproj",
+      "projectPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Application\\ProjectHub.Application.csproj",
       "packagesPath": "C:\\Users\\ghost\\.nuget\\packages\\",
-      "outputPath": "C:\\school\\final_project\\New folder (2)\\Final_Project\\ProjectHub.Application\\obj\\",
+      "outputPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Application\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -614,8 +647,8 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "C:\\school\\final_project\\New folder (2)\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj": {
-              "projectPath": "C:\\school\\final_project\\New folder (2)\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj"
+            "C:\\school\\final_project\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj": {
+              "projectPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj"
             }
           }
         }
@@ -644,6 +677,10 @@
             "target": "Package",
             "version": "[4.0.3, )"
           },
+          "Dapper": {
+            "target": "Package",
+            "version": "[2.1.66, )"
+          },
           "MediatR": {
             "target": "Package",
             "version": "[12.1.1, )"
@@ -665,7 +702,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

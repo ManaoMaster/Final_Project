@@ -7,6 +7,7 @@ using ProjectHub.API.Contracts.Rows;
 using ProjectHub.Application.Dtos; // เพิ่ม: สำหรับ Response DTO
 using ProjectHub.Application.Features.Projects.DeleteProject;
 using ProjectHub.Application.Features.Rows.CreateRow;
+using ProjectHub.Application.Features.Rows.GetRowsByTableId;
 using ProjectHub.Application.Features.Rows.UpdateRow; // เพิ่ม: สำหรับ Command
 
 namespace ProjectHub.API.Controllers
@@ -59,6 +60,22 @@ namespace ProjectHub.API.Controllers
                     new { Error = "An unexpected error occurred while creating the row." }
                 );
             }
+        }
+        // --- *** 2. เพิ่ม Endpoint นี้เข้าไปทั้งยวงครับ *** ---
+        // (วางไว้เหนือ [HttpPost] CreateRow ของคุณ)
+        [HttpGet("table/{tableId:int}")]
+        public async Task<IActionResult> GetRowsByTableId(
+            [FromRoute] int tableId,
+            CancellationToken ct)
+        {
+            // 1. สร้าง Query
+            var query = new GetRowsByTableIdQuery { TableId = tableId };
+
+            // 2. ส่งให้ Handler (ที่ใช้ Dapper)
+            var result = await _mediator.Send(query, ct); // <-- บรรทัดนี้คือส่วนที่ 2
+
+            // 3. ส่งผลลัพธ์ กลับไป
+            return Ok(result);
         }
 
         [HttpPut("{id}")]
