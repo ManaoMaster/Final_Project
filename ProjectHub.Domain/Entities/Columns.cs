@@ -17,5 +17,14 @@ namespace ProjectHub.Domain.Entities
 
         [ForeignKey("Table_id")]
         public Tables? Tables { get; set; }
+
+        public int? LookupRelationshipId { get; set; }
+        public int? LookupTargetColumnId { get; set; }
+
+        [ForeignKey("LookupRelationshipId")]
+        public Relationships? LookupRelationship { get; set; }
+
+        [ForeignKey("LookupTargetColumnId")]
+        public Columns? LookupTargetColumn { get; set; }
     }
 }

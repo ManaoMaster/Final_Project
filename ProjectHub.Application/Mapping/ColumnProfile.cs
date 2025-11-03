@@ -28,6 +28,8 @@ namespace ProjectHub.Application.Mapping
                 .ForMember(d => d.Is_primary, m => m.MapFrom(s => s.IsPrimary)) // ชื่อไม่ตรง
                 .ForMember(d => d.Is_nullable, m => m.MapFrom(s => s.IsNullable)) // ชื่อไม่ตรง
                 .ForMember(d => d.FormulaDefinition, m => m.MapFrom(s => s.FormulaDefinition))
+                .ForMember(d => d.LookupRelationshipId, m => m.MapFrom(s => s.LookupRelationshipId))
+                .ForMember(d => d.LookupTargetColumnId, m => m.MapFrom(s => s.LookupTargetColumnId))
                 // Name ชื่อตรงกัน ไม่ต้องเขียน
                 // Ignore Navigation Property
                 .ForMember(d => d.Tables, m => m.Ignore());

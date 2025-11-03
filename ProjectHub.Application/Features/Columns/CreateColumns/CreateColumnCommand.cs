@@ -6,7 +6,7 @@ namespace ProjectHub.Application.Features.Columns.CreateColumn
     public class CreateColumnCommand : IRequest<ColumnResponseDto>
     {
         // (Property พื้นฐานที่ Handler เรียกใช้)
-        public int TableId { get; set; } 
+        public int TableId { get; set; }
         public string Name { get; set; } = string.Empty;
         public string DataType { get; set; } = string.Empty;
         public bool IsPrimary { get; set; }
@@ -17,5 +17,8 @@ namespace ProjectHub.Application.Features.Columns.CreateColumn
 
 
         public string? FormulaDefinition { get; set; }
+
+        public int? LookupRelationshipId { get; set; }
+        public int? LookupTargetColumnId { get; set; }
     }
 }

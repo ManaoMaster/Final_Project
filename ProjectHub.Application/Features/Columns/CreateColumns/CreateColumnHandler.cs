@@ -6,31 +6,37 @@ using AutoMapper;
 using ProjectHub.Domain.Entities;
 using ProjectHub.Application.Features.Columns.CreateColumn;
 using ProjectHub.Application.Interfaces;
-using ProjectHub.Application.Dtos; 
-using System.Linq; // <-- ตรวจสอบว่ามี Using นี้สำหรับ .Any()
+using ProjectHub.Application.Dtos;
+using System.Linq;
+using ProjectHub.Application.Repositories; // <-- ตรวจสอบว่ามี Using นี้สำหรับ .Any()
+
 
 namespace ProjectHub.Application.Features.Columns.CreateColumn
 {
     public class CreateColumnHandler : IRequestHandler<CreateColumnCommand, ColumnResponseDto>
     {
         // *** 1. แก้ไข: เพิ่มชื่อตัวแปร _formulaTranslator ***
-        private readonly IFormulaTranslator _formulaTranslator; 
+        private readonly IFormulaTranslator _formulaTranslator;
         private readonly IColumnRepository _columnRepository;
-        private readonly ITableRepository _tableRepository; 
+        private readonly ITableRepository _tableRepository;
         private readonly IMapper _mapper;
+
+        private readonly IRelationshipRepository _relationshipRepository;
 
         public CreateColumnHandler(
             IColumnRepository columnRepository,
-            ITableRepository tableRepository, 
+            ITableRepository tableRepository,
             IMapper mapper,
-            IFormulaTranslator formulaTranslator // <-- *** 2. เพิ่ม Parameter นี้เข้ามา ***
+            IFormulaTranslator formulaTranslator, // <-- *** 2. เพิ่ม Parameter นี้เข้ามา ***
+            IRelationshipRepository relationshipRepository
         )
         {
             // *** 3. กำหนดค่าให้ Field _formulaTranslator (ตัวที่มี _) ***
             _formulaTranslator = formulaTranslator;
             _columnRepository = columnRepository;
-            _tableRepository = tableRepository; 
+            _tableRepository = tableRepository;
             _mapper = mapper;
+            _relationshipRepository = relationshipRepository;
         }
 
         public async Task<ColumnResponseDto> Handle(CreateColumnCommand request, CancellationToken cancellationToken)
@@ -88,13 +94,47 @@ namespace ProjectHub.Application.Features.Columns.CreateColumn
                     }
 
                     // (เช็ค Data_type ตามที่คุณบอกว่ามี 'integer' 'long')
-                    if (colInfo.Data_type != "integer" && colInfo.Data_type != "long")
+                    var dataType = colInfo.Data_type.ToLower(); // <-- 1. แปลงเป็นตัวเล็กก่อน
+
+                    if (dataType != "integer" &&
+                        dataType != "long" &&
+                        dataType != "lookup") // <-- *** 2. เพิ่ม "lookup" เข้าไปในเงื่อนไข ***
                     {
-                        throw new Exception($"Formula Error: Column '{name}' is not a numeric type ('integer' or 'long').");
+                        throw new Exception($"Formula Error: Column '{name}' is not a numeric type (or Lookup).");
                     }
                 }
             }
-            
+            if (request.DataType == "Lookup")
+            {
+                if (request.LookupRelationshipId == null)
+                {
+                    throw new ArgumentException("LookupRelationshipId is required for Lookup columns.");
+                }
+                if (request.LookupTargetColumnId == null)
+                {
+                    throw new ArgumentException("LookupTargetColumnId is required for Lookup columns.");
+                }
+
+                // (ตรวจสอบว่ามีอยู่จริง)
+                var relationship = await _relationshipRepository.GetByIdAsync(request.LookupRelationshipId.Value);
+                if (relationship == null)
+                {
+                    throw new ArgumentException($"Relationship with ID {request.LookupRelationshipId} not found.");
+                }
+
+                var targetColumn = await _columnRepository.GetColumnByIdAsync(request.LookupTargetColumnId.Value);
+                if (targetColumn == null)
+                {
+                    throw new ArgumentException($"Lookup Target Column with ID {request.LookupTargetColumnId} not found.");
+                }
+
+                // (Optional: ตรวจสอบให้แน่ใจว่า Target Column อยู่ใน Primary Table ของ Relationship)
+                if (targetColumn.Table_id != relationship.PrimaryTableId)
+                {
+                    throw new ArgumentException("Lookup Target Column does not belong to the Relationship's Primary Table.");
+                }
+            }
+
             // --- Mapping & Persistence ---
 
             // 5. ใช้ AutoMapper แปลง Command -> Entity Columns
