@@ -34,6 +34,7 @@ namespace ProjectHub.Application.Features.Users.EditProfile
 
             user.Email = newEmail;
             user.Username = newUsername;
+            user.ProfilePictureUrl = request.ProfilePictureUrl!;
 
             await _users.UpdateUserAsync(user);
 

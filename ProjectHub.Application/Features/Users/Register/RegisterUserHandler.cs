@@ -36,6 +36,7 @@ namespace ProjectHub.Application.Features.Users.Register
             var user = _mapper.Map<UserEntity>(request);
             user.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
             user.Created_at = DateTime.UtcNow;
+            user.ProfilePictureUrl = request.ProfilePictureUrl!;
             await _userRepository.AddUserAsync(user);
 
             // map Entity -> DTO

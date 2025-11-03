@@ -12,7 +12,9 @@ namespace ProjectHub.Domain.Entities
         public DateTime Created_at { get; set; } = DateTime.UtcNow;
 
         public ICollection<Projects> Projects { get; set; } = new List<Projects>();
+
+        public string ProfilePictureUrl { get; set; } = string.Empty;
     }
 
-    
+
 }

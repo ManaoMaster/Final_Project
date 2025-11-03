@@ -17,5 +17,6 @@ namespace ProjectHub.Application.Features.Users.Register
         [Required]
         [MinLength(6)]
         public string Password { get; set; } = string.Empty;
+        [Required] public string? ProfilePictureUrl { get; set; }
     }
 }

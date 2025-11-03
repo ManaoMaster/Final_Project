@@ -35,6 +35,14 @@ namespace ProjectHub.Application.Validation
             // Check if all required columns (Is_nullable = false) exist in JSON
             foreach (var column in schema)
             {
+                // **STEP 1: ข้าม Formula/Lookup**
+                var colType = column.Data_type?.ToUpperInvariant();
+                if (colType == "FORMULA" || colType == "LOOKUP")
+                {
+                    // ข้ามการ Validation สำหรับคอลัมน์ที่คำนวณทีหลัง
+                    continue;
+                }
+
                 // Check if property exists in JSON, consider case-insensitivity
                 var propertyExists = jsonData
                     .RootElement.EnumerateObject()
@@ -67,6 +75,16 @@ namespace ProjectHub.Application.Validation
                     );
                 }
 
+                // **STEP 2: บล็อก Formula/Lookup**
+                var schemaColType = columnSchema.Data_type?.ToUpperInvariant();
+                if (schemaColType == "FORMULA" || schemaColType == "LOOKUP")
+                {
+                    throw new ArgumentException(
+                        $"Cannot provide a value for calculated column '{columnSchema.Name}'."
+                    );
+                }
+
+
                 // Check for null if column is not nullable
                 if (!columnSchema.Is_nullable && valueElement.ValueKind == JsonValueKind.Null)
                 {
@@ -76,10 +94,11 @@ namespace ProjectHub.Application.Validation
                 // Check Data Type (only if value is not null)
                 if (valueElement.ValueKind != JsonValueKind.Null)
                 {
-                    // Use ToUpperInvariant for reliable comparison
-                    bool typeMatch = columnSchema.Data_type?.ToUpperInvariant() switch
+                    // **STEP 3: เพิ่ม "IMAGE"**
+                    bool typeMatch = schemaColType switch
                     {
                         "TEXT" => valueElement.ValueKind == JsonValueKind.String,
+                        "IMAGE" => valueElement.ValueKind == JsonValueKind.String, // Added
                         "INTEGER" => valueElement.ValueKind == JsonValueKind.Number
                             && valueElement.TryGetInt64(out _),
                         "REAL" => valueElement.ValueKind == JsonValueKind.Number,
@@ -99,12 +118,13 @@ namespace ProjectHub.Application.Validation
                             !new[]
                             {
                                 "TEXT",
+                                "IMAGE", // Added
                                 "INTEGER",
                                 "REAL",
                                 "BOOLEAN",
                                 "STRING",
                                 "INT",
-                            }.Contains(columnSchema.Data_type?.ToUpperInvariant())
+                            }.Contains(schemaColType)
                         )
                         {
                             throw new ArgumentException(
