@@ -1,20 +1,25 @@
-using System; // For ArgumentException
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using ProjectHub.Application.Interfaces;
+using ProjectHub.Application.Features.Projects.DeleteProject;
+using ProjectHub.Application.Interfaces; // 1. [ADD] Import "Yara"
 using ProjectHub.Application.Repositories;
 
-namespace ProjectHub.Application.Features.Projects.DeleteProject
+namespace ProjectHub.Application.Features.Projects.DeleteProject // (Fixed Namespace)
 {
     // Handler for DeleteProjectCommand, returns Unit (nothing)
     public class DeleteProjectHandler : IRequestHandler<DeleteProjectCommand, Unit>
     {
         private readonly IProjectRepository _projectRepository;
+        private readonly IProjectSecurityService _securityService; // 2. [ADD] Inject "Yara"
 
-        public DeleteProjectHandler(IProjectRepository projectRepository)
+        public DeleteProjectHandler(
+            IProjectRepository projectRepository, 
+            IProjectSecurityService securityService) // 3. [ADD] Receive "Yara"
         {
             _projectRepository = projectRepository;
+            _securityService = securityService; // 4. [ADD] Assign "Yara"
         }
 
         public async Task<Unit> Handle(
@@ -22,19 +27,15 @@ namespace ProjectHub.Application.Features.Projects.DeleteProject
             CancellationToken cancellationToken
         )
         {
-            // Optional but recommended: Check if the project exists before deleting
-            // This provides a clearer error message than letting the repository handle it silently
-            var projectExists = await _projectRepository.GetProjectByIdAsync(request.ProjectId);
-            if (projectExists == null)
-            {
-                throw new ArgumentException($"Project with ID {request.ProjectId} not found.");
-                // Or use a custom NotFoundException
-            }
+            // 5. [OPTIMIZE] Call "Yara" FIRST.
+            // This single line handles both checking if it exists AND if you have access.
+            // It will throw an Exception if not found or not authorized.
+            await _securityService.ValidateProjectAccessAsync(request.ProjectId);
 
-            // Call the repository to delete the project by ID
+            // 6. (If OK) Call the repository to delete the project by ID
             await _projectRepository.DeleteProjectAsync(request.ProjectId);
 
-            // Return Unit.Value to indicate success with no return data
+            // 7. Return Unit.Value to indicate success
             return Unit.Value;
         }
     }

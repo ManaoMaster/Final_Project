@@ -29,6 +29,7 @@ namespace ProjectHub.Application.Mapping
                 .ForMember(d => d.Projects, m => m.Ignore())
                 .ForMember(d => d.Columns, m => m.Ignore())
                 .ForMember(d => d.Rows, m => m.Ignore());
+                
 
             CreateMap<UpdateTableCommand, Tables>()
                 .ForMember(d => d.Name, m => m.MapFrom(s => s.NewName))

@@ -14,10 +14,13 @@ namespace ProjectHub.Application.Features.Columns.UpdateColumn
         private readonly IColumnRepository _columnRepository;
         private readonly IMapper _mapper;
 
-        public UpdateColumnHandler(IColumnRepository columnRepository, IMapper mapper)
+        private readonly IProjectSecurityService _securityService;
+
+        public UpdateColumnHandler(IColumnRepository columnRepository, IMapper mapper, IProjectSecurityService securityService)
         {
             _columnRepository = columnRepository;
             _mapper = mapper;
+            _securityService = securityService;
         }
 
         public async Task<ColumnResponseDto> Handle(
@@ -34,6 +37,8 @@ namespace ProjectHub.Application.Features.Columns.UpdateColumn
                 throw new ArgumentException($"Column with ID {request.ColumnId} not found.");
                 // หรืออาจจะใช้ Exception ที่ Custom ขึ้นมาเอง เช่น NotFoundException
             }
+
+            await _securityService.ValidateTableAccessAsync(columnToUpdate.Table_id);
 
             // (Optional) ตรวจสอบ Business Rule เพิ่มเติม
             // เช่น เช็คว่าชื่อใหม่ซ้ำหรือไม่ (ถ้าต้องการ) โดยเรียก IsProjectNameUniqueForUserAsync

@@ -23,12 +23,14 @@ namespace ProjectHub.Application.Features.Columns.CreateColumn
 
         private readonly IRelationshipRepository _relationshipRepository;
 
+        private readonly IProjectSecurityService _securityService;
         public CreateColumnHandler(
             IColumnRepository columnRepository,
             ITableRepository tableRepository,
             IMapper mapper,
             IFormulaTranslator formulaTranslator, // <-- *** 2. เพิ่ม Parameter นี้เข้ามา ***
-            IRelationshipRepository relationshipRepository
+            IRelationshipRepository relationshipRepository,
+            IProjectSecurityService securityService
         )
         {
             // *** 3. กำหนดค่าให้ Field _formulaTranslator (ตัวที่มี _) ***
@@ -36,11 +38,14 @@ namespace ProjectHub.Application.Features.Columns.CreateColumn
             _columnRepository = columnRepository;
             _tableRepository = tableRepository;
             _mapper = mapper;
-            _relationshipRepository = relationshipRepository;
+            _relationshipRepository = relationshipRepository;   
+            _securityService = securityService;
         }
 
         public async Task<ColumnResponseDto> Handle(CreateColumnCommand request, CancellationToken cancellationToken)
         {
+            await _securityService.ValidateTableAccessAsync(request.TableId);
+            
             // --- Business Logic (Logic ของคุณดีอยู่แล้ว) ---
 
             // 1. ตรวจสอบ Input พื้นฐาน

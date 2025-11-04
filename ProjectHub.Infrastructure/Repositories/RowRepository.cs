@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using ProjectHub.Application.Repositories; // ใช้ Interface จาก Application
 using ProjectHub.Domain.Entities; // ใช้ Entity Rows
 using ProjectHub.Infrastructure.Persistence; // ใช้ AppDbContext
+using Dapper; // ใช้ Dapper สำหรับรัน SQL แบบ Raw
+
 
 namespace ProjectHub.Infrastructure.Repositories
 {
@@ -56,5 +58,45 @@ namespace ProjectHub.Infrastructure.Repositories
             }
             // ถ้าไม่เจอ ก็ไม่ต้องทำอะไร (Handler ควรจะเช็คเจอไปก่อนแล้ว)
         }
+        public async Task<int> GetMaxPkValueAsync(int tableId, string pkColumnName)
+        {
+            // SQL นี้จะหาค่า "สูงสุด" (MAX) ของคอลัมน์ PK นั้น
+            // (COALESCE(..., 0) หมายความว่า ถ้าตารางว่างเปล่า ให้คืนค่า 0)
+            var sql = $@"
+                SELECT COALESCE(MAX(CAST(""Data""->>@pkColumnName AS INTEGER)), 0) 
+                FROM ""Rows"" 
+                WHERE ""Table_id"" = @tableId";
+
+            // Dapper จะรันคำสั่งนี้ และส่งค่ากลับมาเป็น int
+            var maxId = await _context.Database.GetDbConnection().QuerySingleAsync<int>(sql, new
+            {
+                pkColumnName, // Dapper จะ Map ค่านี้ให้ @pkColumnName
+                tableId       // Dapper จะ Map ค่านี้ให้ @tableId
+            });
+
+            return maxId;
+        }
+        public async Task<bool> IsPkValueDuplicateAsync(int tableId, string pkColumnName, string pkValue)
+        {
+            // SQL นี้จะ "นับ" (COUNT) ว่ามีแถวที่ใช้ค่า PK นี้แล้วกี่แถว
+            var sql = $@"
+                SELECT COUNT(1) 
+                FROM ""Rows"" 
+                WHERE ""Table_id"" = @tableId AND ""Data""->>@pkColumnName = @pkValue";
+
+            // Dapper จะรันคำสั่งนี้ และส่งค่ากลับมาเป็น int
+            var count = await _context.Database.GetDbConnection().QuerySingleAsync<int>(sql, new
+            {
+                tableId,
+                pkColumnName,
+                pkValue
+            });
+
+            // ถ้า count > 0 (เช่น 1) แปลว่า "ซ้ำ" (Duplicate) -> คืนค่า true
+            return count > 0;
+        }
+
+        // ^^^ --- [สิ้นสุด 2 METHOD ใหม่] --- ^^^
     }
 }
+

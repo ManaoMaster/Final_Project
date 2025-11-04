@@ -22,6 +22,7 @@ namespace ProjectHub.API.Controllers
         {
             _mediator = mediator;
             _mapper = mapper; // เพิ่ม
+
         }
 
         // DTO สำหรับรับ Input จาก Client (ควรอยู่ใน Contracts แต่ใช้ record ที่นี่เพื่อความง่าย)
@@ -36,6 +37,9 @@ namespace ProjectHub.API.Controllers
             {
                 ProjectId = request.ProjectId,
                 Name = request.Name,
+                UseAutoIncrement = request.UseAutoIncrement,
+                IsPrimaryKey = request.IsPrimaryKey
+                
             };
 
             try

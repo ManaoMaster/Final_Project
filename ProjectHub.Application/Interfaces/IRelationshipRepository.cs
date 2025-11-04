@@ -13,5 +13,6 @@ namespace ProjectHub.Application.Repositories
         Task DeleteAsync(Relationships relationship);
 
         Task<Relationships?> GetByIdAsync(int id);
+        Task<IEnumerable<Relationships>> GetByIdsAsync(List<int> ids);
     }
 }

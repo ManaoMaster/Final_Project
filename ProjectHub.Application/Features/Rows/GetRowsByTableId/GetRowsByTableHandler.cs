@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using ProjectHub.Application.Interfaces;
-using ProjectHub.Application.Repositories; // <-- *** 1. เพิ่ม Using นี้ (สำหรับ IRelationshipRepository) ***
+using ProjectHub.Application.Repositories;
 using System.Data;
-using Dapper;
+using Dapper; // <-- 1. [ADD] ต้องใช้ Dapper ตัวเต็ม
 using System.Linq;
 using System;
-using System.Text; // <-- *** 2. เพิ่ม Using นี้ (สำหรับ StringBuilder) ***
+using System.Text;
+using ProjectHub.Application.Common; // (สำหรับ ColumnTypeHelper)
+using ColumnEntity = ProjectHub.Domain.Entities.Columns; // (Alias)
 
 namespace ProjectHub.Application.Features.Rows.GetRowsByTableId
 {
@@ -17,150 +19,186 @@ namespace ProjectHub.Application.Features.Rows.GetRowsByTableId
         private readonly IColumnRepository _columnRepository;
         private readonly IFormulaTranslator _formulaTranslator;
         private readonly IDbConnection _dbConnection;
-        // --- *** 3. Inject Repositories ที่จำเป็นเพิ่ม *** ---
         private readonly IRelationshipRepository _relationshipRepository;
+        private readonly IProjectSecurityService _securityService;
 
         public GetRowsByTableIdHandler(
             IColumnRepository columnRepository,
             IFormulaTranslator formulaTranslator,
             IDbConnection dbConnection,
-            // --- *** 4. เพิ่ม Parameter นี้เข้ามา *** ---
-            IRelationshipRepository relationshipRepository)
+            IRelationshipRepository relationshipRepository,
+            IProjectSecurityService securityService)
         {
             _columnRepository = columnRepository;
             _formulaTranslator = formulaTranslator;
             _dbConnection = dbConnection;
-            _relationshipRepository = relationshipRepository; // <-- 5. กำหนดค่า
+            _relationshipRepository = relationshipRepository;
+            _securityService = securityService;
         }
 
         public async Task<IEnumerable<IDictionary<string, object>>> Handle(GetRowsByTableIdQuery request, CancellationToken cancellationToken)
         {
-            // === 1. ดึง Schema ทั้งหมด ===
-            var columns = (await _columnRepository.GetColumnsByTableIdAsync(request.TableId)).ToList();
+            // === 1. [Security] ตรวจสอบสิทธิ์ (Task 1) ===
+            await _securityService.ValidateTableAccessAsync(request.TableId);
 
+            // === 2. [Prep] เตรียม Dapper Parameters (SQL Injection Fix) ===
+            // เราจะใช้ DynamicParameters เพื่อเพิ่ม Parameter เข้าไปทีหลัง
+            var dapperParams = new DynamicParameters();
+            dapperParams.Add("TableId", request.TableId); // @TableId
+
+            // === 3. [Performance] ดึง Metadata ทั้งหมดนอก Loop (N+1 Fix) ===
+            var columns = (await _columnRepository.GetColumnsByTableIdAsync(request.TableId)).ToList();
             if (!columns.Any())
             {
                 return new List<IDictionary<string, object>>();
             }
 
-            // === 2. เตรียมตัวแปรสำหรับสร้าง SQL ===
+            var lookupColumns = columns.Where(c => c.Data_type == "Lookup" && c.LookupRelationshipId != null).ToList();
+
+            // 3.1 ดึง Relationship ที่จำเป็นทั้งหมด (1 Query)
+            var requiredRelIds = lookupColumns.Select(c => c.LookupRelationshipId.Value).Distinct().ToList();
+            // (คุณต้องไปสร้าง Method นี้ใน Repository)
+            var allRelationships = (await _relationshipRepository.GetByIdsAsync(requiredRelIds))
+                                     .ToDictionary(r => r.RelationshipId); // แปลงเป็น Dictionary เพื่อให้ค้นหาเร็ว
+
+            // 3.2 ดึง Column (Metadata) ที่จำเป็นทั้งหมด (1 Query)
+            var requiredColIds = new HashSet<int>();
+            foreach (var col in lookupColumns)
+                requiredColIds.Add(col.LookupTargetColumnId.Value);
+            foreach (var rel in allRelationships.Values)
+            {
+                requiredColIds.Add(rel.PrimaryColumnId);
+                requiredColIds.Add(rel.ForeignColumnId);
+            }
+            // (คุณต้องไปสร้าง Method นี้ใน Repository)
+            var allColumnsMetadata = (await _columnRepository.GetByIdsAsync(requiredColIds.ToList()))
+                                       .ToDictionary(c => c.Column_id); // แปลงเป็น Dictionary
+
+
+            // === 4. [Build SQL] สร้าง Query แบบไดนามิก ===
             var selectClauses = new List<string>();
             var joinClauses = new List<string>();
-
-            // (สำคัญ) นี่คือ "พจนานุกรม" ที่เก็บว่าคอลัมน์ไหน (เช่น "Num1_lookup") 
-            // จะถูกแทนที่ด้วย SQL อะไร (เช่น "t_lookup_1.\"Data\"->>'Num1'")
-            var columnSqlAliasMap = new Dictionary<string, string>();
-
-            // ตั้งชื่อเล่นให้ตารางหลัก (Rows)
-            string mainTableAlias = "t_main";
+            var columnSqlAliasMap = new Dictionary<string, string>(); // Map["Num1"] = "(t_main."Data"->>'Num1')::numeric"
+            string mainTableAlias = SanitizeIdentifier("t_main");
 
             selectClauses.Add($"{mainTableAlias}.\"Row_id\"");
             selectClauses.Add($"{mainTableAlias}.\"Data\"");
 
-            // === 3. (Loop ที่ 1) ประมวลผลคอลัมน์ธรรมดา (เพื่อสร้าง Alias Map) ===
-            var nativeColumns = columns.Where(c =>
-                c.Data_type != "Formula" && c.Data_type != "Lookup" &&
-                !string.IsNullOrWhiteSpace(c.Name));
-
+            // --- Loop 1: คอลัมน์ธรรมดา (Native) ---
+            var nativeColumns = columns.Where(c => c.Data_type != "Formula" && c.Data_type != "Lookup");
             foreach (var col in nativeColumns)
             {
-                // เก็บว่า "Num1" = '("t_main"."Data"->>'Num1')::numeric'
-                columnSqlAliasMap[col.Name] = $"(\"{mainTableAlias}\".\"Data\"->>'{col.Name}')::numeric";
+                string safeColName = SanitizeLiteral(col.Name); // (SQL Injection Fix)
+                string colCast = ColumnTypeHelper.GetSqlCast(col.Data_type); // (Bug Fix)
+                string sqlSnippet = $"({mainTableAlias}.\"Data\"->>'{safeColName}')";
+
+                selectClauses.Add($"{sqlSnippet} AS {SanitizeIdentifier(col.Name)}"); // (Bug Fix)
+                columnSqlAliasMap[col.Name] = $"{sqlSnippet}{colCast}";
             }
 
-            // === 4. (Loop ที่ 2) สร้าง JOINs สำหรับคอลัมน์ Lookup (นี่คือ Logic ใหม่) ===
-            var lookupColumns = columns.Where(c => c.Data_type == "Lookup").ToList();
-            int lookupIndex = 1; // ใช้นับเพื่อสร้างชื่อเล่น t_lookup_1, t_lookup_2
-
+            // --- Loop 2: คอลัมน์ Lookup (อ่านจาก Dictionary, ไม่มี await) ---
+            int lookupIndex = 1;
             foreach (var col in lookupColumns)
             {
-                if (col.LookupRelationshipId == null || col.LookupTargetColumnId == null)
+                // ดึงข้อมูล Metadata จาก Dictionary (เร็วมาก)
+                if (!allRelationships.TryGetValue(col.LookupRelationshipId.Value, out var relationship) ||
+                    !allColumnsMetadata.TryGetValue(col.LookupTargetColumnId.Value, out var targetColumn) ||
+                    !allColumnsMetadata.TryGetValue(relationship.ForeignColumnId, out var foreignKeyCol) ||
+                    !allColumnsMetadata.TryGetValue(relationship.PrimaryColumnId, out var primaryKeyCol))
                 {
-                    selectClauses.Add($"'LOOKUP_ERROR: Column {col.Name} is not configured.' AS \"{col.Name}\"");
+                    selectClauses.Add($@"'LOOKUP_ERROR: Config Error' AS {SanitizeIdentifier(col.Name)}");
                     continue;
                 }
 
-                // 1. ดึง "กฎ" การเชื่อมโยง (จากตาราง Relationships)
-                var relationship = await _relationshipRepository.GetByIdAsync(col.LookupRelationshipId.Value);
-                // 2. ดึง "คอลัมน์เป้าหมาย" ที่เราจะเอาค่า (เช่น "Num1" จาก Table 1)
-                var targetColumn = await _columnRepository.GetColumnByIdAsync(col.LookupTargetColumnId.Value);
-                // 3. ดึง "คอลัมน์ Foreign Key" (ในตารางนี้)
-                var foreignKeyCol = await _columnRepository.GetColumnByIdAsync(relationship.ForeignColumnId);
-                // 4. ดึง "คอลัมน์ Primary Key" (ในตารางเป้าหมาย)
-                var primaryKeyCol = await _columnRepository.GetColumnByIdAsync(relationship.PrimaryColumnId);
+                string joinTableAlias = SanitizeIdentifier($"t_lookup_{lookupIndex}");
+                string paramName = $"p_{lookupIndex}"; // e.g. @p_1, @p_2
+                lookupIndex++;
 
-                if (relationship == null || targetColumn == null || foreignKeyCol == null || primaryKeyCol == null)
-                {
-                    selectClauses.Add($"'LOOKUP_ERROR: Invalid configuration.' AS \"{col.Name}\"");
-                    continue;
-                }
+                // (SQL Injection Fix 1: ฆ่าเชื้อชื่อคอลัมน์)
+                string safeFkName = SanitizeLiteral(foreignKeyCol.Name);
+                string safePkName = SanitizeLiteral(primaryKeyCol.Name);
 
-                // 5. สร้างชื่อเล่น (Alias) ให้ตารางที่จะ Join
-                string joinTableAlias = $"t_lookup_{lookupIndex++}";
-
-                // 6. สร้าง SQL LEFT JOIN
-                // (Join jsonb กับ jsonb โดยอิงจาก Metadata)
+                // (SQL Injection Fix 2: ใช้ Parameter @paramName แทนการต่อ String)
                 string joinSql = $@"
 LEFT JOIN ""Rows"" AS {joinTableAlias} 
-       ON (""{mainTableAlias}"".""Data""->>'{foreignKeyCol.Name}')::int = (""{joinTableAlias}"".""Data""->>'{primaryKeyCol.Name}')::int
-       AND ""{joinTableAlias}"".""Table_id"" = {relationship.PrimaryTableId}
+    ON ({mainTableAlias}.""Data""->>'{safeFkName}')::int = ({joinTableAlias}.""Data""->>'{safePkName}')::int
+    AND {joinTableAlias}.""Table_id"" = @{paramName}
 ";
                 joinClauses.Add(joinSql);
+                dapperParams.Add(paramName, relationship.PrimaryTableId); // เพิ่ม Parameter ให้ Dapper
 
-                // 7. สร้าง SQL Snippet ที่จะใช้ดึงค่า
-                string selectSnippet = $"(\"{joinTableAlias}\".\"Data\"->>'{targetColumn.Name}')";
+                // สร้าง SELECT
+                string safeTargetName = SanitizeLiteral(targetColumn.Name);
+                string targetCast = ColumnTypeHelper.GetSqlCast(targetColumn.Data_type);
+                string selectSnippet = $"({joinTableAlias}.\"Data\"->>'{safeTargetName}')";
 
-                // 8. เพิ่มเข้าไปใน SELECT List
-                selectClauses.Add($"{selectSnippet} AS \"{col.Name}\"");
-
-                // 9. (สำคัญ) เก็บเข้าพจนานุกรม เพื่อให้ Formula (Loop 3) รู้จัก
-                columnSqlAliasMap[col.Name] = $"{selectSnippet}::numeric"; // (สมมติว่า Lookup มาเป็นตัวเลข)
+                selectClauses.Add($"{selectSnippet} AS {SanitizeIdentifier(col.Name)}");
+                columnSqlAliasMap[col.Name] = $"{selectSnippet}{targetCast}";
             }
 
-            // === 5. (Loop ที่ 3) ประมวลผลคอลัมน์ Formula (อัปเกรด Logic) ===
-            var formulaColumns = columns.Where(c => c.Data_type == "Formula"
-                                        && !string.IsNullOrWhiteSpace(c.FormulaDefinition));
-
+            // --- Loop 3: คอลัมน์ Formula ---
+            var formulaColumns = columns.Where(c => c.Data_type == "Formula" && !string.IsNullOrWhiteSpace(c.FormulaDefinition));
             foreach (var col in formulaColumns)
             {
                 try
                 {
-                    // 1. แปลง JSON AST เป็น SQL (เช่น ("Data"->>'Num1')::numeric + ("Data"->>'T1_Num1')::numeric)
+                    // 1. แปลงสูตร (สมมติว่า Translator สร้าง Placeholder เช่น ("Data"->>'Num1')::numeric)
                     string sqlSnippet = _formulaTranslator.Translate(col.FormulaDefinition!, "Data");
 
-                    // 2. *** (Logic ใหม่ที่แก้ไขแล้ว) แทนที่ ***
-                    // วนลูปในพจนานุกรม แล้วแทนที่ SQL ที่ FormulaTranslator สร้าง
+                    // 2. แทนที่ Placeholder ด้วย SQL ที่มี Alias
                     foreach (var entry in columnSqlAliasMap)
                     {
-                        // *** (แก้ไข) Placeholder ต้องตรงกับที่ Translator สร้าง ***
-                        // (เช่น ("Data"->>'Num1')::numeric)
-                        string placeholder = $"(\"Data\"->>'{entry.Key}')::numeric";
+                        var placeholderCol = columns.FirstOrDefault(c => c.Name == entry.Key);
+                        string placeholderCast = ColumnTypeHelper.GetSqlCast(placeholderCol?.Data_type);
 
-                        // (เช่น ("t_main"."Data"->>'Num1')::numeric หรือ ("t_lookup_1"."Data"->>'Num1')::numeric)
+                        // Placeholder ที่ Translator สร้าง: ("Data"->>'Num1')::numeric
+                        string placeholder = $"(\"Data\"->>'{SanitizeLiteral(entry.Key)}'){placeholderCast}";
+
+                        // ค่าจริงที่จะแทนที่: (t_main."Data"->>'Num1')::numeric
                         string replacementValue = entry.Value;
 
                         sqlSnippet = sqlSnippet.Replace(placeholder, replacementValue);
                     }
-
-                    selectClauses.Add($"({sqlSnippet}) AS \"{col.Name}\"");
+                    selectClauses.Add($"({sqlSnippet}) AS {SanitizeIdentifier(col.Name)}");
                 }
                 catch (Exception ex)
                 {
-                    selectClauses.Add($"'FORMULA_ERROR: {ex.Message.Replace("'", "''")}' AS \"{col.Name}\"");
+                    selectClauses.Add($@"'FORMULA_ERROR: {SanitizeLiteral(ex.Message)}' AS {SanitizeIdentifier(col.Name)}");
                 }
             }
-            // === 6. สร้าง SQL ฉบับเต็ม ===
+
+            // === 5. [Build SQL] สร้าง SQL ฉบับเต็ม ===
             string finalSql = $@"
-                SELECT {string.Join(", ", selectClauses)}
+                SELECT {string.Join(", \n\t", selectClauses)}
                 FROM ""Rows"" AS {mainTableAlias}
                 {string.Join("\n", joinClauses)}
-                WHERE ""{mainTableAlias}"".""Table_id"" = @TableId
+                WHERE {mainTableAlias}.""Table_id"" = @TableId
             ";
 
-            // === 7. รัน Raw SQL ด้วย Dapper ===
-            var results = await _dbConnection.QueryAsync<dynamic>(finalSql, new { request.TableId });
+            // === 6. [Execute] รัน Dapper ด้วย Parameters ที่เราสร้างไว้ ===
+            var results = await _dbConnection.QueryAsync<dynamic>(finalSql, dapperParams);
 
             return results.Cast<IDictionary<string, object>>();
+        }
+
+        // --- [SQL INJECTION HELPERS] ---
+
+        /// <summary>
+        /// Sanitize (ฆ่าเชื้อ) ชื่อ Identifier (เช่น ชื่อตาราง, ชื่อคอลัมน์)
+        /// โดยการครอบด้วย "..." และ Escape " ภายใน
+        /// </summary>
+        private string SanitizeIdentifier(string identifier)
+        {
+            return $"\"{identifier.Replace("\"", "\"\"")}\"";
+        }
+
+        /// <summary>
+        /// Sanitize (ฆ่าเชื้อ) ค่า String Literal (สำหรับใช้ใน ->> '...')
+        /// โดยการ Escape ' (single-quote) ภายใน
+        /// </summary>
+        private string SanitizeLiteral(string literal)
+        {
+            return literal.Replace("'", "''");
         }
     }
 }

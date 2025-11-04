@@ -1582,7 +1582,10 @@
         },
         "runtime": {
           "bin/placeholder/ProjectHub.Infrastructure.dll": {}
-        }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
       }
     }
   },
@@ -4463,11 +4466,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\school\\final_project\\Final_Project\\ProjectHub.Api\\ProjectHub.API.csproj",
+      "projectUniqueName": "C:\\school\\final_project\\Final_Project\\ProjectHub.API\\ProjectHub.API.csproj",
       "projectName": "ProjectHub.API",
-      "projectPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Api\\ProjectHub.API.csproj",
+      "projectPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.API\\ProjectHub.API.csproj",
       "packagesPath": "C:\\Users\\ghost\\.nuget\\packages\\",
-      "outputPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.Api\\obj\\",
+      "outputPath": "C:\\school\\final_project\\Final_Project\\ProjectHub.API\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

@@ -11,19 +11,32 @@ namespace ProjectHub.Application.Features.Projects.CreateProject
         private readonly IProjectRepository _projectRepository;
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
+        private readonly IProjectSecurityService _securityService;
 
         public CreateProjectHandler(
             IProjectRepository projectRepository,
             IUserRepository userRepository,
-            IMapper mapper)
+            IMapper mapper,
+            IProjectSecurityService securityService
+            )
         {
             _projectRepository = projectRepository;
             _userRepository = userRepository;
             _mapper = mapper;
+            _securityService = securityService;
         }
 
         public async Task<ProjectResponseDto> Handle(CreateProjectCommand request, CancellationToken cancellationToken)
         {
+            var currentUserId = _securityService.GetCurrentUserId();
+
+            // เช็คว่า User ที่ล็อกอิน (currentUserId)
+            // พยายามสร้างโปรเจกต์ให้ตัวเอง (request.UserId) ใช่หรือไม่
+            if (request.UserId != currentUserId)
+            {
+                throw new UnauthorizedAccessException("คุณสามารถสร้างโปรเจกต์ให้ตัวเองได้เท่านั้น");
+            }
+            
             var isDuplicate = await _projectRepository.IsProjectNameUniqueForUserAsync(request.UserId, request.Name);
             if (isDuplicate)
                 throw new ArgumentException($"Project name '{request.Name}' is already in use by this user.");

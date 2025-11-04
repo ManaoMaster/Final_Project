@@ -16,5 +16,9 @@ namespace ProjectHub.Application.Repositories
         // --- (เมธอดอื่นๆ ที่อาจจะเพิ่มในอนาคต) ---
 
         Task DeleteRowAsync(int rowId);
+
+        Task<int> GetMaxPkValueAsync(int tableId, string pkColumnName);
+
+        Task<bool> IsPkValueDuplicateAsync(int tableId, string pkColumnName, string pkValue);
     }
 }

@@ -13,9 +13,13 @@ namespace TableHub.Application.Features.Tables.DeleteTable
     {
         private readonly ITableRepository _tableRepository;
 
-        public DeleteTableHandler(ITableRepository tableRepository)
+
+        private readonly IProjectSecurityService _securityService;
+
+        public DeleteTableHandler(ITableRepository tableRepository, IProjectSecurityService securityService)
         {
             _tableRepository = tableRepository;
+            _securityService = securityService;
         }
 
         public async Task<Unit> Handle(
@@ -23,19 +27,21 @@ namespace TableHub.Application.Features.Tables.DeleteTable
             CancellationToken cancellationToken
         )
         {
-            // Optional but recommended: Check if the table exists before deleting
-            // This provides a clearer error message than letting the repository handle it silently
-            var tableExists = await _tableRepository.GetTableByIdAsync(request.TableId);
-            if (tableExists == null)
+            // 1. ดึงตาราง (ครั้งที่ 1 และครั้งเดียว)
+            var tableToDelete = await _tableRepository.GetTableByIdAsync(request.TableId);
+
+            if (tableToDelete == null)
             {
                 throw new ArgumentException($"Table with ID {request.TableId} not found.");
-                // Or use a custom NotFoundException
             }
 
-            // Call the repository to delete the table by ID
+            // 2. [FIX] เรียก "ยาม" โดยใช้ ProjectId ที่เราเพิ่งหาเจอ
+            // (เราข้าม 'ValidateTableAccessAsync' ไปเลย เพราะเรามีข้อมูลแล้ว)
+            await _securityService.ValidateProjectAccessAsync(tableToDelete.Project_id); // (หรือ .ProjectId)
+
+            // 3. (ถ้าผ่าน) ลบตาราง
             await _tableRepository.DeleteTableAsync(request.TableId);
 
-            // Return Unit.Value to indicate success with no return data
             return Unit.Value;
         }
     }

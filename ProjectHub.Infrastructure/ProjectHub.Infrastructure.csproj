@@ -2,6 +2,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ProjectHub.Application\ProjectHub.Application.csproj" />
     <ProjectReference Include="..\ProjectHub.Domain\ProjectHub.Domain.csproj" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.1.66" />

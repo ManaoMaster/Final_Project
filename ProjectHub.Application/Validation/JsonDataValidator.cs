@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using ProjectHub.Application.Common;
 using ColumnEntity = ProjectHub.Domain.Entities.Columns; // Using Alias
 
 namespace ProjectHub.Application.Validation
@@ -42,6 +43,18 @@ namespace ProjectHub.Application.Validation
                     // ข้ามการ Validation สำหรับคอลัมน์ที่คำนวณทีหลัง
                     continue;
                 }
+
+                // vvv --- [นี่คือโค้ด Task 2.3 ที่เพิ่มเข้ามา] --- vvv
+
+                // ถ้าคอลัมน์นี้เป็น AutoIncrement...
+                // ให้ "ข้าม" การเช็ค "Required" (Is_nullable) ไปเลย
+                // เพราะ Backend (CreateRowHandler) จะเป็นคนยัดค่าให้เอง
+                if (column.PrimaryKeyType == "AUTO_INCREMENT")
+                {
+                    continue;
+                }
+                // ^^^ --- [สิ้นสุดโค้ดที่เพิ่ม] --- ^^^
+
 
                 // Check if property exists in JSON, consider case-insensitivity
                 var propertyExists = jsonData
@@ -88,44 +101,26 @@ namespace ProjectHub.Application.Validation
                 // Check for null if column is not nullable
                 if (!columnSchema.Is_nullable && valueElement.ValueKind == JsonValueKind.Null)
                 {
-                    throw new ArgumentException($"Column '{columnSchema.Name}' cannot be null.");
+                    // (ข้อยกเว้น: ถ้า PK เป็น AutoIncrement User อาจจะส่ง null มาก็ได้)
+                    if (columnSchema.PrimaryKeyType != "AUTO_INCREMENT")
+                    {
+                        throw new ArgumentException($"Column '{columnSchema.Name}' cannot be null.");
+                    }
                 }
 
                 // Check Data Type (only if value is not null)
                 if (valueElement.ValueKind != JsonValueKind.Null)
                 {
                     // **STEP 3: เพิ่ม "IMAGE"**
-                    bool typeMatch = schemaColType switch
-                    {
-                        "TEXT" => valueElement.ValueKind == JsonValueKind.String,
-                        "IMAGE" => valueElement.ValueKind == JsonValueKind.String, // Added
-                        "INTEGER" => valueElement.ValueKind == JsonValueKind.Number
-                            && valueElement.TryGetInt64(out _),
-                        "REAL" => valueElement.ValueKind == JsonValueKind.Number,
-                        "BOOLEAN" => valueElement.ValueKind == JsonValueKind.True
-                            || valueElement.ValueKind == JsonValueKind.False,
-                        "STRING" => valueElement.ValueKind == JsonValueKind.String,
-                        "INT" => valueElement.ValueKind == JsonValueKind.Number
-                            && valueElement.TryGetInt64(out _),
-                        // Add other specific types (e.g., DATETIME)
-                        _ => false, // Default to false if type is unknown/unsupported
-                    };
+                    bool typeMatch = ColumnTypeHelper.IsValidJsonValue(
+                    schemaColType ?? string.Empty,
+                    valueElement
+                    );
 
                     if (!typeMatch)
                     {
                         // Throw specific error if the data type string itself is unsupported
-                        if (
-                            !new[]
-                            {
-                                "TEXT",
-                                "IMAGE", // Added
-                                "INTEGER",
-                                "REAL",
-                                "BOOLEAN",
-                                "STRING",
-                                "INT",
-                            }.Contains(schemaColType)
-                        )
+                        if (!ColumnTypeHelper.GetKnownDataTypes().Contains(schemaColType))
                         {
                             throw new ArgumentException(
                                 $"Unsupported data type '{columnSchema.Data_type}' defined in schema for column '{columnSchema.Name}'."

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ProjectHub.Infrastructure.Persistence;
@@ -11,9 +12,11 @@ using ProjectHub.Infrastructure.Persistence;
 namespace ProjectHub.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251104055612_Add_PrimaryKeyType_To_Columns")]
+    partial class Add_PrimaryKeyType_To_Columns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -255,7 +258,7 @@ namespace ProjectHub.Infrastructure.Migrations
                     b.HasOne("ProjectHub.Domain.Entities.Columns", "ForeignColumn")
                         .WithMany()
                         .HasForeignKey("ForeignColumnId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("ProjectHub.Domain.Entities.Tables", "ForeignTable")
@@ -273,7 +276,7 @@ namespace ProjectHub.Infrastructure.Migrations
                     b.HasOne("ProjectHub.Domain.Entities.Tables", "PrimaryTable")
                         .WithMany()
                         .HasForeignKey("PrimaryTableId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("ForeignColumn");

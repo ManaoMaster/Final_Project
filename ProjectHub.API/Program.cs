@@ -25,6 +25,7 @@ using ProjectHub.Infrastructure.Persistence;
 using ProjectHub.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddHttpContextAccessor();  
 
 // --- 1. ตั้งค่า PostgreSQL Database ---
 var connectionString = builder.Configuration.GetConnectionString("PostgresConnection");
@@ -65,8 +66,9 @@ builder.Services.AddScoped<IColumnRepository, ColumnRepository>();
 builder.Services.AddScoped<IRowRepository, RowRepository>();
 builder.Services.AddScoped<IRelationshipRepository, RelationshipRepository>();
 builder.Services.AddScoped<IFormulaTranslator, FormulaTranslator>(); //
-
-builder.Services.AddScoped<IDbConnection>(sp => 
+builder.Services.AddScoped<IProjectSecurityService,
+    ProjectHub.Infrastructure.Services.ProjectSecurityService>();
+builder.Services.AddScoped<IDbConnection>(sp =>
     new NpgsqlConnection(builder.Configuration.GetConnectionString("PostgresConnection"))
 );
 

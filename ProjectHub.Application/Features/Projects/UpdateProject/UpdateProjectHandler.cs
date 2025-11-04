@@ -13,10 +13,13 @@ namespace ProjectHub.Application.Features.Projects.UpdateProject
         private readonly IProjectRepository _projectRepository;
         private readonly IMapper _mapper;
 
-        public UpdateProjectHandler(IProjectRepository projectRepository, IMapper mapper)
+        private readonly IProjectSecurityService _securityService;
+
+        public UpdateProjectHandler(IProjectRepository projectRepository, IMapper mapper, IProjectSecurityService securityService)
         {
             _projectRepository = projectRepository;
             _mapper = mapper;
+            _securityService = securityService;
         }
 
 
@@ -35,6 +38,8 @@ namespace ProjectHub.Application.Features.Projects.UpdateProject
                 // หรืออาจจะใช้ Exception ที่ Custom ขึ้นมาเอง เช่น NotFoundException
             }
 
+
+            await _securityService.ValidateProjectAccessAsync(projectToUpdate.User_id);
             // (Optional) ตรวจสอบ Business Rule เพิ่มเติม
             // เช่น เช็คว่าชื่อใหม่ซ้ำหรือไม่ (ถ้าต้องการ) โดยเรียก IsProjectNameUniqueForUserAsync
             // var isDuplicate = await _projectRepository.IsProjectNameUniqueForUserAsync(projectToUpdate.User_id, request.NewName);

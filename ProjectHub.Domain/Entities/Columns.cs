@@ -26,5 +26,7 @@ namespace ProjectHub.Domain.Entities
 
         [ForeignKey("LookupTargetColumnId")]
         public Columns? LookupTargetColumn { get; set; }
+
+        public string? PrimaryKeyType { get; set; }
     }
 }

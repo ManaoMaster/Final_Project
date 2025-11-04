@@ -80,5 +80,14 @@ namespace ProjectHub.Infrastructure.Repositories
             }
             // ถ้าไม่เจอ ก็ไม่ต้องทำอะไร (Handler ควรจะเช็คเจอไปก่อนแล้ว)
         }
+        public async Task<IEnumerable<Columns>> GetByIdsAsync(List<int> ids)
+        {
+            // (ถ้าใช้ EF Core)
+            return await _context.Columns.Where(c => ids.Contains(c.Column_id)).ToListAsync();
+
+            // (ถ้าใช้ Dapper)
+            // var sql = "SELECT * FROM \"Columns\" WHERE \"Id\" = ANY(@ids)";
+            // return await _dbConnection.QueryAsync<Columns>(sql, new { ids });
+        }
     }
 }

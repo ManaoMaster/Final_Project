@@ -17,17 +17,22 @@ namespace ProjectHub.Application.Features.Tables.EditTable
         private readonly ITableRepository _tableRepository;
         private readonly IMapper _mapper;
 
-        public EditTableHandler(ITableRepository tableRepository, IMapper mapper)
+        private readonly IProjectSecurityService _securityService;
+
+        public EditTableHandler(ITableRepository tableRepository, IMapper mapper, IProjectSecurityService securityService)
         {
             _tableRepository = tableRepository;
             _mapper = mapper;
+            _securityService = securityService;
         }
 
         public async Task<TableResponseDto> Handle(
             UpdateTableCommand request,
             CancellationToken cancellationToken
+
         )
         {
+
             // 1. ดึงข้อมูล Table ที่ต้องการแก้ไข
             var tableToUpdate = await _tableRepository.GetTableByIdAsync(request.TableId);
 
@@ -37,6 +42,7 @@ namespace ProjectHub.Application.Features.Tables.EditTable
                 throw new ArgumentException($"Table with ID {request.TableId} not found.");
                 // หรือใช้ NotFoundException
             }
+            await _securityService.ValidateProjectAccessAsync(tableToUpdate.Project_id); // (หรือ .Project_id)
 
             // (Optional แต่สำคัญ) 3. ตรวจสอบว่าชื่อใหม่ซ้ำกับ Table อื่นใน Project เดียวกันหรือไม่
             // เราต้องไม่ให้ชื่อ Table ซ้ำกันใน Project เดียวกัน

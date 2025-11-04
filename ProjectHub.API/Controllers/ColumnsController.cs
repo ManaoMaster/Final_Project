@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using AutoMapper; 
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ProjectHub.API.Contracts.Columns; // <-- 1. ใช้ DTO ที่ถูกต้องจาก Contracts
@@ -9,28 +9,29 @@ using ProjectHub.Application.Features.Columns.CreateColumn;
 using ProjectHub.Application.Features.Columns.DeleteColumn;
 using ProjectHub.Application.Features.Columns.UpdateColumn; // <-- 2. เพิ่ม Using นี้สำหรับ Update
 using System.Threading;
-using ProjectHub.Application.Features.Projects.UpdateProject; // <-- 3. เพิ่ม Using นี้สำหรับ CancellationToken
+using ProjectHub.Application.Features.Projects.UpdateProject;
+using ProjectHub.Application.Features.Columns.GetPrimaryColumnsByTableId; // <-- 3. เพิ่ม Using นี้สำหรับ CancellationToken
 
 namespace ProjectHub.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")] 
+    [Route("api/[controller]")]
     public class ColumnsController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly IMapper _mapper; 
+        private readonly IMapper _mapper;
 
         public ColumnsController(IMediator mediator, IMapper mapper)
         {
             _mediator = mediator;
-            _mapper = mapper; 
+            _mapper = mapper;
         }
 
         // --- (ลบ record CreateColumnRequest และ CreateColumnRequestPayload ที่ซ้ำซ้อนทิ้งไป) ---
 
         // --- Endpoint: POST /api/columns ---
         // (เราไม่ต้องใช้ {tableId} ใน Route แล้ว เพราะมันอยู่ใน Request Body)
-        [HttpPost] 
+        [HttpPost]
         public async Task<IActionResult> CreateColumn(
             [FromBody] CreateColumnRequest request, // <-- 4. เปลี่ยนมารับ DTO ที่ถูกต้อง
             CancellationToken ct // <-- เพิ่ม ct
@@ -46,7 +47,7 @@ namespace ProjectHub.API.Controllers
 
                 // 7. คืนค่า 201 Created
                 return CreatedAtAction(
-                    null, 
+                    null,
                     new { id = responseDto.ColumnId },
                     responseDto
                 );
@@ -55,7 +56,7 @@ namespace ProjectHub.API.Controllers
             {
                 return BadRequest(new { Error = ex.Message });
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 // Log the exception ex
                 return StatusCode(500, new { Error = "An unexpected error occurred." });
@@ -76,30 +77,37 @@ namespace ProjectHub.API.Controllers
         }
 
         // --- Endpoint: DELETE /api/columns/{id} ---
-        [HttpDelete("{id}")] 
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteColumn(
-            [FromRoute] int id, 
+            [FromRoute] int id,
             CancellationToken ct
-        ) 
+        )
         {
             var command = new DeleteColumnCommand { ColumnId = id };
 
             try
             {
-                await _mediator.Send(command, ct); 
+                await _mediator.Send(command, ct);
                 return NoContent();
             }
-            catch (ArgumentException ex) 
+            catch (ArgumentException ex)
             {
-                return NotFound(new { Error = ex.Message }); 
+                return NotFound(new { Error = ex.Message });
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 Console.WriteLine($"Error deleting column {id}: {ex}"); // (แก้จาก row เป็น column)
                 return StatusCode(500, new { Error = "An unexpected error occurred." });
             }
         }
-        
+        [HttpGet("table/{tableId}/primary")]
+        public async Task<IActionResult> GetPrimaryColumnsByTableId(int tableId)
+        {
+            var query = new GetPrimaryColumnsByTableIdQuery { TableId = tableId };
+            var primaryColumns = await _mediator.Send(query);
+            return Ok(primaryColumns);
+        }
+
         // --- (Optional) Endpoint: GET /api/columns/{id} ---
         // (ยังไม่ได้สร้าง Handler)
     }

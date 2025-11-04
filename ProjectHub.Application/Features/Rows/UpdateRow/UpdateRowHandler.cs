@@ -25,15 +25,20 @@ namespace ProjectHub.Application.Features.Rows.UpdateRow
         private readonly IColumnRepository _columnRepository; // Needed for schema validation
         private readonly IMapper _mapper;
 
+
+        private readonly IProjectSecurityService _securityService;
+
         public UpdateRowHandler(
             IRowRepository rowRepository,
             IColumnRepository columnRepository,
-            IMapper mapper
+            IMapper mapper,
+            IProjectSecurityService securityService
         )
         {
             _rowRepository = rowRepository;
             _columnRepository = columnRepository;
             _mapper = mapper;
+            _securityService = securityService;
         }
 
         public async Task<RowResponseDto> Handle(
@@ -47,6 +52,8 @@ namespace ProjectHub.Application.Features.Rows.UpdateRow
             {
                 throw new ArgumentException($"Row with ID {request.RowId} not found.");
             }
+
+            await _securityService.ValidateTableAccessAsync(rowToUpdate.Table_id);
 
             // 2. Fetch the Column Schema for the associated Table
             var columnsSchema = await _columnRepository.GetColumnsByTableIdAsync(
