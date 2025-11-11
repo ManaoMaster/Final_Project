@@ -9,7 +9,6 @@ using ProjectHub.Application.Features.Columns.CreateColumn;
 using ProjectHub.Application.Features.Columns.DeleteColumn;
 using ProjectHub.Application.Features.Columns.UpdateColumn; // <-- 2. เพิ่ม Using นี้สำหรับ Update
 using System.Threading;
-using ProjectHub.Application.Features.Projects.UpdateProject;
 using ProjectHub.Application.Features.Columns.GetPrimaryColumnsByTableId; // <-- 3. เพิ่ม Using นี้สำหรับ CancellationToken
 
 namespace ProjectHub.API.Controllers
@@ -33,19 +32,43 @@ namespace ProjectHub.API.Controllers
         // (เราไม่ต้องใช้ {tableId} ใน Route แล้ว เพราะมันอยู่ใน Request Body)
         [HttpPost]
         public async Task<IActionResult> CreateColumn(
-            [FromBody] CreateColumnRequest request, // <-- 4. เปลี่ยนมารับ DTO ที่ถูกต้อง
-            CancellationToken ct // <-- เพิ่ม ct
-        )
+             [FromBody] CreateColumnRequest request, // <-- 1. รับ Request ที่อัปเกรดแล้ว
+             CancellationToken ct
+         )
         {
-            // 5. ใช้ AutoMapper (แบบนี้ FormulaDefinition จะถูกแมปไปด้วย)
-            var command = _mapper.Map<CreateColumnCommand>(request);
+            // --- [FIX] ---
+            // เราจะสร้าง Command ด้วยมือ เพื่อจัดการ Logic ไก่กับไข่
+            // (ลบ var command = _mapper.Map<CreateColumnCommand>(request); ทิ้งไป)
+
+            var command = new CreateColumnCommand
+            {
+                TableId = request.TableId,
+                Name = request.Name,
+                DataType = request.DataType,
+                IsNullable = request.IsNullable,
+                IsPrimary = request.IsPrimary,
+                FormulaDefinition = request.FormulaDefinition,
+                LookupTargetColumnId = request.LookupTargetColumnId,
+
+                // 2. ส่ง "ไข่" (ID ที่มีอยู่)
+                LookupRelationshipId = request.LookupRelationshipId,
+
+                // 3. แปลง "ไก่" (ข้อมูลใหม่) จาก Request -> Command
+                NewRelationship = (request.NewRelationship == null) ? null : new NewRelationshipData
+                {
+                    PrimaryTableId = request.NewRelationship.PrimaryTableId,
+                    PrimaryColumnId = request.NewRelationship.PrimaryColumnId,
+                    ForeignTableId = request.NewRelationship.ForeignTableId,
+                    ForeignColumnId = request.NewRelationship.ForeignColumnId
+                }
+            };
+            // --- [End of FIX] ---
 
             try
             {
-                // 6. ส่ง Command ไปยัง MediatR
-                ColumnResponseDto responseDto = await _mediator.Send(command, ct); // <-- ส่ง ct
+                // 4. ส่ง Command ที่เราสร้างเอง ไปยัง MediatR
+                ColumnResponseDto responseDto = await _mediator.Send(command, ct);
 
-                // 7. คืนค่า 201 Created
                 return CreatedAtAction(
                     null,
                     new { id = responseDto.ColumnId },
@@ -58,11 +81,9 @@ namespace ProjectHub.API.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception ex
                 return StatusCode(500, new { Error = "An unexpected error occurred." });
             }
         }
-
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateColumn(
             [FromRoute] int id,
@@ -103,10 +124,45 @@ namespace ProjectHub.API.Controllers
         [HttpGet("table/{tableId}/primary")]
         public async Task<IActionResult> GetPrimaryColumnsByTableId(int tableId)
         {
-            var query = new GetPrimaryColumnsByTableIdQuery { TableId = tableId };
-            var primaryColumns = await _mediator.Send(query);
-            return Ok(primaryColumns);
+            // vvv --- [FIX] เพิ่ม try...catch บล็อกนี้ --- vvv
+            try
+            {
+                var query = new GetPrimaryColumnsByTableIdQuery { TableId = tableId };
+                var primaryColumns = await _mediator.Send(query);
+                return Ok(primaryColumns);
+            }
+            catch (UnauthorizedAccessException ex) // ถ้า "ยาม" (Security) ทำงาน
+            {
+                return Unauthorized(new { Error = ex.Message });
+            }
+            catch (Exception ex) // ถ้า Error อื่นๆ (เช่น Table ไม่เจอ)
+            {
+                return BadRequest(new { Error = ex.Message });
+            }
+            // ^^^ --- [สิ้นสุดการแก้] --- ^^^
         }
+        [HttpGet("table/{tableId}")] // <-- นี่คือ "ประตู" ใหม่
+        public async Task<IActionResult> GetColumnsByTableId(int tableId)
+        {
+            // (สร้าง Query (Source 184) ที่ Handler (Source 183) รอรับ)
+            var query = new GetColumnsByTableIdQuery { TableId = tableId };
+
+            try
+            {
+                var columns = await _mediator.Send(query);
+                return Ok(columns);
+            }
+            catch (UnauthorizedAccessException ex) // ถ้า "ยาม" (Security) ทำงาน
+            {
+                return Unauthorized(new { Error = ex.Message });
+            }
+            catch (Exception ex) // ถ้า Error อื่นๆ (เช่น Table ไม่เจอ)
+            {
+                // (ใน Service ของเรา เรา throw Exception ธรรมดา)
+                return BadRequest(new { Error = ex.Message });
+            }
+        }
+
 
         // --- (Optional) Endpoint: GET /api/columns/{id} ---
         // (ยังไม่ได้สร้าง Handler)

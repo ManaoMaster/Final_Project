@@ -38,7 +38,6 @@ namespace ProjectHub.API.Controllers
                 ProjectId = request.ProjectId,
                 Name = request.Name,
                 UseAutoIncrement = request.UseAutoIncrement,
-                IsPrimaryKey = request.IsPrimaryKey
                 
             };
 

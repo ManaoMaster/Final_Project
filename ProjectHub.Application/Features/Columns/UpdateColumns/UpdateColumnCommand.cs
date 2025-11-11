@@ -4,13 +4,13 @@ using MediatR;
 using ProjectHub.Application.Dtos; // ใช้ DTO เดิม
 
 // Namespace อาจจะต้องเปลี่ยนตาม Folder ใหม่ (ถ้าคุณเปลี่ยนชื่อ Folder)
-namespace ProjectHub.Application.Features.Projects.UpdateProject // <-- เปลี่ยน Namespace (ถ้าเปลี่ยน Folder)
+namespace ProjectHub.Application.Features.Columns.UpdateColumn
 {
     // เปลี่ยนชื่อ Class จาก Edit... เป็น Update...
     public class UpdateColumnCommand : IRequest<ColumnResponseDto>
     {
         [Required]
-        public int ColumnId { get; set; } // ID ของ Project ที่จะแก้ไข
+        public int ColumnId { get; set; } // ID ของ Column ที่จะแก้ไข
 
         [Required]
         [MaxLength(100)]

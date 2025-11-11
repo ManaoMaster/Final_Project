@@ -2,6 +2,7 @@ using AutoMapper;
 using ProjectHub.Application.Dtos;
 using ProjectHub.Application.Features.Columns.CreateColumn; // Command
 using ProjectHub.Application.Features.Columns.DeleteColumn;
+using ProjectHub.Application.Features.Columns.UpdateColumn;
 using ProjectHub.Application.Features.Projects.UpdateProject;
 using ProjectHub.Domain.Entities; // Entity
 

@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+
 namespace ProjectHub.Domain.Entities
 {
     public class Columns

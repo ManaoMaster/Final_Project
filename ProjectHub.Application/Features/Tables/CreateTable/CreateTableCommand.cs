@@ -15,6 +15,5 @@ namespace ProjectHub.Application.Features.Tables.CreateTable
 
         public bool UseAutoIncrement { get; set; }
 
-        public bool IsPrimaryKey { get; set; }
     }
 }

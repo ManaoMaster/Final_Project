@@ -55,15 +55,15 @@ namespace ProjectHub.Application.Services
 
                 case "column":
                     string colName = node.GetProperty("name").GetString() ?? "";
-                    
-                    // --- *** นี่คือจุดที่แก้ไขครับ *** ---
-                    // เพิ่ม \" (ฟันหนู) รอบ _dataColumn
-                    // เพื่อให้ SQL ที่ได้เป็น ("Data"->>'salary')::numeric
-                    return $"(\"{_dataColumn}\"->>'{colName}')::numeric";
+
+                    // --- *** [FIX 1] *** ---
+                    // ลบ ::numeric ออก ให้คืนค่า JSON accessor ดิบๆ
+                    return $"\"{_dataColumn}\"->>'{colName}'";
 
                 case "literal":
+                    // --- *** [FIX 2] *** ---
+                    // ลบ ::numeric ออก ให้คืนค่า literal ดิบๆ
                     return node.GetProperty("value").GetRawText();
-
                 default:
                     throw new NotSupportedException($"Unsupported AST node type: {type}");
             }
@@ -83,7 +83,7 @@ namespace ProjectHub.Application.Services
                 case "column":
                     names.Add(node.GetProperty("name").GetString() ?? "");
                     break;
-                
+
                 case "literal":
                     // Literal nodes ไม่มีชื่อคอลัมน์
                     break;

@@ -11,6 +11,8 @@ using System;
 using System.Text;
 using ProjectHub.Application.Common; // (สำหรับ ColumnTypeHelper)
 using ColumnEntity = ProjectHub.Domain.Entities.Columns; // (Alias)
+using System.Diagnostics;
+using Microsoft.Extensions.Logging; // <--- เพิ่มบรรทัดนี้
 
 namespace ProjectHub.Application.Features.Rows.GetRowsByTableId
 {
@@ -21,19 +23,22 @@ namespace ProjectHub.Application.Features.Rows.GetRowsByTableId
         private readonly IDbConnection _dbConnection;
         private readonly IRelationshipRepository _relationshipRepository;
         private readonly IProjectSecurityService _securityService;
+        private readonly ILogger<GetRowsByTableIdHandler> _logger;
 
         public GetRowsByTableIdHandler(
             IColumnRepository columnRepository,
             IFormulaTranslator formulaTranslator,
             IDbConnection dbConnection,
             IRelationshipRepository relationshipRepository,
-            IProjectSecurityService securityService)
+            IProjectSecurityService securityService,
+            ILogger<GetRowsByTableIdHandler> logger)
         {
             _columnRepository = columnRepository;
             _formulaTranslator = formulaTranslator;
             _dbConnection = dbConnection;
             _relationshipRepository = relationshipRepository;
             _securityService = securityService;
+            _logger = logger;
         }
 
         public async Task<IEnumerable<IDictionary<string, object>>> Handle(GetRowsByTableIdQuery request, CancellationToken cancellationToken)
@@ -137,29 +142,50 @@ LEFT JOIN ""Rows"" AS {joinTableAlias}
             }
 
             // --- Loop 3: คอลัมน์ Formula ---
-            var formulaColumns = columns.Where(c => c.Data_type == "Formula" && !string.IsNullOrWhiteSpace(c.FormulaDefinition));
+            var formulaColumns = columns.Where(c =>
+                c.Data_type.Equals("Formula", StringComparison.OrdinalIgnoreCase) &&
+                !string.IsNullOrWhiteSpace(c.FormulaDefinition));
             foreach (var col in formulaColumns)
             {
                 try
                 {
-                    // 1. แปลงสูตร (สมมติว่า Translator สร้าง Placeholder เช่น ("Data"->>'Num1')::numeric)
+                    // 1. แปลงสูตร (จะได้: ( (("Data"->>'price')) + 10 ) )
                     string sqlSnippet = _formulaTranslator.Translate(col.FormulaDefinition!, "Data");
-
-                    // 2. แทนที่ Placeholder ด้วย SQL ที่มี Alias
+                    _logger.LogInformation("\n--- [Formula: {FormulaName}] ---", col.Name);
+                    _logger.LogInformation("[LOG 1] Snippet จาก Translator:\n{Snippet}", sqlSnippet);
                     foreach (var entry in columnSqlAliasMap)
                     {
+                        // [โค้ดเดิม ไม่ต้องแก้]
                         var placeholderCol = columns.FirstOrDefault(c => c.Name == entry.Key);
                         string placeholderCast = ColumnTypeHelper.GetSqlCast(placeholderCol?.Data_type);
 
-                        // Placeholder ที่ Translator สร้าง: ("Data"->>'Num1')::numeric
-                        string placeholder = $"(\"Data\"->>'{SanitizeLiteral(entry.Key)}'){placeholderCast}";
+                        // --- *** [FIX 3] *** ---
+                        // "สตริงสำหรับค้นหา" (placeholder) ต้อง *ไม่มี* Cast
+                        // เพื่อให้ตรงกับที่ Translator ตัวใหม่สร้าง
+                        string placeholder = $"\"Data\"->>'{SanitizeLiteral(entry.Key)}'"; // <--- เอา placeholderCast ออก
 
-                        // ค่าจริงที่จะแทนที่: (t_main."Data"->>'Num1')::numeric
+                        // "สตริงสำหรับแทนที่" (replacementValue) ยังถูกต้องเหมือนเดิม
+                        // (เพราะมันมี t_main และ ::bigint อยู่แล้วจาก Loop 1)
                         string replacementValue = entry.Value;
+                        // --- *** [LOG 2] *** ---
+                        _logger.LogInformation("[LOG 2] กำลังค้นหา: {Placeholder}", placeholder);
+                        // --- *** [LOG 3] *** ---
+                        _logger.LogInformation("[LOG 3] จะแทนที่ด้วย: {Replacement}", replacementValue);
+                        _logger.LogInformation("[LOG 3.5] เจอหรือไม่: {Found}", sqlSnippet.Contains(placeholder));
+                        // --------------------------
 
                         sqlSnippet = sqlSnippet.Replace(placeholder, replacementValue);
                     }
-                    selectClauses.Add($"({sqlSnippet}) AS {SanitizeIdentifier(col.Name)}");
+                    _logger.LogInformation("[LOG 4] Snippet หลัง Replace:\n{SnippetAfter}", sqlSnippet);
+                    // ตอนนี้ sqlSnippet จะเป็น: ( ((t_main."Data"->>'price')::bigint) + 10 )
+                    // ซึ่ง 10 ยังไม่มี Type แต่ PostgreSQL จะจัดการให้ (bigint + literal)
+
+                    // --- *** [FIX 4] *** ---
+                    // Cast ผลลัพธ์สุดท้ายทั้งก้อน ด้วย Type ของคอลัมน์ Formula
+                    // (จากรูป Data_type ของ "Price_Plus_..." คือ "FORMULA")
+                    string finalCast = ColumnTypeHelper.GetSqlCast(col.Data_type); // (จะได้ ::text จาก default)
+
+                    selectClauses.Add($"({sqlSnippet}){finalCast} AS {SanitizeIdentifier(col.Name)}");
                 }
                 catch (Exception ex)
                 {

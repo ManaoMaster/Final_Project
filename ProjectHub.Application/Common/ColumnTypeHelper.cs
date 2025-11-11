@@ -15,6 +15,7 @@ namespace ProjectHub.Application.Common
                 "REAL" => "::numeric",
                 "NUMBER" => "::numeric", // (เพิ่ม Number ถ้าคุณใช้)
                 "BOOLEAN" => "::boolean",
+                "FORMULA" => "::numeric",
                 "TEXT" => "::text",
                 "IMAGE" => "::text",
                 _ => "::text" // Default ที่ปลอดภัยที่สุด
@@ -33,6 +34,7 @@ namespace ProjectHub.Application.Common
                 "INT" => valueKind == JsonValueKind.Number && valueElement.TryGetInt64(out _),
                 "REAL" => valueKind == JsonValueKind.Number,
                 "NUMBER" => valueKind == JsonValueKind.Number,
+                "FORMULA" => valueKind == JsonValueKind.Number,
                 "BOOLEAN" => valueKind == JsonValueKind.True || valueKind == JsonValueKind.False,
                 _ => false
             };
@@ -41,9 +43,9 @@ namespace ProjectHub.Application.Common
         // === 3. ศูนย์กลางสำหรับรายชื่อ Type ทั้งหมด ===
         public static IReadOnlyList<string> GetKnownDataTypes()
         {
-            return new[] 
-            { 
-                "TEXT", "IMAGE", "INTEGER", "INT", "REAL", "NUMBER", "BOOLEAN" 
+            return new[]
+            {
+                "TEXT", "IMAGE", "INTEGER", "INT", "REAL", "NUMBER", "BOOLEAN", "FORMULA"
             };
         }
     }

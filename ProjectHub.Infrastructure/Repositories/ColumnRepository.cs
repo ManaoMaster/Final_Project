@@ -89,5 +89,37 @@ namespace ProjectHub.Infrastructure.Repositories
             // var sql = "SELECT * FROM \"Columns\" WHERE \"Id\" = ANY(@ids)";
             // return await _dbConnection.QueryAsync<Columns>(sql, new { ids });
         }
+        public async Task<Columns> CreateColumnWithNewRelationshipAsync(Columns columnEntity, Relationships newRelationship)
+        {
+            // 1. เริ่ม Transaction โดยใช้ _context ที่มีอยู่
+            await using (var transaction = await _context.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    // 2. สร้าง Relationship ก่อน
+                    _context.Relationships.Add(newRelationship);
+                    await _context.SaveChangesAsync(); // <-- ยืนยันการสร้าง (EF จะอัปเดต ID ให้)
+
+                    // 3. เอา ID ใหม่ มาเชื่อมกับ Column
+                    columnEntity.LookupRelationshipId = newRelationship.RelationshipId;
+
+                    // 4. สร้าง Column
+                    _context.Columns.Add(columnEntity);
+                    await _context.SaveChangesAsync(); // <-- ยืนยันการสร้าง Column
+
+                    // 5. ถ้าสำเร็จทั้งหมด Commit Transaction
+                    await transaction.CommitAsync();
+
+                    // 6. คืนค่า Column ที่สร้างเสร็จ (พร้อม ID ใหม่)
+                    return columnEntity;
+                }
+                catch (Exception)
+                {
+                    // 7. ถ้ามีอะไรพัง ให้ Rollback ทั้งหมด
+                    await transaction.RollbackAsync();
+                    throw; // โยน Error 500 กลับไป
+                }
+            }
+        }
     }
 }

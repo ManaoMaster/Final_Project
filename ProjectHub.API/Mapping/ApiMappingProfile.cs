@@ -9,6 +9,7 @@ using ProjectHub.API.Contracts.Users;
 using ProjectHub.API.Controllers;
 using ProjectHub.Application.Features.Columns.CreateColumn;
 using ProjectHub.Application.Features.Columns.DeleteColumn;
+using ProjectHub.Application.Features.Columns.UpdateColumn;
 using ProjectHub.Application.Features.Projects.CreateProject;
 using ProjectHub.Application.Features.Projects.DeleteProject;
 using ProjectHub.Application.Features.Projects.UpdateProject;
@@ -48,6 +49,8 @@ namespace ProjectHub.API.Mapping
             CreateMap<CreateRelationshipRequest, CreateRelationshipCommand>();
 
             CreateMap<UpdateRelationshipRequest, UpdateRelationshipCommand>();
+
+            CreateMap<UpdateColumnRequest, UpdateColumnCommand>();
         }
     }
 }

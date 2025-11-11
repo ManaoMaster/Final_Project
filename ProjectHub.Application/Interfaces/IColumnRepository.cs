@@ -6,6 +6,7 @@ namespace ProjectHub.Application.Interfaces // ต้องใช้ Namespace �
     // นี่คือ Interface (สัญญา) สำหรับจัดการข้อมูล Column
     public interface IColumnRepository
     {
+        Task<Columns> CreateColumnWithNewRelationshipAsync(Columns columnEntity, Relationships newRelationship);
         // สัญญาข้อที่ 1: ตรวจสอบว่าชื่อ Column ซ้ำกันหรือไม่ *ภายใน Table เดียวกัน*
         // Input: ID ของ Table, ชื่อ Column ที่ต้องการตรวจสอบ
         // Output: true ถ้าชื่อซ้ำ, false ถ้าไม่ซ้ำ
