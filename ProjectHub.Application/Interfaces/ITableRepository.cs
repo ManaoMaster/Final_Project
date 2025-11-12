@@ -11,7 +11,7 @@ namespace ProjectHub.Application.Interfaces // ต้องใช้ Namespace �
     {
         Task<bool> IsTableNameUniqueForProjectAsync(int ProjectId, string tableName);
         Task AddTableAsync(Tables table);
-
+        Task<IEnumerable<Tables>> GetTablesByProjectIdAsync(int projectId);
         Task<Tables?> GetTableByIdAsync(int tableId);
         Task UpdateTableAsync(Tables tableToUpdate);
 
