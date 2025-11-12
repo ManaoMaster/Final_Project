@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "RCNarum2SNw=",
+  "dgSpecHash": "5MGKggYoAms=",
   "success": true,
-  "projectFilePath": "C:\\school\\final_project\\Final_Project\\ProjectHub.api\\ProjectHub.API.csproj",
+  "projectFilePath": "C:\\school\\final_project\\Final_Project\\projectHub.api\\ProjectHub.API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ghost\\.nuget\\packages\\automapper\\15.1.0\\automapper.15.1.0.nupkg.sha512",
     "C:\\Users\\ghost\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",

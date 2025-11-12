@@ -100,6 +100,7 @@ namespace ProjectHub.API.Controllers
                 UserId = int.Parse(sub),
                 Email = req.Email,
                 Username = req.Username,
+                ProfilePictureUrl = req.ProfilePictureUrl   
             };
 
             try
