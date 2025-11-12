@@ -19,5 +19,6 @@ namespace ProjectHub.Application.Interfaces // ต้องใช้ Namespace �
         Task UpdateProjectAsync(Projects project);
 
         Task DeleteProjectAsync(int projectId);
+        Task UpdateTimestampsAsync(Projects project);
     }
 }

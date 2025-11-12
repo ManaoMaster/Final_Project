@@ -9,7 +9,8 @@ using ProjectHub.Application.Features.Projects.CreateProject; // Namespace ส�
 using ProjectHub.Application.Features.Projects.DeleteProject; // Namespace สำหรับ Delete Command
 using ProjectHub.Application.Features.Projects.UpdateProject;
 using ProjectHub.Application.Features.Projects.GetAllProjects; // <-- *** [FIX 1] *** เพิ่ม Using นี้
-using System.Security.Claims; // <-- *** [FIX 2] *** เพิ่ม Using นี้
+using System.Security.Claims;
+using ProjectHub.Application.Features.Projects.ToggleFavoriteProject; // <-- *** [FIX 2] *** เพิ่ม Using นี้
 namespace ProjectHub.API.Controllers
 {
     // [ApiController]: Attribute นี้เปิดใช้งานฟีเจอร์ต่างๆ ของ API Controller
@@ -84,6 +85,43 @@ namespace ProjectHub.API.Controllers
             {
                 // ควร Log ex ไว้ด้วย
                 return StatusCode(500, new { Error = "An unexpected error occurred." }); // คืน 500
+            }
+        }
+        [HttpPut("{id}/toggle-favorite")]
+        public async Task<IActionResult> ToggleFavorite(
+            [FromRoute] int id,
+            CancellationToken ct)
+        {
+            try
+            {
+                // 1. Controller "ฉลาด" ดึง UserId จาก Token (Claims)
+                var userId = GetCurrentUserId();
+
+                // 2. สร้าง Command (จาก Step 4)
+                var command = new ToggleFavoriteProjectCommand
+                {
+                    ProjectId = id,
+                    UserId = userId
+                };
+
+                // 3. ส่งให้ Handler (Handler จะพลิกค่า IsFavorite และอัปเดต UpdatedAt)
+                ProjectResponseDto updatedProject = await _mediator.Send(command, ct);
+
+                // 4. คืนค่า 200 OK พร้อม DTO ใหม่
+                return Ok(updatedProject);
+            }
+            catch (UnauthorizedAccessException ex) // ถ้า Handler ตรวจสอบแล้วพบว่า "ไม่มีสิทธิ์"
+            {
+                return Unauthorized(new { Error = ex.Message });
+            }
+            catch (ArgumentException ex) // ถ้า Handler โยน Error (เช่น Project ไม่เจอ)
+            {
+                return NotFound(new { Error = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                // (ควร Log ex)
+                return StatusCode(500, new { Error = "An unexpected error occurred." });
             }
         }
         [HttpGet]

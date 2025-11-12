@@ -40,7 +40,7 @@ namespace ProjectHub.Infrastructure.Repositories
             // ใช้ FirstOrDefaultAsync เพื่อหา Project ตาม ID
             // Include(p => p.Tables) ถ้าต้องการโหลด Tables มาด้วย (Optional)
             return await _context.Projects
-            // .Include(p => p.Tables)
+            .Include(p => p.Tables) // <-- [!] ผมแอบเปิด .Include() ให้นะครับ
             .FirstOrDefaultAsync(p => p.Project_id == projectId);
         }
 
@@ -67,12 +67,29 @@ namespace ProjectHub.Infrastructure.Repositories
 
         public async Task<IEnumerable<Projects>> GetProjectsByUserIdAsync(int userId)
         {
+            // --- *** [FIX 1] *** ---
+            // เราต้อง .Include(p => p.Tables) ที่นี่ด้วย
+            // เพื่อให้ AutoMapper ใน Step 6.2 สามารถนับ .Tables.Count ได้
             return await _context.Projects
-                .Where(p => p.User_id == userId)
-                .AsNoTracking() // (แนะนำให้ใช้ .AsNoTracking() เพื่อให้ Read-Only query เร็วขึ้น)
-                .ToListAsync();
+                   .Where(p => p.User_id == userId)
+                           .Include(p => p.Tables) // <-- *** เพิ่มบรรทัดนี้ ***
+            .AsNoTracking()
+                   .ToListAsync();
         }
+        public async Task UpdateTimestampsAsync(Projects project)
+        {
+            // 1. "แนบ" (Attach) Entity เข้ากับ Context
+            // (บอก EF Core ว่า "ช่วย Track ตัวนี้หน่อย แต่ไม่ต้องทำอะไร")
+            _context.Projects.Attach(project);
 
+            // 2. "สั่ง" (Mark) ว่าเราต้องการอัปเดต *เฉพาะ* Property นี้เท่านั้น
+            _context.Entry(project).Property(p => p.LastOpenedAt).IsModified = true;
+
+            // (เราจะไม่แตะ UpdatedAt หรือ IsFavorite)
+
+            // 3. บันทึก (EF Core จะรัน SQL UPDATE ที่อัปเดตแค่ 1 Field)
+            await _context.SaveChangesAsync();
+        }
 
     }
 }
