@@ -65,5 +65,13 @@ namespace ProjectHub.Infrastructure.Repositories
             }
             // ถ้าไม่เจอ ก็ไม่ต้องทำอะไร (Handler ควรจะเช็คเจอไปก่อนแล้ว)
         }
+
+        public async Task<IEnumerable<Tables>> GetTablesByProjectIdAsync(int projectId)
+        {
+            return await _context.Tables
+                .Where(t => t.Project_id == projectId)
+                .AsNoTracking() // (แนะนำให้ใช้ .AsNoTracking() เพื่อให้ Read-Only query เร็วขึ้น)
+                .ToListAsync();
+        }
     }
 }

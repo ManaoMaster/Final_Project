@@ -8,7 +8,8 @@ using ProjectHub.Application.Dtos; // Namespace สำหรับ Response DTOs
 using ProjectHub.Application.Features.Projects.CreateProject; // Namespace สำหรับ Create Command
 using ProjectHub.Application.Features.Projects.DeleteProject; // Namespace สำหรับ Delete Command
 using ProjectHub.Application.Features.Projects.UpdateProject;
-
+using ProjectHub.Application.Features.Projects.GetAllProjects; // <-- *** [FIX 1] *** เพิ่ม Using นี้
+using System.Security.Claims; // <-- *** [FIX 2] *** เพิ่ม Using นี้
 namespace ProjectHub.API.Controllers
 {
     // [ApiController]: Attribute นี้เปิดใช้งานฟีเจอร์ต่างๆ ของ API Controller
@@ -16,6 +17,7 @@ namespace ProjectHub.API.Controllers
     [ApiController]
     // [Route("api/[controller]")]: กำหนด URL พื้นฐานสำหรับ Controller นี้
     // "[controller]" จะถูกแทนที่ด้วยชื่อ Controller (Projects) -> /api/projects
+
     [Route("api/[controller]")]
     public class ProjectsController : ControllerBase // สืบทอดจาก ControllerBase (สำหรับ API)
     {
@@ -84,7 +86,45 @@ namespace ProjectHub.API.Controllers
                 return StatusCode(500, new { Error = "An unexpected error occurred." }); // คืน 500
             }
         }
+        [HttpGet]
+        public async Task<IActionResult> GetAllProjects(CancellationToken ct)
+        {
+            try
+            {
+                // 1. Controller "ฉลาด" ดึง UserId จาก Token (Claims)
+                var userId = GetCurrentUserId();
 
+                // 2. สร้าง Query และ "ยัด" UserId เข้าไป
+                var query = new GetAllProjectsQuery { UserId = userId };
+
+                // 3. ส่ง Query ที่ "สะอาด" (ไม่มี HttpContext) ไปให้ Handler
+                var projects = await _mediator.Send(query, ct);
+
+                // 4. คืนค่า 200 OK
+                return Ok(projects);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(new { Error = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                // (ควร Log ex)
+                return StatusCode(500, new { Error = "An unexpected error occurred." });
+            }
+        }
+        private int GetCurrentUserId()
+        {
+            // ดึง Claim "NameIdentifier" (ซึ่งปกติคือ User ID)
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId))
+            {
+                // นี่คือ Error 401
+                throw new UnauthorizedAccessException("User is not authenticated or UserId is invalid.");
+            }
+            return userId;
+        }
         // --- Endpoint: แก้ไขชื่อ Project ---
         // [HttpPut("{id}")]: ระบุว่าเมธอดนี้จะทำงานเมื่อมี HTTP PUT request
         // มาที่ Route /api/projects/{id} (เช่น /api/projects/5)

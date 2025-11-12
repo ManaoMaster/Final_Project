@@ -8,6 +8,8 @@ using ProjectHub.Application.Dtos; // TableResponseDto
 using ProjectHub.Application.Features.Tables.CreateTable;
 using ProjectHub.Application.Features.Tables.DeleteTable;
 using ProjectHub.Application.Features.Tables.UpdateTable; // CreateTableCommand
+using ProjectHub.Application.Features.Tables.GetAllTablesByProjectId; // <-- *** [FIX 1] *** เพิ่ม Using นี้
+using System.Threading; // <-- [FIX 2] เพิ่ม Using นี้ (ถ้ายังไม่มี)
 
 namespace ProjectHub.API.Controllers
 {
@@ -26,7 +28,32 @@ namespace ProjectHub.API.Controllers
         }
 
         // DTO สำหรับรับ Input จาก Client (ควรอยู่ใน Contracts แต่ใช้ record ที่นี่เพื่อความง่าย)
+        [HttpGet("project/{projectId}")]
+        public async Task<IActionResult> GetTablesByProjectId(
+                    [FromRoute] int projectId,
+                    CancellationToken ct)
+        {
+            // 1. สร้าง Query จาก Route parameter
+            var query = new GetAllTablesByProjectIdQuery { ProjectId = projectId };
 
+            try
+            {
+                // 2. ส่ง Query ให้ Handler (Handler จะเช็คสิทธิ์ Project เอง)
+                var tables = await _mediator.Send(query, ct);
+
+                // 3. คืนค่า 200 OK
+                return Ok(tables);
+            }
+            catch (UnauthorizedAccessException ex) // ถ้า Handler ตรวจสอบแล้วพบว่า "ไม่มีสิทธิ์"
+            {
+                return Unauthorized(new { Error = ex.Message });
+            }
+            catch (Exception ex) // ถ้า Handler โยน Error อื่นๆ (เช่น Project ไม่เจอ)
+            {
+                // (Handler ของเราโยน Exception ธรรมดา)
+                return BadRequest(new { Error = ex.Message });
+            }
+        }
         // POST /api/tables
         [HttpPost]
         public async Task<IActionResult> CreateTable([FromBody] CreateTableRequest request)
@@ -38,7 +65,7 @@ namespace ProjectHub.API.Controllers
                 ProjectId = request.ProjectId,
                 Name = request.Name,
                 UseAutoIncrement = request.UseAutoIncrement,
-                
+
             };
 
             try
