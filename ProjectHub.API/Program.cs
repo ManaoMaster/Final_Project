@@ -25,7 +25,7 @@ using ProjectHub.Infrastructure.Persistence;
 using ProjectHub.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddHttpContextAccessor();  
+builder.Services.AddHttpContextAccessor();
 
 // --- 1. ตั้งค่า PostgreSQL Database ---
 var connectionString = builder.Configuration.GetConnectionString("PostgresConnection");
@@ -71,6 +71,8 @@ builder.Services.AddScoped<IProjectSecurityService,
 builder.Services.AddScoped<IDbConnection>(sp =>
     new NpgsqlConnection(builder.Configuration.GetConnectionString("PostgresConnection"))
 );
+builder.Services.AddScoped<IPasswordHasher, ProjectHub.Infrastructure.Services.PasswordHasher>();
+
 
 // --- 5. ลงทะเบียน Controllers ---
 builder.Services.AddControllers();

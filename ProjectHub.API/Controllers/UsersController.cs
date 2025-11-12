@@ -9,6 +9,7 @@ using ProjectHub.Application.Features.Projects.DeleteProject;
 using ProjectHub.Application.Features.Users.EditProfile;
 using ProjectHub.Application.Features.Users.Login;
 using ProjectHub.Application.Features.Users.Register;
+using ProjectHub.Application.Features.Users.ChangePassword;
 
 namespace ProjectHub.API.Controllers
 {
@@ -25,6 +26,39 @@ namespace ProjectHub.API.Controllers
             _mapper = mapper;
         }
 
+
+        [Authorize] // <-- *** [FIX 2] *** (ต้องล็อกอินก่อน)
+        [HttpPut("change-password")]
+        public async Task<IActionResult> ChangePassword(
+                    [FromBody] ChangePasswordRequest req,
+                    CancellationToken ct
+                )
+        {
+            // 1. ดึง UserId จาก Token (Claims) เพื่อความปลอดภัย
+            var sub =
+                User.FindFirst("sub")?.Value ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (sub is null)
+                return Unauthorized();
+
+            // 2. สร้าง Command
+            var cmd = new ChangePasswordCommand
+            {
+                UserId = int.Parse(sub),
+                CurrentPassword = req.CurrentPassword,
+                NewPassword = req.NewPassword
+            };
+
+            // 3. ส่งให้ Handler
+            try
+            {
+                await _mediator.Send(cmd, ct);
+                return NoContent(); // (คืนค่า 204 No Content = สำเร็จ)
+            }
+            catch (ArgumentException ex) // (จับ Error จาก Handler เช่น "รหัสเก่าผิด")
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
         // ------------------------
         // Register
         // ------------------------
@@ -100,7 +134,7 @@ namespace ProjectHub.API.Controllers
                 UserId = int.Parse(sub),
                 Email = req.Email,
                 Username = req.Username,
-                ProfilePictureUrl = req.ProfilePictureUrl   
+                ProfilePictureUrl = req.ProfilePictureUrl
             };
 
             try
