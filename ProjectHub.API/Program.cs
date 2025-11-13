@@ -23,9 +23,32 @@ using ProjectHub.Application.Services;
 using ProjectHub.Infrastructure.Auth;
 using ProjectHub.Infrastructure.Persistence;
 using ProjectHub.Infrastructure.Repositories;
+using System.Text.Json.Serialization;
+
+
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpContextAccessor();
+
+
+// -- Logging --
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
+builder.Logging.AddFilter("Microsoft", LogLevel.Information);
+builder.Logging.AddFilter("System", LogLevel.Warning);
+builder.Logging.AddFilter("ProjectHub", LogLevel.Debug);
+
+
+builder.Services
+  .AddControllers()
+  .AddJsonOptions(o =>
+  {
+      o.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+      o.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+  });
 
 // --- 1. ตั้งค่า PostgreSQL Database ---
 var connectionString = builder.Configuration.GetConnectionString("PostgresConnection");
@@ -48,7 +71,9 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connect
 builder.Services.AddAutoMapper(
     cfg => { }, // บังคับให้เลือก overload ที่ถูก
     typeof(ProjectProfile).Assembly, // Scan Application Layer
-    typeof(ApiMappingProfile).Assembly // Scan API Layer
+    typeof(ApiMappingProfile).Assembly, // Scan API Layer
+    typeof(ProjectHub.API.Mapping.ApiMappingProfile).Assembly,
+    typeof(ProjectHub.Application.Mapping.ProjectProfile).Assembly
 );
 
 // --- 3. ลงทะเบียน MediatR (v12 Syntax) ---
@@ -144,6 +169,8 @@ builder
         };
     });
 
+// เพื่มให้ IProjectSecurityService อ่าน user ได้
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthorization();
 
 // Token service
@@ -161,7 +188,9 @@ builder.Services.AddCors(opt =>
                     "http://localhost:5173", // Frontend
                     "http://localhost:3000",
                     "https://localhost:52212",
-                    "http://localhost:52212"
+                    "http://localhost:52212",
+                    "https://localhost:4200",
+                    "http://localhost:4200"
                 )
                 .AllowAnyHeader()
                 .AllowAnyMethod()

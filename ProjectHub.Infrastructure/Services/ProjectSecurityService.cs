@@ -42,26 +42,17 @@ namespace ProjectHub.Infrastructure.Services
             var currentUserId = GetCurrentUserId();
 
             var project = await _projectRepository.GetProjectByIdAsync(projectId);
-
             if (project == null)
-            {
-                throw new Exception($"ไม่พบ Project ID: {projectId}");
-            }
+                throw new ArgumentException($"Project ID {projectId} not found.");
 
             if (project.User_id != currentUserId)
-            {
-                throw new UnauthorizedAccessException("คุณไม่มีสิทธิ์เข้าถึงโปรเจกต์นี้");
-            }
+                throw new UnauthorizedAccessException($"ไม่มีสิทธิ์ใน Project ID: {projectId}");
 
-            // --- *** [FIX] นี่คือ Logic "Recent Open" ที่เราเพิ่มเข้ามา *** ---
-            // ถ้าสิทธิ์ผ่าน (User เปิด Project สำเร็จ)
-            // ให้อัปเดต LastOpenedAt เป็น "ตอนนี้"
+            // อัปเดต recent-open
             project.LastOpenedAt = DateTime.UtcNow;
-
-            // เรียกใช้ Method "อัปเดตเฉพาะ Timestamp" ที่เราสร้างไว้
             await _projectRepository.UpdateTimestampsAsync(project);
-            // --- [End of FIX] ---
         }
+
 
         // --- 3. Logic ตรวจสอบสิทธิ์ของ Table (ที่เราจะใช้บ่อย) ---
         public async Task ValidateTableAccessAsync(int tableId)

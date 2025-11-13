@@ -10,6 +10,8 @@ using ProjectHub.Application.Features.Projects.DeleteProject; // Namespace ส�
 using ProjectHub.Application.Features.Projects.UpdateProject;
 using ProjectHub.Application.Features.Projects.GetAllProjects; // <-- *** [FIX 1] *** เพิ่ม Using นี้
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using ProjectHub.Application.Features.Projects.ToggleFavoriteProject; // <-- *** [FIX 2] *** เพิ่ม Using นี้
 namespace ProjectHub.API.Controllers
 {
@@ -18,20 +20,24 @@ namespace ProjectHub.API.Controllers
     [ApiController]
     // [Route("api/[controller]")]: กำหนด URL พื้นฐานสำหรับ Controller นี้
     // "[controller]" จะถูกแทนที่ด้วยชื่อ Controller (Projects) -> /api/projects
-
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
+    
     public class ProjectsController : ControllerBase // สืบทอดจาก ControllerBase (สำหรับ API)
     {
         // --- Dependency Injection ---
         // readonly: หมายถึง field นี้จะถูกกำหนดค่าใน Constructor เท่านั้น
         private readonly IMediator _mediator; // Service สำหรับส่ง Command/Query ไปยัง Handler
         private readonly IMapper _mapper; // Service สำหรับแปลง Object (เช่น Request -> Command)
+        private readonly ILogger<ProjectsController> _logger;
+
 
         // Constructor: รับ Services ที่ลงทะเบียนไว้ใน Program.cs เข้ามาใช้งาน
-        public ProjectsController(IMediator mediator, IMapper mapper)
+        public ProjectsController(IMediator mediator, IMapper mapper, ILogger<ProjectsController> logger)
         {
             _mediator = mediator;
             _mapper = mapper;
+            _logger = logger;
         }
 
         // --- Endpoint: สร้าง Project ใหม่ ---
@@ -167,46 +173,36 @@ namespace ProjectHub.API.Controllers
         // [HttpPut("{id}")]: ระบุว่าเมธอดนี้จะทำงานเมื่อมี HTTP PUT request
         // มาที่ Route /api/projects/{id} (เช่น /api/projects/5)
         [HttpPut("{id}")]
-        // IActionResult: ระบุว่าคืนค่า HTTP Status Code (อาจมี Body หรือไม่มีก็ได้)
-        public async Task<IActionResult> UpdateProject(
-            // [FromRoute]: บอกให้ดึงค่า Parameter 'id' มาจาก URL Path ({id})
-            [FromRoute] int id,
-            // [FromBody]: บอกให้ดึงข้อมูลใหม่ (NewName) มาจาก Request Body (JSON)
-            [FromBody] UpdateProjectRequest request,
-            CancellationToken ct
-        )
+        public async Task<IActionResult> UpdateProject([FromRoute] int id,
+                                                   [FromBody] UpdateProjectRequest request,
+                                                   CancellationToken ct)
         {
-            // --- Mapping: Request -> Command ---
-            // ใช้ AutoMapper แปลงข้อมูลจาก API Request (EditProjectRequest)
-            // ไปเป็น Application Command (EditProjectCommand)
             var command = _mapper.Map<UpdateProjectCommand>(request);
-
-            // *** สำคัญ: กำหนด ID ที่จะแก้ไข ให้กับ Command ***
-            // ID มาจาก URL Path ไม่ใช่ Request Body
             command.ProjectId = id;
 
             try
             {
-                // --- Logic Execution ---
-                // ส่ง Command ไปให้ MediatR
-                // Handler (EditProjectHandler) จะทำงาน, ดึงข้อมูล, แก้ไข, บันทึก
-                // และคืนค่า DTO ที่อัปเดตแล้วกลับมา
-                ProjectResponseDto updatedDto = await _mediator.Send(command, ct);
-
-                // --- Response ---
-                // คืนค่า 200 OK พร้อมข้อมูล Project ที่อัปเดตแล้ว
+                var updatedDto = await _mediator.Send(command, ct);
                 return Ok(updatedDto);
             }
-            catch (ArgumentException ex) // จับ Error จาก Handler (เช่น ไม่เจอ Project ID)
+            catch (UnauthorizedAccessException ex)
             {
-                return NotFound(new { Error = ex.Message }); // คืน 404 Not Found
+                _logger.LogWarning(ex, "Unauthorized to update project {ProjectId}", id);
+                return Unauthorized(new { Error = ex.Message });
             }
-            catch (Exception ex) // จับ Error อื่นๆ
+            catch (ArgumentException ex)
             {
-                // ควร Log ex
-                return StatusCode(500, new { Error = "An unexpected error occurred." }); // คืน 500
+                _logger.LogWarning(ex, "Project {ProjectId} not found", id);
+                return NotFound(new { Error = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                // บันทึก Exception ทั้งหมด พร้อม StackTrace
+                _logger.LogError(ex, "Error updating project {ProjectId}", id);
+                return StatusCode(500, new { Error = ex.Message, Stack = ex.StackTrace });
             }
         }
+
 
         // --- Endpoint: ลบ Project ---
         // [HttpDelete("{id}")]: ระบุว่าเมธอดนี้จะทำงานเมื่อมี HTTP DELETE request

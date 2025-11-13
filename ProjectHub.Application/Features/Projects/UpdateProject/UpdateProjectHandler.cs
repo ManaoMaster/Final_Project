@@ -39,7 +39,7 @@ namespace ProjectHub.Application.Features.Projects.UpdateProject
             }
 
 
-            await _securityService.ValidateProjectAccessAsync(projectToUpdate.User_id);
+            await _securityService.ValidateProjectAccessAsync(request.ProjectId);
             // (Optional) ตรวจสอบ Business Rule เพิ่มเติม
             // เช่น เช็คว่าชื่อใหม่ซ้ำหรือไม่ (ถ้าต้องการ) โดยเรียก IsProjectNameUniqueForUserAsync
             // var isDuplicate = await _projectRepository.IsProjectNameUniqueForUserAsync(projectToUpdate.User_id, request.NewName);

@@ -10,6 +10,8 @@ using ProjectHub.Application.Features.Users.EditProfile;
 using ProjectHub.Application.Features.Users.Login;
 using ProjectHub.Application.Features.Users.Register;
 using ProjectHub.Application.Features.Users.ChangePassword;
+using ProjectHub.Application.Interfaces; // ⬅️ เพิ่ม
+using System.Threading;
 
 namespace ProjectHub.API.Controllers
 {
@@ -19,28 +21,29 @@ namespace ProjectHub.API.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
+        private readonly IUserRepository _users; // ⬅️ เพิ่ม repo
 
-        public UsersController(IMediator mediator, IMapper mapper)
+        public UsersController(IMediator mediator, IMapper mapper, IUserRepository users)
         {
             _mediator = mediator;
             _mapper = mapper;
+            _users = users; // ⬅️ ฉีดเข้ามา
         }
 
-
-        [Authorize] // <-- *** [FIX 2] *** (ต้องล็อกอินก่อน)
+        // ------------------------
+        // Change password
+        // ------------------------
+        [Authorize]
         [HttpPut("change-password")]
         public async Task<IActionResult> ChangePassword(
-                    [FromBody] ChangePasswordRequest req,
-                    CancellationToken ct
-                )
+            [FromBody] ChangePasswordRequest req,
+            CancellationToken ct)
         {
-            // 1. ดึง UserId จาก Token (Claims) เพื่อความปลอดภัย
-            var sub =
-                User.FindFirst("sub")?.Value ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var sub = User.FindFirst("sub")?.Value ??
+                      User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (sub is null)
                 return Unauthorized();
 
-            // 2. สร้าง Command
             var cmd = new ChangePasswordCommand
             {
                 UserId = int.Parse(sub),
@@ -48,25 +51,24 @@ namespace ProjectHub.API.Controllers
                 NewPassword = req.NewPassword
             };
 
-            // 3. ส่งให้ Handler
             try
             {
                 await _mediator.Send(cmd, ct);
-                return NoContent(); // (คืนค่า 204 No Content = สำเร็จ)
+                return NoContent();
             }
-            catch (ArgumentException ex) // (จับ Error จาก Handler เช่น "รหัสเก่าผิด")
+            catch (ArgumentException ex)
             {
                 return BadRequest(new { error = ex.Message });
             }
         }
+
         // ------------------------
         // Register
         // ------------------------
         [HttpPost("register")]
         public async Task<ActionResult<UserResponseDto>> Register(
             [FromBody] RegisterUserRequest request,
-            CancellationToken ct
-        )
+            CancellationToken ct)
         {
             var command = _mapper.Map<RegisterUserCommand>(request);
             var userDto = await _mediator.Send(command, ct);
@@ -79,8 +81,7 @@ namespace ProjectHub.API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<TokenResponseDto>> Login(
             [FromBody] LoginRequest req,
-            CancellationToken ct
-        )
+            CancellationToken ct)
         {
             try
             {
@@ -97,35 +98,50 @@ namespace ProjectHub.API.Controllers
         }
 
         // ------------------------
-        // ดูข้อมูลตัวเองจาก Token (ทดสอบ JWT)
+        // GET /api/users/me (คืนข้อมูลจริงของผู้ใช้)
         // ------------------------
         [Authorize]
         [HttpGet("me")]
-        public ActionResult<object> Me()
+        public async Task<ActionResult<object>> Me(CancellationToken ct)
         {
-            return Ok(
-                new
-                {
-                    sub = User.FindFirst("sub")?.Value
-                        ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value,
-                    email = User.FindFirst("email")?.Value
-                        ?? User.FindFirst(ClaimTypes.Email)?.Value,
-                    name = User.Identity?.Name,
-                }
-            );
+            // 1️⃣ อ่าน UserId จาก JWT claims
+            var sub = User.FindFirst("sub")?.Value ??
+                      User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrWhiteSpace(sub))
+                return Unauthorized();
+
+            if (!int.TryParse(sub, out var userId))
+                return BadRequest(new { error = "Invalid user id claim." });
+
+            // 2️⃣ ดึงข้อมูลจากฐานข้อมูลผ่าน IUserRepository
+            var user = await _users.GetByIdAsync(userId);
+            if (user is null)
+                return NotFound(new { error = "User not found." });
+
+            // 3️⃣ คืนข้อมูลที่ฝั่ง Angular ใช้
+            return Ok(new
+            {
+                UserId = int.Parse(sub),
+                email = user.Email,
+                username = user.Username,
+                name = user.Username, // เผื่อ Angular ใช้ field name เดิม
+                profilePictureUrl = string.IsNullOrWhiteSpace(user.ProfilePictureUrl)
+                    ? "/assets/ph_profile.png"
+                    : user.ProfilePictureUrl
+            });
         }
 
-        //edit profile
-
+        // ------------------------
+        // Edit profile
+        // ------------------------
         [Authorize]
         [HttpPut("me")]
         public async Task<ActionResult<UserResponseDto>> EditProfile(
             [FromBody] EditProfileRequest req,
-            CancellationToken ct
-        )
+            CancellationToken ct)
         {
-            var sub =
-                User.FindFirst("sub")?.Value ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var sub = User.FindFirst("sub")?.Value ??
+                      User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (sub is null)
                 return Unauthorized();
 
@@ -148,31 +164,26 @@ namespace ProjectHub.API.Controllers
             }
         }
 
-        // --- Endpoint: DELETE /api/rows/{id} ---
-        [HttpDelete("{id}")] // รับ ID จาก URL Path
-        public async Task<IActionResult> DeleteUser(
-            [FromRoute] int id, // ดึง ID จาก Path
-            CancellationToken ct
-        ) // เพิ่ม ct
+        // ------------------------
+        // Delete user
+        // ------------------------
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser([FromRoute] int id, CancellationToken ct)
         {
-            // สร้าง Command โดยตรงจาก ID ที่ได้จาก Route
             var command = new DeleteUserCommand { UserId = id };
 
             try
             {
-                // ส่ง Command ให้ MediatR (Handler จะคืน Unit)
-                await _mediator.Send(command, ct); // เพิ่ม ct
-
-                // คืน 204 No Content = สำเร็จ ไม่มีข้อมูลส่งกลับ
+                await _mediator.Send(command, ct);
                 return NoContent();
             }
-            catch (ArgumentException ex) // จับ Error จาก Handler (Row not found)
+            catch (ArgumentException ex)
             {
-                return NotFound(new { Error = ex.Message }); // คืน 404 Not Found
+                return NotFound(new { Error = ex.Message });
             }
-            catch (Exception ex) // จับ Error อื่นๆ
+            catch (Exception ex)
             {
-                Console.WriteLine($"Error deleting user {id}: {ex}"); // Log ง่ายๆ
+                Console.WriteLine($"Error deleting user {id}: {ex}");
                 return StatusCode(500, new { Error = "An unexpected error occurred." });
             }
         }
