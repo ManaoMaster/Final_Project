@@ -125,9 +125,7 @@ namespace ProjectHub.API.Controllers
                 email = user.Email,
                 username = user.Username,
                 name = user.Username, // เผื่อ Angular ใช้ field name เดิม
-                profilePictureUrl = string.IsNullOrWhiteSpace(user.ProfilePictureUrl)
-                    ? "/assets/ph_profile.png"
-                    : user.ProfilePictureUrl
+                profilePictureUrl =  user.ProfilePictureUrl
             });
         }
 

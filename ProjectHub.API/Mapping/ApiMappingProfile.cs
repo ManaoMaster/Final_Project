@@ -50,7 +50,12 @@ namespace ProjectHub.API.Mapping
 
             CreateMap<UpdateRelationshipRequest, UpdateRelationshipCommand>();
 
-            CreateMap<UpdateColumnRequest, UpdateColumnCommand>();
+            CreateMap<UpdateColumnRequest, UpdateColumnCommand>()
+                .ForMember(d => d.ColumnId, m => m.Ignore())
+                 .ForMember(d => d.NewName, m => m.MapFrom(s => s.ColumnName))
+                .ForMember(d => d.NewDataType, m => m.MapFrom(s => s.DataType))
+                 .ForMember(d => d.NewIsPrimary, m => m.MapFrom(s => s.IsPrimary))
+                .ForMember(d => d.NewIsNullable, m => m.MapFrom(s => s.IsNullable));
         }
     }
 }
