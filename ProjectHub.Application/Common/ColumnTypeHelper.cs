@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text.Json;
 
 namespace ProjectHub.Application.Common
@@ -16,6 +17,7 @@ namespace ProjectHub.Application.Common
                 "NUMBER" => "::numeric", // (เพิ่ม Number ถ้าคุณใช้)
                 "BOOLEAN" => "::boolean",
                 "FORMULA" => "::numeric",
+                "DATE" => "::date",
                 "TEXT" => "::text",
                 "IMAGE" => "::text",
                 _ => "::text" // Default ที่ปลอดภัยที่สุด
@@ -28,7 +30,7 @@ namespace ProjectHub.Application.Common
             var valueKind = valueElement.ValueKind;
             return dataType?.ToUpperInvariant() switch
             {
-                "TEXT" => valueKind == JsonValueKind.String,
+                "TEXT" => valueKind == JsonValueKind.String || valueKind == JsonValueKind.Number,
                 "IMAGE" => valueKind == JsonValueKind.String,
                 "INTEGER" => valueKind == JsonValueKind.Number && valueElement.TryGetInt64(out _),
                 "INT" => valueKind == JsonValueKind.Number && valueElement.TryGetInt64(out _),
@@ -36,16 +38,34 @@ namespace ProjectHub.Application.Common
                 "NUMBER" => valueKind == JsonValueKind.Number,
                 "FORMULA" => valueKind == JsonValueKind.Number,
                 "BOOLEAN" => valueKind == JsonValueKind.True || valueKind == JsonValueKind.False,
+                "DATE" => valueKind == JsonValueKind.String
+                           && IsValidDate(valueElement.GetString()),
                 _ => false
+
             };
         }
+
+        private static bool IsValidDate(string? text)
+        {
+            if (string.IsNullOrWhiteSpace(text)) return false;
+
+            // แนะนำใช้รูปแบบ ISO จาก frontend เช่น "2025-11-15"
+            return DateTime.TryParseExact(
+                text,
+                new[] { "yyyy-MM-dd", "yyyy-MM-ddTHH:mm:ss", "yyyy-MM-ddTHH:mm:ssZ" },
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out _
+            );
+        }
+
 
         // === 3. ศูนย์กลางสำหรับรายชื่อ Type ทั้งหมด ===
         public static IReadOnlyList<string> GetKnownDataTypes()
         {
             return new[]
             {
-                "TEXT", "IMAGE", "INTEGER", "INT", "REAL", "NUMBER", "BOOLEAN", "FORMULA"
+                "TEXT", "IMAGE", "INTEGER", "INT", "REAL", "NUMBER", "BOOLEAN", "FORMULA","DATE"
             };
         }
     }

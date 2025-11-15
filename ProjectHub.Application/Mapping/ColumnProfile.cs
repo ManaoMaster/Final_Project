@@ -35,12 +35,17 @@ namespace ProjectHub.Application.Mapping
                 // Ignore Navigation Property
                 .ForMember(d => d.Tables, m => m.Ignore());
             CreateMap<UpdateColumnCommand, Columns>()
-                .ForMember(d => d.Column_id, m => m.Ignore()) // Database จะสร้างให้
-                .ForMember(d => d.Table_id, m => m.Ignore()) // Database จะสร้างให้
-                .ForMember(d => d.Data_type, m => m.Ignore()) // Database จะสร้างให้
-                .ForMember(d => d.Is_primary, m => m.Ignore()) // Database จะสร้างให้
-                .ForMember(d => d.Is_nullable, m => m.Ignore()); // Database จะสร้างให้
-            // Name ชื่อตรงกัน ไม่ต้องเขียน
+    // ไม่ให้ไปยุ่งกับ id / table_id
+    .ForMember(d => d.Column_id, m => m.Ignore())
+    .ForMember(d => d.Table_id, m => m.Ignore())
+
+    //  map ค่าจริงจาก Command ลง Entity
+    .ForMember(d => d.Name, m => m.MapFrom(s => s.NewName))
+    .ForMember(d => d.Data_type, m => m.MapFrom(s => s.NewDataType))
+    .ForMember(d => d.Is_primary, m => m.MapFrom(s => s.NewIsPrimary))
+    .ForMember(d => d.Is_nullable, m => m.MapFrom(s => s.NewIsNullable));
+
+            
 
         }
     }

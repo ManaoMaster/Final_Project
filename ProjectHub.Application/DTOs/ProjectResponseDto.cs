@@ -20,5 +20,8 @@ namespace ProjectHub.Application.Dtos
 
         // 3. ติดดาว (Favorite)
         public bool IsFavorite { get; set; }
+
+        // 4. วันทีเปิด (Last Opened)
+        public DateTime LastOpenedAt { get; set; }
     }
 }
