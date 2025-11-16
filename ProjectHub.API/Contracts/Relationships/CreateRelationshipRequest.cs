@@ -8,6 +8,6 @@ namespace ProjectHub.API.Contracts.Relationships
         int PrimaryTableId,
         int PrimaryColumnId,
         int ForeignTableId,
-        int ForeignColumnId
+        int? ForeignColumnId
     );
 }

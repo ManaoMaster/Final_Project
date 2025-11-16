@@ -6,7 +6,7 @@ namespace ProjectHub.API.Contracts.Columns
         int PrimaryTableId,
         int PrimaryColumnId,
         int ForeignTableId,
-        int ForeignColumnId
+        int? ForeignColumnId
     );
 
     // *** [UPGRADE] 2. อัปเกรด Request หลัก ***
