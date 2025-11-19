@@ -9,6 +9,6 @@ namespace ProjectHub.Application.DTOs
         public int PrimaryTableId { get; set; }
         public int PrimaryColumnId { get; set; }
         public int ForeignTableId { get; set; }
-        public int ForeignColumnId { get; set; }
+        public int? ForeignColumnId { get; set; }
     }
 }

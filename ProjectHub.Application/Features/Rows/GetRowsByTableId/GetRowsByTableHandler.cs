@@ -41,6 +41,13 @@ namespace ProjectHub.Application.Features.Rows.GetRowsByTableId
             _logger = logger;
         }
 
+        private static bool IsLookup(ColumnEntity c) =>
+    string.Equals(c.Data_type, "LOOKUP", StringComparison.OrdinalIgnoreCase);
+
+        private static bool IsFormula(ColumnEntity c) =>
+            string.Equals(c.Data_type, "FORMULA", StringComparison.OrdinalIgnoreCase);
+
+
         public async Task<IEnumerable<IDictionary<string, object>>> Handle(GetRowsByTableIdQuery request, CancellationToken cancellationToken)
         {
             // === 1. [Security] ตรวจสอบสิทธิ์ (Task 1) ===
@@ -58,7 +65,10 @@ namespace ProjectHub.Application.Features.Rows.GetRowsByTableId
                 return new List<IDictionary<string, object>>();
             }
 
-            var lookupColumns = columns.Where(c => c.Data_type == "Lookup" && c.LookupRelationshipId != null).ToList();
+
+            var lookupColumns = columns
+     .Where(c => IsLookup(c) && c.LookupRelationshipId != null)
+     .ToList();
 
             // 3.1 ดึง Relationship ที่จำเป็นทั้งหมด (1 Query)
             var requiredRelIds = lookupColumns.Select(c => c.LookupRelationshipId.Value).Distinct().ToList();
@@ -67,14 +77,36 @@ namespace ProjectHub.Application.Features.Rows.GetRowsByTableId
                                      .ToDictionary(r => r.RelationshipId); // แปลงเป็น Dictionary เพื่อให้ค้นหาเร็ว
 
             // 3.2 ดึง Column (Metadata) ที่จำเป็นทั้งหมด (1 Query)
+            //var requiredColIds = new HashSet<int>();
+            //foreach (var col in lookupColumns)
+            //    requiredColIds.Add(col.LookupTargetColumnId.Value);
+            //foreach (var rel in allRelationships.Values)
+            //{
+            //    requiredColIds.Add(rel.PrimaryColumnId);
+            //    requiredColIds.Add(rel.ForeignColumnId);
+            //}
             var requiredColIds = new HashSet<int>();
+
+            // จาก lookupColumns
             foreach (var col in lookupColumns)
-                requiredColIds.Add(col.LookupTargetColumnId.Value);
+            {
+                if (col.LookupTargetColumnId.HasValue)
+                {
+                    requiredColIds.Add(col.LookupTargetColumnId.Value);
+                }
+            }
+
+            // จาก relationships
             foreach (var rel in allRelationships.Values)
             {
                 requiredColIds.Add(rel.PrimaryColumnId);
-                requiredColIds.Add(rel.ForeignColumnId);
+
+                if (rel.ForeignColumnId.HasValue)          // ✅ เช็ค null ก่อน
+                {
+                    requiredColIds.Add(rel.ForeignColumnId.Value);
+                }
             }
+
             // (คุณต้องไปสร้าง Method นี้ใน Repository)
             var allColumnsMetadata = (await _columnRepository.GetByIdsAsync(requiredColIds.ToList()))
                                        .ToDictionary(c => c.Column_id); // แปลงเป็น Dictionary
@@ -90,7 +122,10 @@ namespace ProjectHub.Application.Features.Rows.GetRowsByTableId
             selectClauses.Add($"{mainTableAlias}.\"Data\"");
 
             // --- Loop 1: คอลัมน์ธรรมดา (Native) ---
-            var nativeColumns = columns.Where(c => c.Data_type != "Formula" && c.Data_type != "Lookup");
+            var nativeColumns = columns
+     .Where(c => !IsLookup(c) && !IsFormula(c))
+     .ToList();
+
             foreach (var col in nativeColumns)
             {
                 string safeColName = SanitizeLiteral(col.Name); // (SQL Injection Fix)
@@ -106,14 +141,33 @@ namespace ProjectHub.Application.Features.Rows.GetRowsByTableId
             foreach (var col in lookupColumns)
             {
                 // ดึงข้อมูล Metadata จาก Dictionary (เร็วมาก)
-                if (!allRelationships.TryGetValue(col.LookupRelationshipId.Value, out var relationship) ||
-                    !allColumnsMetadata.TryGetValue(col.LookupTargetColumnId.Value, out var targetColumn) ||
-                    !allColumnsMetadata.TryGetValue(relationship.ForeignColumnId, out var foreignKeyCol) ||
+                //if (!allRelationships.TryGetValue(col.LookupRelationshipId.Value, out var relationship) ||
+                //    !allColumnsMetadata.TryGetValue(col.LookupTargetColumnId.Value, out var targetColumn) ||
+                //    !allColumnsMetadata.TryGetValue(relationship.ForeignColumnId, out var foreignKeyCol) ||
+                //    !allColumnsMetadata.TryGetValue(relationship.PrimaryColumnId, out var primaryKeyCol))
+                //{
+                //    selectClauses.Add($@"'LOOKUP_ERROR: Config Error' AS {SanitizeIdentifier(col.Name)}");
+                //    continue;
+                //}
+                if (!allRelationships.TryGetValue(col.LookupRelationshipId!.Value, out var relationship) ||
+    !allColumnsMetadata.TryGetValue(col.LookupTargetColumnId!.Value, out var targetColumn))
+                {
+                    selectClauses.Add($@"'LOOKUP_ERROR: Config Error' AS {SanitizeIdentifier(col.Name)}");
+                    continue;
+                }
+
+                // ดึง foreignColumnId แบบมั่นใจว่าไม่ null
+                var foreignColumnId = relationship.ForeignColumnId
+                    ?? throw new InvalidOperationException(
+                        $"Relationship {relationship.RelationshipId} has no ForeignColumnId.");
+
+                if (!allColumnsMetadata.TryGetValue(foreignColumnId, out var foreignKeyCol) ||
                     !allColumnsMetadata.TryGetValue(relationship.PrimaryColumnId, out var primaryKeyCol))
                 {
                     selectClauses.Add($@"'LOOKUP_ERROR: Config Error' AS {SanitizeIdentifier(col.Name)}");
                     continue;
                 }
+
 
                 string joinTableAlias = SanitizeIdentifier($"t_lookup_{lookupIndex}");
                 string paramName = $"p_{lookupIndex}"; // e.g. @p_1, @p_2
@@ -142,9 +196,9 @@ LEFT JOIN ""Rows"" AS {joinTableAlias}
             }
 
             // --- Loop 3: คอลัมน์ Formula ---
-            var formulaColumns = columns.Where(c =>
-                c.Data_type.Equals("Formula", StringComparison.OrdinalIgnoreCase) &&
-                !string.IsNullOrWhiteSpace(c.FormulaDefinition));
+            var formulaColumns = columns
+    .Where(c => IsFormula(c) && !string.IsNullOrWhiteSpace(c.FormulaDefinition))
+    .ToList();
             foreach (var col in formulaColumns)
             {
                 try

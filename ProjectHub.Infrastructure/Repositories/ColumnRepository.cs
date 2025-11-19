@@ -57,7 +57,12 @@ namespace ProjectHub.Infrastructure.Repositories
         {
             // ใช้ Where เพื่อกรอง Columns ที่มี Table_id ตรงกัน
             // ToListAsync เพื่อดึงข้อมูลทั้งหมดมาเป็น List ใน Memory
-            return await _context.Columns.Where(c => c.Table_id == tableId).ToListAsync();
+            //return await _context.Columns.Where(c => c.Table_id == tableId).ToListAsync();
+            return await _context.Columns
+        .Include(c => c.LookupRelationship)
+            .ThenInclude(r => r.PrimaryColumn)
+        .Where(c => c.Table_id == tableId)
+        .ToListAsync();
         }
 
         public async Task UpdateColumnAsync(Columns column)
@@ -89,37 +94,38 @@ namespace ProjectHub.Infrastructure.Repositories
             // var sql = "SELECT * FROM \"Columns\" WHERE \"Id\" = ANY(@ids)";
             // return await _dbConnection.QueryAsync<Columns>(sql, new { ids });
         }
-        public async Task<Columns> CreateColumnWithNewRelationshipAsync(Columns columnEntity, Relationships newRelationship)
+        public async Task<Columns> CreateColumnWithNewRelationshipAsync(
+    Columns columnEntity,
+    Relationships newRelationship)
         {
-            // 1. เริ่ม Transaction โดยใช้ _context ที่มีอยู่
-            await using (var transaction = await _context.Database.BeginTransactionAsync())
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+            try
             {
-                try
-                {
-                    // 2. สร้าง Relationship ก่อน
-                    _context.Relationships.Add(newRelationship);
-                    await _context.SaveChangesAsync(); // <-- ยืนยันการสร้าง (EF จะอัปเดต ID ให้)
+                // 1) สร้าง Column ก่อน (จะได้ ColumnId จริงจาก DB)
+                _context.Columns.Add(columnEntity);
+                await _context.SaveChangesAsync();   // ตอนนี้ columnEntity.ColumnId ถูกเติมแล้ว
 
-                    // 3. เอา ID ใหม่ มาเชื่อมกับ Column
-                    columnEntity.LookupRelationshipId = newRelationship.RelationshipId;
+                // 2) ผูก Relationship ให้ชี้มาหา Column ที่เพิ่งสร้าง
+                //    (ชื่อ property ตรงนี้ปรับตาม Entity ของคุณ)
+                newRelationship.ForeignTableId = columnEntity.Table_id;   // หรือ columnEntity.TableId
+                newRelationship.ForeignColumnId = columnEntity.Column_id;// หรือ columnEntity.ColumnId
 
-                    // 4. สร้าง Column
-                    _context.Columns.Add(columnEntity);
-                    await _context.SaveChangesAsync(); // <-- ยืนยันการสร้าง Column
+                _context.Relationships.Add(newRelationship);
+                await _context.SaveChangesAsync();   // ตอนนี้ newRelationship.RelationshipId ถูกเติมแล้ว
 
-                    // 5. ถ้าสำเร็จทั้งหมด Commit Transaction
-                    await transaction.CommitAsync();
+                // 3) ผูก Column กลับไปหา Relationship (LookupRelationshipId)
+                columnEntity.LookupRelationshipId = newRelationship.RelationshipId;
+                _context.Columns.Update(columnEntity);
+                await _context.SaveChangesAsync();
 
-                    // 6. คืนค่า Column ที่สร้างเสร็จ (พร้อม ID ใหม่)
-                    return columnEntity;
-                }
-                catch (Exception)
-                {
-                    // 7. ถ้ามีอะไรพัง ให้ Rollback ทั้งหมด
-                    await transaction.RollbackAsync();
-                    throw; // โยน Error 500 กลับไป
-                }
+                await transaction.CommitAsync();
+                return columnEntity;
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
             }
         }
     }
-}
+    }

@@ -15,7 +15,7 @@ namespace ProjectHub.Domain.Entities
 
         // --- Foreign Key (ปลายทาง) ---
         public int ForeignTableId { get; set; } // FK ไปยัง Tables
-        public int ForeignColumnId { get; set; } // FK ไปยัง Columns
+        public int? ForeignColumnId { get; set; } // FK ไปยัง Columns
 
         // --- *** METADATA ที่เราเพิ่มเข้ามา *** ---
         // (เราจะใช้สิ่งนี้ใน "Update")

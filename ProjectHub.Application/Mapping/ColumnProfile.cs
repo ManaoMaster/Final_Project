@@ -18,7 +18,35 @@ namespace ProjectHub.Application.Mapping
                 .ForMember(d => d.TableId, m => m.MapFrom(s => s.Table_id)) // ชื่อไม่ตรง
                 .ForMember(d => d.DataType, m => m.MapFrom(s => s.Data_type)) // ชื่อไม่ตรง
                 .ForMember(d => d.IsPrimary, m => m.MapFrom(s => s.Is_primary)) // ชื่อไม่ตรง
-                .ForMember(d => d.IsNullable, m => m.MapFrom(s => s.Is_nullable)); // ชื่อไม่ตรง
+                .ForMember(d => d.IsNullable, m => m.MapFrom(s => s.Is_nullable)) // ชื่อไม่ตรง
+                 .ForMember(d => d.FormulaDefinition,
+                       m => m.MapFrom(s => s.FormulaDefinition))
+            //Add new
+            // PK meta อยู่บน Columns ไม่ได้อยู่บน Tables
+            .ForMember(d => d.PrimaryKeyType,
+                       m => m.MapFrom(s => s.PrimaryKeyType))
+
+            // Lookup meta ที่เก็บใน Columns ตรง ๆ
+            .ForMember(d => d.LookupRelationshipId,
+                       m => m.MapFrom(s => s.LookupRelationshipId))
+            .ForMember(d => d.LookupTargetColumnId,
+                       m => m.MapFrom(s => s.LookupTargetColumnId))
+
+    //  ตารางปลายทาง = PrimaryTable ของ relationship (master table)
+    .ForMember(d => d.LookupTargetTableId,
+               m => m.MapFrom(s =>
+                   s.LookupRelationship != null
+                     ? (int?)s.LookupRelationship.PrimaryTableId
+                     : null))
+
+    //  ชื่อคอลัมน์ปลายทาง (เอาไว้โชว์ได้ในอนาคต)
+    .ForMember(d => d.LookupTargetColumnName,
+               m => m.MapFrom(s =>
+                   s.LookupRelationship != null &&
+                   s.LookupRelationship.PrimaryColumn != null
+                     ? s.LookupRelationship.PrimaryColumn.Name
+                     : null));
+
             // Name ชื่อตรงกัน ไม่ต้องเขียน
 
             // Command -> Domain (Entity) (ใช้ d, s)
