@@ -85,5 +85,11 @@ namespace ProjectHub.Infrastructure.Repositories
             // ดึงข้อมูล Users ทั้งหมดออกมาเป็น List
             return await _context.Users.ToListAsync();
         }
+
+        public async Task UpdateAsync(Users user)
+        {
+            _context.Users.Update(user);          
+            await _context.SaveChangesAsync();    
+        }
     }
 }

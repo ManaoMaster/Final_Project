@@ -25,5 +25,7 @@ namespace ProjectHub.Application.Interfaces
         Task<Users?> GetUserByIdAsync(int userId);
 
         Task<List<Users>> GetAllAsync();
+
+        Task UpdateAsync(Users user);
     }
 }
