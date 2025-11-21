@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using System.Threading;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -6,12 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 using ProjectHub.API.Contracts.Users;
 using ProjectHub.Application.Dtos;
 using ProjectHub.Application.Features.Projects.DeleteProject;
+using ProjectHub.Application.Features.Users.ChangePassword;
 using ProjectHub.Application.Features.Users.EditProfile;
+using ProjectHub.Application.Features.Users.GetAllUsers;
 using ProjectHub.Application.Features.Users.Login;
 using ProjectHub.Application.Features.Users.Register;
-using ProjectHub.Application.Features.Users.ChangePassword;
 using ProjectHub.Application.Interfaces; // ⬅️ เพิ่ม
-using System.Threading;
 
 namespace ProjectHub.API.Controllers
 {
@@ -37,10 +38,11 @@ namespace ProjectHub.API.Controllers
         [HttpPut("change-password")]
         public async Task<IActionResult> ChangePassword(
             [FromBody] ChangePasswordRequest req,
-            CancellationToken ct)
+            CancellationToken ct
+        )
         {
-            var sub = User.FindFirst("sub")?.Value ??
-                      User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var sub =
+                User.FindFirst("sub")?.Value ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (sub is null)
                 return Unauthorized();
 
@@ -48,7 +50,7 @@ namespace ProjectHub.API.Controllers
             {
                 UserId = int.Parse(sub),
                 CurrentPassword = req.CurrentPassword,
-                NewPassword = req.NewPassword
+                NewPassword = req.NewPassword,
             };
 
             try
@@ -68,7 +70,8 @@ namespace ProjectHub.API.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<UserResponseDto>> Register(
             [FromBody] RegisterUserRequest request,
-            CancellationToken ct)
+            CancellationToken ct
+        )
         {
             var command = _mapper.Map<RegisterUserCommand>(request);
             var userDto = await _mediator.Send(command, ct);
@@ -81,7 +84,8 @@ namespace ProjectHub.API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<TokenResponseDto>> Login(
             [FromBody] LoginRequest req,
-            CancellationToken ct)
+            CancellationToken ct
+        )
         {
             try
             {
@@ -97,6 +101,29 @@ namespace ProjectHub.API.Controllers
             }
         }
 
+        [ApiController]
+        [Route("api/[controller]")]
+        // ⛔️ ป้ายห้ามเข้า: เฉพาะคนถือบัตร Admin เท่านั้น
+        [Authorize(Roles = "Admin")]
+        public class AdminController : ControllerBase
+        {
+            private readonly IMediator _mediator;
+
+            public AdminController(IMediator mediator)
+            {
+                _mediator = mediator;
+            }
+
+            // GET: api/admin/users
+            [HttpGet("users")]
+            public async Task<IActionResult> GetAllUsers()
+            {
+                // ส่ง Query ไปให้ Handler ทำงาน
+                var users = await _mediator.Send(new GetAllUsersQuery());
+                return Ok(users);
+            }
+        }
+
         // ------------------------
         // GET /api/users/me (คืนข้อมูลจริงของผู้ใช้)
         // ------------------------
@@ -105,8 +132,8 @@ namespace ProjectHub.API.Controllers
         public async Task<ActionResult<object>> Me(CancellationToken ct)
         {
             // 1️⃣ อ่าน UserId จาก JWT claims
-            var sub = User.FindFirst("sub")?.Value ??
-                      User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var sub =
+                User.FindFirst("sub")?.Value ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrWhiteSpace(sub))
                 return Unauthorized();
 
@@ -119,14 +146,16 @@ namespace ProjectHub.API.Controllers
                 return NotFound(new { error = "User not found." });
 
             // 3️⃣ คืนข้อมูลที่ฝั่ง Angular ใช้
-            return Ok(new
-            {
-                UserId = int.Parse(sub),
-                email = user.Email,
-                username = user.Username,
-                name = user.Username, // เผื่อ Angular ใช้ field name เดิม
-                profilePictureUrl =  user.ProfilePictureUrl
-            });
+            return Ok(
+                new
+                {
+                    UserId = int.Parse(sub),
+                    email = user.Email,
+                    username = user.Username,
+                    name = user.Username, // เผื่อ Angular ใช้ field name เดิม
+                    profilePictureUrl = user.ProfilePictureUrl,
+                }
+            );
         }
 
         // ------------------------
@@ -136,10 +165,11 @@ namespace ProjectHub.API.Controllers
         [HttpPut("me")]
         public async Task<ActionResult<UserResponseDto>> EditProfile(
             [FromBody] EditProfileRequest req,
-            CancellationToken ct)
+            CancellationToken ct
+        )
         {
-            var sub = User.FindFirst("sub")?.Value ??
-                      User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var sub =
+                User.FindFirst("sub")?.Value ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (sub is null)
                 return Unauthorized();
 
@@ -148,7 +178,7 @@ namespace ProjectHub.API.Controllers
                 UserId = int.Parse(sub),
                 Email = req.Email,
                 Username = req.Username,
-                ProfilePictureUrl = req.ProfilePictureUrl
+                ProfilePictureUrl = req.ProfilePictureUrl,
             };
 
             try

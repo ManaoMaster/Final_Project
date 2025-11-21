@@ -1,6 +1,6 @@
-﻿using MediatR;
+﻿using BCrypt.Net;
+using MediatR;
 using ProjectHub.Application.Dtos;
-using BCrypt.Net;
 using ProjectHub.Application.Interfaces;
 
 namespace ProjectHub.Application.Features.Users.Login
@@ -18,13 +18,15 @@ namespace ProjectHub.Application.Features.Users.Login
 
         public async Task<TokenResponseDto> Handle(LoginCommand request, CancellationToken ct)
         {
-            var user = await _users.GetByEmailAsync(request.Email)
-                       ?? throw new ArgumentException("Invalid email or password.");
+            var user =
+                await _users.GetByEmailAsync(request.Email)
+                ?? throw new ArgumentException("Invalid email or password.");
 
             var ok = BCrypt.Net.BCrypt.Verify(request.Password, user.Password);
-            if (!ok) throw new ArgumentException("Invalid email or password.");
+            if (!ok)
+                throw new ArgumentException("Invalid email or password.");
 
-            return _jwt.GenerateForUser(user.User_id, user.Email, user.Username);
+            return _jwt.GenerateForUser(user.User_id, user.Email, user.Username, user.Role);
         }
     }
 }

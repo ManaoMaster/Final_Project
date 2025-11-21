@@ -79,5 +79,11 @@ namespace ProjectHub.Infrastructure.Repositories
             }
             // ถ้าไม่เจอ ก็ไม่ต้องทำอะไร (Handler ควรจะเช็คเจอไปก่อนแล้ว)
         }
+
+        public async Task<List<Users>> GetAllAsync()
+        {
+            // ดึงข้อมูล Users ทั้งหมดออกมาเป็น List
+            return await _context.Users.ToListAsync();
+        }
     }
 }

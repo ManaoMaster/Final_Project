@@ -1,10 +1,10 @@
-﻿using AutoMapper;
+﻿using System.Linq;
+using AutoMapper;
 using ProjectHub.Application.Dtos;
 using ProjectHub.Application.Features.Projects.CreateProject;
 using ProjectHub.Application.Features.Projects.DeleteProject;
 using ProjectHub.Application.Features.Projects.UpdateProject;
 using ProjectHub.Domain.Entities;
-using System.Linq;
 
 namespace ProjectHub.Application.Mapping
 {
@@ -21,7 +21,6 @@ namespace ProjectHub.Application.Mapping
                 .ForMember(d => d.UpdatedAt, m => m.MapFrom(s => s.UpdatedAt))
                 .ForMember(d => d.IsFavorite, m => m.MapFrom(s => s.IsFavorite))
                 .ForMember(d => d.TableCount, m => m.MapFrom(s => s.Tables.Count));
-
 
             // Command -> Domain (เพื่อใช้ใน Handler)
             CreateMap<CreateProjectCommand, Projects>()
@@ -46,7 +45,7 @@ namespace ProjectHub.Application.Mapping
                 .ForMember(d => d.Name, m => m.MapFrom(s => s.NewName))
                 .ForMember(d => d.Project_id, m => m.Ignore())
                 .ForMember(d => d.Created_at, m => m.Ignore())
-                .ForMember(d => d.UpdatedAt, m => m.Ignore())   // <— เตือนใจ: ไปตั้งใน Handler
+                .ForMember(d => d.UpdatedAt, m => m.Ignore()) // <— เตือนใจ: ไปตั้งใน Handler
                 .ForMember(d => d.Tables, m => m.Ignore())
                 .ForMember(d => d.Users, m => m.Ignore());
         }

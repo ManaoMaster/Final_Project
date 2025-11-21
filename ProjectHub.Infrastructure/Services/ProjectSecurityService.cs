@@ -1,9 +1,9 @@
+using System;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using ProjectHub.Application.Interfaces;
 using ProjectHub.Application.Repositories;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System;
 
 namespace ProjectHub.Infrastructure.Services
 {
@@ -14,9 +14,10 @@ namespace ProjectHub.Infrastructure.Services
         private readonly IProjectRepository _projectRepository;
 
         public ProjectSecurityService(
-          IHttpContextAccessor httpContextAccessor,
-          ITableRepository tableRepository,
-          IProjectRepository projectRepository)
+            IHttpContextAccessor httpContextAccessor,
+            ITableRepository tableRepository,
+            IProjectRepository projectRepository
+        )
         {
             _httpContextAccessor = httpContextAccessor;
             _tableRepository = tableRepository;
@@ -26,8 +27,9 @@ namespace ProjectHub.Infrastructure.Services
         // --- 1. Helper สำหรับดึง User ID ที่ล็อกอิน ---
         public int GetCurrentUserId()
         {
-            var userIdString = _httpContextAccessor.HttpContext?.User?
-              .FindFirstValue(ClaimTypes.NameIdentifier);
+            var userIdString = _httpContextAccessor.HttpContext?.User?.FindFirstValue(
+                ClaimTypes.NameIdentifier
+            );
 
             if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out var userId))
             {
@@ -36,9 +38,20 @@ namespace ProjectHub.Infrastructure.Services
             return userId;
         }
 
+        private bool IsAdmin()
+        {
+            var role = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Role);
+
+            return role == "Admin";
+        }
+
         // --- 2. Logic ตรวจสอบสิทธิ์ของ Project ---
         public async Task ValidateProjectAccessAsync(int projectId)
         {
+            if (IsAdmin())
+            {
+                return; // ✅ อนุญาตทันที จบข่าว
+            }
             var currentUserId = GetCurrentUserId();
 
             var project = await _projectRepository.GetProjectByIdAsync(projectId);
@@ -52,7 +65,6 @@ namespace ProjectHub.Infrastructure.Services
             project.LastOpenedAt = DateTime.UtcNow;
             await _projectRepository.UpdateTimestampsAsync(project);
         }
-
 
         // --- 3. Logic ตรวจสอบสิทธิ์ของ Table (ที่เราจะใช้บ่อย) ---
         public async Task ValidateTableAccessAsync(int tableId)
