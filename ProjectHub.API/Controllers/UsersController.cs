@@ -9,10 +9,9 @@ using ProjectHub.Application.Dtos;
 using ProjectHub.Application.Features.Projects.DeleteProject;
 using ProjectHub.Application.Features.Users.ChangePassword;
 using ProjectHub.Application.Features.Users.EditProfile;
-using ProjectHub.Application.Features.Users.GetAllUsers;
 using ProjectHub.Application.Features.Users.Login;
 using ProjectHub.Application.Features.Users.Register;
-using ProjectHub.Application.Interfaces; // ⬅️ เพิ่ม
+using ProjectHub.Application.Interfaces; 
 
 namespace ProjectHub.API.Controllers
 {
@@ -22,13 +21,13 @@ namespace ProjectHub.API.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
-        private readonly IUserRepository _users; // ⬅️ เพิ่ม repo
+        private readonly IUserRepository _users; 
 
         public UsersController(IMediator mediator, IMapper mapper, IUserRepository users)
         {
             _mediator = mediator;
             _mapper = mapper;
-            _users = users; // ⬅️ ฉีดเข้ามา
+            _users = users; 
         }
 
         // ------------------------
@@ -101,28 +100,31 @@ namespace ProjectHub.API.Controllers
             }
         }
 
-        [ApiController]
-        [Route("api/[controller]")]
-        // ⛔️ ป้ายห้ามเข้า: เฉพาะคนถือบัตร Admin เท่านั้น
-        [Authorize(Roles = "Admin")]
-        public class AdminController : ControllerBase
-        {
-            private readonly IMediator _mediator;
-
-            public AdminController(IMediator mediator)
-            {
-                _mediator = mediator;
-            }
-
-            // GET: api/admin/users
-            [HttpGet("users")]
-            public async Task<IActionResult> GetAllUsers()
-            {
-                // ส่ง Query ไปให้ Handler ทำงาน
-                var users = await _mediator.Send(new GetAllUsersQuery());
-                return Ok(users);
-            }
-        }
+        //// ------------------------
+        //// ⛔️ เดิม: AdminController ซ้อนอยู่ใน UsersController (ไม่ควรใช้แบบนี้)
+        //// ------------------------
+        ////[ApiController]
+        ////[Route("api/[controller]")]
+        ////// ⛔️ ป้ายห้ามเข้า: เฉพาะคนถือบัตร Admin เท่านั้น
+        ////[Authorize(Roles = "Admin")]
+        ////public class AdminController : ControllerBase
+        ////{
+        ////    private readonly IMediator _mediator;
+        ////
+        ////    public AdminController(IMediator mediator)
+        ////    {
+        ////        _mediator = mediator;
+        ////    }
+        ////
+        ////    // GET: api/admin/users
+        ////    [HttpGet("users")]
+        ////    public async Task<IActionResult> GetAllUsers()
+        ////    {
+        ////        // ส่ง Query ไปให้ Handler ทำงาน
+        ////        var users = await _mediator.Send(new GetAllUsersQuery());
+        ////        return Ok(users);
+        ////    }
+        ////}
 
         // ------------------------
         // GET /api/users/me (คืนข้อมูลจริงของผู้ใช้)
@@ -217,3 +219,4 @@ namespace ProjectHub.API.Controllers
         }
     }
 }
+

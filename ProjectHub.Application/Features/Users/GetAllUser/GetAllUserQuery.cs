@@ -1,9 +1,11 @@
 using MediatR;
-using ProjectHub.Application.Dtos; // หรือที่เก็บ UserDto ของคุณ
+using ProjectHub.Application.Dtos;
+using System.Collections.Generic;
 
-namespace ProjectHub.Application.Features.Users.GetAllUsers
+namespace ProjectHub.Application.Features.Users.Queries.GetAllUsers
 {
-    // Request: ไม่ต้องส่งอะไรมา เพราะจะเอาทั้งหมด
-    // Response: List ของ UserDto
-    public class GetAllUsersQuery : IRequest<UserResponseDto> { }
+    // เดิมน่าจะเป็น IRequest<UserResponseDto>
+    public class GetAllUsersQuery : IRequest<List<UserResponseDto>>
+    {
+    }
 }

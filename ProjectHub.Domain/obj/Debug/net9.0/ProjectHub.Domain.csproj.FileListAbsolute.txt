@@ -93,3 +93,15 @@ C:\school\final_project\Final_Project\ProjectHub.Domain\obj\Debug\net9.0\Project
 C:\school\final_project\Final_Project\ProjectHub.Domain\obj\Debug\net9.0\refint\ProjectHub.Domain.dll
 C:\school\final_project\Final_Project\ProjectHub.Domain\obj\Debug\net9.0\ProjectHub.Domain.pdb
 C:\school\final_project\Final_Project\ProjectHub.Domain\obj\Debug\net9.0\ref\ProjectHub.Domain.dll
+C:\Users\Admin\Source\Repos\Final_Projectu\ProjectHub.Domain\bin\Debug\net9.0\ProjectHub.Domain.deps.json
+C:\Users\Admin\Source\Repos\Final_Projectu\ProjectHub.Domain\bin\Debug\net9.0\ProjectHub.Domain.dll
+C:\Users\Admin\Source\Repos\Final_Projectu\ProjectHub.Domain\bin\Debug\net9.0\ProjectHub.Domain.pdb
+C:\Users\Admin\Source\Repos\Final_Projectu\ProjectHub.Domain\obj\Debug\net9.0\ProjectHub.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Admin\Source\Repos\Final_Projectu\ProjectHub.Domain\obj\Debug\net9.0\ProjectHub.Domain.AssemblyInfoInputs.cache
+C:\Users\Admin\Source\Repos\Final_Projectu\ProjectHub.Domain\obj\Debug\net9.0\ProjectHub.Domain.AssemblyInfo.cs
+C:\Users\Admin\Source\Repos\Final_Projectu\ProjectHub.Domain\obj\Debug\net9.0\ProjectHub.Domain.csproj.CoreCompileInputs.cache
+C:\Users\Admin\Source\Repos\Final_Projectu\ProjectHub.Domain\obj\Debug\net9.0\ProjectHub.Domain.sourcelink.json
+C:\Users\Admin\Source\Repos\Final_Projectu\ProjectHub.Domain\obj\Debug\net9.0\ProjectHub.Domain.dll
+C:\Users\Admin\Source\Repos\Final_Projectu\ProjectHub.Domain\obj\Debug\net9.0\refint\ProjectHub.Domain.dll
+C:\Users\Admin\Source\Repos\Final_Projectu\ProjectHub.Domain\obj\Debug\net9.0\ProjectHub.Domain.pdb
+C:\Users\Admin\Source\Repos\Final_Projectu\ProjectHub.Domain\obj\Debug\net9.0\ref\ProjectHub.Domain.dll

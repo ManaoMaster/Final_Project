@@ -26,6 +26,7 @@ namespace ProjectHub.API.Mapping
     public class ApiMappingProfile : Profile
     {
         public ApiMappingProfile()
+
         {
             // API -> Application (Users)
             CreateMap<RegisterUserRequest, RegisterUserCommand>();
