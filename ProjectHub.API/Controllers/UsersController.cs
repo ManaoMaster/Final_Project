@@ -11,7 +11,9 @@ using ProjectHub.Application.Features.Users.ChangePassword;
 using ProjectHub.Application.Features.Users.EditProfile;
 using ProjectHub.Application.Features.Users.Login;
 using ProjectHub.Application.Features.Users.Register;
-using ProjectHub.Application.Interfaces; 
+using ProjectHub.Application.Interfaces;
+using ProjectHub.Application.Features.Users.ForgotPassword;
+using ProjectHub.Application.Features.Users.ResetPassword;
 
 namespace ProjectHub.API.Controllers
 {
@@ -97,6 +99,42 @@ namespace ProjectHub.API.Controllers
             catch (ArgumentException)
             {
                 return Unauthorized(new { error = "Invalid email or password." });
+            }
+        }
+
+        // POST: /api/users/forgot-password
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword(
+            [FromBody] ForgotPasswordRequest req,
+            CancellationToken ct)
+        {
+            await _mediator.Send(new ForgotPasswordCommand { Email = req.Email }, ct);
+            // ส่ง 200 เสมอ ไม่บอกว่ามี user หรือไม่
+            return Ok();
+        }
+
+        // POST: /api/users/reset-password
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword(
+            [FromBody] ResetPasswordRequest req,
+            CancellationToken ct)
+        {
+            try
+            {
+                await _mediator.Send(
+                    new ResetPasswordCommand
+                    {
+                        Token = req.Token,
+                        NewPassword = req.NewPassword,
+                    },
+                    ct
+                );
+
+                return Ok();
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { error = ex.Message });
             }
         }
 
@@ -218,5 +256,10 @@ namespace ProjectHub.API.Controllers
             }
         }
     }
+
+
+
+
+
 }
 

@@ -15,6 +15,7 @@ namespace ProjectHub.Infrastructure.Persistence
         public DbSet<Columns> Columns { get; set; }
         public DbSet<Rows> Rows { get; set; }
         public DbSet<Relationships> Relationships { get; set; }
+        public DbSet<PasswordResetToken> PasswordResetTokens { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -24,6 +24,7 @@ using ProjectHub.Infrastructure.Auth;
 using ProjectHub.Infrastructure.Persistence;
 using ProjectHub.Infrastructure.Repositories;
 using System.Text.Json.Serialization;
+using ProjectHub.Infrastructure;
 
 
 
@@ -32,6 +33,7 @@ using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpContextAccessor();
 
+builder.Services.AddInfrastructure(builder.Configuration);
 
 // -- Logging --
 builder.Logging.ClearProviders();
