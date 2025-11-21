@@ -1,16 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ProjectHub.Application.Dtos;
+using ProjectHub.API.Contracts.Users;
+using ProjectHub.Application.Features.Users.AdminUpdateUser;
 using ProjectHub.Application.Features.Users.Queries.GetAllUsers;
 
 namespace ProjectHub.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]          // => /api/Admin
+    [Route("api/[controller]")]      // => /api/Admin
     [Authorize(Roles = "Admin")]
     public class AdminController : ControllerBase
     {
@@ -21,15 +19,32 @@ namespace ProjectHub.API.Controllers
             _mediator = mediator;
         }
 
-        // GET: api/Admin/users
+        // GET: /api/Admin/users
         [HttpGet("users")]
-        public async Task<ActionResult<List<UserResponseDto>>> GetAllUsers(CancellationToken ct)
+        public async Task<IActionResult> GetAllUsers()
         {
-            // ส่ง Query ไปให้ Handler ทำงาน
-            var users = await _mediator.Send(new GetAllUsersQuery(), ct);
-
-            // users = List<UserResponseDto>
+            var users = await _mediator.Send(new GetAllUsersQuery());
             return Ok(users);
+        }
+
+        // PUT: /api/Admin/users/{id}
+        [HttpPut("users/{id:int}")]
+        public async Task<IActionResult> UpdateUser(
+            int id,
+            [FromBody] AdminUpdateUserRequest request,
+            CancellationToken ct)
+        {
+            var cmd = new AdminUpdateUserCommand
+            {
+                UserId = id,
+                Email = request.Email,
+                Username = request.Username,
+                Role = request.Role,
+                ProfilePictureUrl = request.ProfilePictureUrl
+            };
+
+            var dto = await _mediator.Send(cmd, ct);
+            return Ok(dto);
         }
     }
 }
