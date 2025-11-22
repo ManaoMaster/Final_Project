@@ -1,12 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "CIr+EXOKEds=",
+  "dgSpecHash": "t0JDnk+7jwk=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Admin\\Source\\Repos\\Final_Projectu\\ProjectHub.Domain\\ProjectHub.Domain.csproj",
-  "expectedPackageFiles": [
-    "C:\\Users\\Admin\\.nuget\\packages\\microsoft.netcore.app.ref\\9.0.7\\microsoft.netcore.app.ref.9.0.7.nupkg.sha512",
-    "C:\\Users\\Admin\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\9.0.7\\microsoft.windowsdesktop.app.ref.9.0.7.nupkg.sha512",
-    "C:\\Users\\Admin\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\9.0.7\\microsoft.aspnetcore.app.ref.9.0.7.nupkg.sha512"
-  ],
+  "projectFilePath": "C:\\Users\\Acer\\Source\\Repos\\Final_Projects\\ProjectHub.Domain\\ProjectHub.Domain.csproj",
+  "expectedPackageFiles": [],
   "logs": []
 }
