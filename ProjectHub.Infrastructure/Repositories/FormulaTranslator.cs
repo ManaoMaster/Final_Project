@@ -39,7 +39,7 @@ namespace ProjectHub.Application.Services
             }
         }
 
-        // --- Recursive Parser (ส่วนที่ทำงานจริง) ---
+        
 
         private string ParseNode(JsonElement node)
         {
@@ -56,13 +56,13 @@ namespace ProjectHub.Application.Services
                 case "column":
                     string colName = node.GetProperty("name").GetString() ?? "";
 
-                    // --- *** [FIX 1] *** ---
-                    // ลบ ::numeric ออก ให้คืนค่า JSON accessor ดิบๆ
+                    
+                    
                     return $"\"{_dataColumn}\"->>'{colName}'";
 
                 case "literal":
-                    // --- *** [FIX 2] *** ---
-                    // ลบ ::numeric ออก ให้คืนค่า literal ดิบๆ
+                    
+                    
                     return node.GetProperty("value").GetRawText();
                 default:
                     throw new NotSupportedException($"Unsupported AST node type: {type}");
@@ -85,7 +85,7 @@ namespace ProjectHub.Application.Services
                     break;
 
                 case "literal":
-                    // Literal nodes ไม่มีชื่อคอลัมน์
+                    
                     break;
             }
         }

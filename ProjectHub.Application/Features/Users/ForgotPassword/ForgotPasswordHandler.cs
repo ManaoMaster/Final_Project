@@ -26,17 +26,17 @@ namespace ProjectHub.Application.Features.Users.ForgotPassword
 
         public async Task Handle(ForgotPasswordCommand request, CancellationToken cancellationToken)
         {
-            // 1) หา user จาก email
+            
             var user = await _users.GetByEmailAsync(request.Email);
             if (user is null)
                 throw new ArgumentException("Email not found.");
 
-            // 2) สร้าง token ใหม่
+            
             var tokenValue = Guid.NewGuid().ToString("N");
 
             var token = new PasswordResetToken
             {
-                UserId = user.User_id,           // ✅ ใช้ User_id
+                UserId = user.User_id,           
                 Token = tokenValue,
                 CreatedAt = DateTime.UtcNow,
                 ExpiresAt = DateTime.UtcNow.AddMinutes(30),
@@ -46,13 +46,12 @@ namespace ProjectHub.Application.Features.Users.ForgotPassword
             await _tokens.AddAsync(token);
             await _tokens.SaveChangesAsync();
 
-            // 3) สร้างลิงก์ไปหน้า reset password
+            
             var frontendBase = _config["Frontend:BaseUrl"]?.TrimEnd('/')
                                ?? "http://localhost:4200";
 
             var resetLink = $"{frontendBase}/reset-password?token={tokenValue}";
 
-            // 4) ส่งอีเมล
             var subject = "ProjectHub – Reset your password";
             var body = $@"
 สวัสดี {user.Username},

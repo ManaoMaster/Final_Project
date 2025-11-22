@@ -28,13 +28,13 @@ namespace ProjectHub.API.Mapping
         public ApiMappingProfile()
 
         {
-            // API -> Application (Users)
+            
             CreateMap<RegisterUserRequest, RegisterUserCommand>();
 
-            // API -> Application (Projects)
+            
             CreateMap<CreateProjectRequest, CreateProjectCommand>();
 
-            // API -> Appliation (Tables)
+            
             CreateMap<CreateTableRequest, CreateTableCommand>();
 
             CreateMap<CreateColumnRequest, CreateColumnCommand>();

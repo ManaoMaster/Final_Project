@@ -3,7 +3,7 @@ using ProjectHub.Domain.Entities;
 
 namespace ProjectHub.Application.Repositories
 {
-    // สัญญาสำหรับการจัดการข้อมูล "กฎ" ความสัมพันธ์
+    
     public interface IRelationshipRepository
     {
         Task AddRelationshipAsync(Relationships relationship);

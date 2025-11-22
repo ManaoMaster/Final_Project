@@ -32,9 +32,9 @@ namespace ProjectHub.API.Controllers
             _users = users; 
         }
 
-        // ------------------------
-        // Change password
-        // ------------------------
+        
+        
+        
         [Authorize]
         [HttpPut("change-password")]
         public async Task<IActionResult> ChangePassword(
@@ -65,9 +65,9 @@ namespace ProjectHub.API.Controllers
             }
         }
 
-        // ------------------------
-        // Register
-        // ------------------------
+        
+        
+        
         [HttpPost("register")]
         public async Task<ActionResult<UserResponseDto>> Register(
             [FromBody] RegisterUserRequest request,
@@ -79,9 +79,9 @@ namespace ProjectHub.API.Controllers
             return Created($"/api/users/{userDto.UserId}", userDto);
         }
 
-        // ------------------------
-        // Login
-        // ------------------------
+        
+        
+        
         [HttpPost("login")]
         public async Task<ActionResult<TokenResponseDto>> Login(
             [FromBody] LoginRequest req,
@@ -102,18 +102,18 @@ namespace ProjectHub.API.Controllers
             }
         }
 
-        // POST: /api/users/forgot-password
+        
         [HttpPost("forgot-password")]
         public async Task<IActionResult> ForgotPassword(
             [FromBody] ForgotPasswordRequest req,
             CancellationToken ct)
         {
             await _mediator.Send(new ForgotPasswordCommand { Email = req.Email }, ct);
-            // ส่ง 200 เสมอ ไม่บอกว่ามี user หรือไม่
+            
             return Ok();
         }
 
-        // POST: /api/users/reset-password
+        
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword(
             [FromBody] ResetPasswordRequest req,
@@ -138,40 +138,40 @@ namespace ProjectHub.API.Controllers
             }
         }
 
-        //// ------------------------
-        //// ⛔️ เดิม: AdminController ซ้อนอยู่ใน UsersController (ไม่ควรใช้แบบนี้)
-        //// ------------------------
-        ////[ApiController]
-        ////[Route("api/[controller]")]
-        ////// ⛔️ ป้ายห้ามเข้า: เฉพาะคนถือบัตร Admin เท่านั้น
-        ////[Authorize(Roles = "Admin")]
-        ////public class AdminController : ControllerBase
-        ////{
-        ////    private readonly IMediator _mediator;
-        ////
-        ////    public AdminController(IMediator mediator)
-        ////    {
-        ////        _mediator = mediator;
-        ////    }
-        ////
-        ////    // GET: api/admin/users
-        ////    [HttpGet("users")]
-        ////    public async Task<IActionResult> GetAllUsers()
-        ////    {
-        ////        // ส่ง Query ไปให้ Handler ทำงาน
-        ////        var users = await _mediator.Send(new GetAllUsersQuery());
-        ////        return Ok(users);
-        ////    }
-        ////}
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
-        // ------------------------
-        // GET /api/users/me (คืนข้อมูลจริงของผู้ใช้)
-        // ------------------------
+        
+        
+        
         [Authorize]
         [HttpGet("me")]
         public async Task<ActionResult<object>> Me(CancellationToken ct)
         {
-            // 1️⃣ อ่าน UserId จาก JWT claims
+            
             var sub =
                 User.FindFirst("sub")?.Value ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrWhiteSpace(sub))
@@ -180,27 +180,27 @@ namespace ProjectHub.API.Controllers
             if (!int.TryParse(sub, out var userId))
                 return BadRequest(new { error = "Invalid user id claim." });
 
-            // 2️⃣ ดึงข้อมูลจากฐานข้อมูลผ่าน IUserRepository
+            
             var user = await _users.GetByIdAsync(userId);
             if (user is null)
                 return NotFound(new { error = "User not found." });
 
-            // 3️⃣ คืนข้อมูลที่ฝั่ง Angular ใช้
+            
             return Ok(
                 new
                 {
                     UserId = int.Parse(sub),
                     email = user.Email,
                     username = user.Username,
-                    name = user.Username, // เผื่อ Angular ใช้ field name เดิม
+                    name = user.Username, 
                     profilePictureUrl = user.ProfilePictureUrl,
                 }
             );
         }
 
-        // ------------------------
-        // Edit profile
-        // ------------------------
+        
+        
+        
         [Authorize]
         [HttpPut("me")]
         public async Task<ActionResult<UserResponseDto>> EditProfile(
@@ -232,9 +232,9 @@ namespace ProjectHub.API.Controllers
             }
         }
 
-        // ------------------------
-        // Delete user
-        // ------------------------
+        
+        
+        
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser([FromRoute] int id, CancellationToken ct)
         {

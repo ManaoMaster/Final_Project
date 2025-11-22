@@ -1,18 +1,18 @@
 using MediatR;
-using ProjectHub.Application.Dtos; // ใช้ DTO เดิม
+using ProjectHub.Application.Dtos; 
 using System.ComponentModel.DataAnnotations;
 
-// Namespace อาจจะต้องเปลี่ยนตาม Folder ใหม่ (ถ้าคุณเปลี่ยนชื่อ Folder)
-namespace ProjectHub.Application.Features.Projects.UpdateProject // <-- เปลี่ยน Namespace (ถ้าเปลี่ยน Folder)
+
+namespace ProjectHub.Application.Features.Projects.UpdateProject 
 {
-    // เปลี่ยนชื่อ Class จาก Edit... เป็น Update...
+    
     public class UpdateProjectCommand : IRequest<ProjectResponseDto>
     {
         [Required]
-        public int ProjectId { get; set; } // ID ของ Project ที่จะแก้ไข
+        public int ProjectId { get; set; } 
 
         [Required]
         [MaxLength(100)]
-        public string NewName { get; set; } = string.Empty; // ชื่อใหม่ (ยังใช้ NewName ได้ หรือจะเปลี่ยนเป็น Name ก็ได้)
+        public string NewName { get; set; } = string.Empty; 
     }
 }

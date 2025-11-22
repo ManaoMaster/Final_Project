@@ -2,7 +2,7 @@ using System;
 
 namespace ProjectHub.Application.DTOs
 {
-    // DTO สำหรับส่งข้อมูล "กฎ" ความสัมพันธ์กลับไป
+    
     public class RelationshipResponseDto
     {
         public int RelationshipId { get; set; }

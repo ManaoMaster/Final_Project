@@ -4,8 +4,8 @@ using ProjectHub.Application.DTOs;
 
 namespace ProjectHub.Application.Features.Relationships.CreateRelationship
 {
-    // Command สำหรับสร้าง "กฎ" ความสัมพันธ์
-    // คืนค่าเป็น DTO ที่เพิ่งสร้าง
+    
+    
     public class CreateRelationshipCommand : IRequest<RelationshipResponseDto>
     {
         public string? DisplayName { get; set; }

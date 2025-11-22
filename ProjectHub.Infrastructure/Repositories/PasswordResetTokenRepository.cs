@@ -7,7 +7,7 @@ namespace ProjectHub.Infrastructure.Repositories
 {
     public class PasswordResetTokenRepository : IPasswordResetTokenRepository
     {
-        private readonly AppDbContext _context; // ใช้ชื่อ DbContext ของเธอจริง ๆ
+        private readonly AppDbContext _context; 
 
         public PasswordResetTokenRepository(AppDbContext context)
         {

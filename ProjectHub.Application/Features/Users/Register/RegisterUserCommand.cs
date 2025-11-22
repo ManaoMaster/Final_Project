@@ -4,7 +4,7 @@ using ProjectHub.Application.Dtos;
 
 namespace ProjectHub.Application.Features.Users.Register
 {
-    // 2. เปลี่ยน return type จาก int เป็น UserResponseDto
+    
     public class RegisterUserCommand : IRequest<UserResponseDto>
     {
         [Required]

@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema; // <-- เพิ่ม Using นี้
+using System.ComponentModel.DataAnnotations.Schema; 
 
 namespace ProjectHub.Domain.Entities
 {

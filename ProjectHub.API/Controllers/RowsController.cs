@@ -1,150 +1,150 @@
 using System;
 using System.Threading.Tasks;
-using AutoMapper; // เพิ่ม: ถ้าใช้ AutoMapper ใน API
+using AutoMapper; 
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ProjectHub.API.Contracts.Rows;
-using ProjectHub.Application.Dtos; // เพิ่ม: สำหรับ Response DTO
+using ProjectHub.Application.Dtos; 
 using ProjectHub.Application.Features.Projects.DeleteProject;
 using ProjectHub.Application.Features.Rows.CreateRow;
 using ProjectHub.Application.Features.Rows.GetRowsByTableId;
-using ProjectHub.Application.Features.Rows.UpdateRow; // เพิ่ม: สำหรับ Command
+using ProjectHub.Application.Features.Rows.UpdateRow; 
 
 namespace ProjectHub.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")] // ใช้ /api/rows
+    [Route("api/[controller]")] 
     public class RowsController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly IMapper _mapper; // เพิ่ม: ถ้าใช้ AutoMapper
+        private readonly IMapper _mapper; 
 
-        // Inject IMediator และ IMapper (ถ้าใช้)
+        
         public RowsController(IMediator mediator, IMapper mapper)
         {
             _mediator = mediator;
-            _mapper = mapper; // เพิ่ม
+            _mapper = mapper; 
         }
 
-        // --- Endpoint: POST /api/rows ---
+        
         [HttpPost]
         public async Task<IActionResult> CreateRow([FromBody] CreateRowRequest request)
         {
-            // 1. Map Request DTO ไปยัง Command (ใช้ AutoMapper)
+            
             var command = _mapper.Map<CreateRowCommand>(request);
 
             try
             {
-                // 2. ส่ง Command ไปยัง MediatR (ซึ่งจะหา Handler มาทำงาน)
+                
                 RowResponseDto responseDto = await _mediator.Send(command);
 
-                // 3. คืนค่า 201 Created พร้อม DTO ที่ได้กลับมา
-                // (ใช้ GetById endpoint ถ้ามี, ถ้าไม่มี ใช้ null ไปก่อน)
+                
+                
                 return CreatedAtAction(
-                    null, // nameof(GetRowById) ถ้ามี Endpoint นี้
-                    new { id = responseDto.RowId }, // ใช้ RowId จาก Response DTO
+                    null, 
+                    new { id = responseDto.RowId }, 
                     responseDto
                 );
             }
             catch (ArgumentException ex)
             {
-                // จับ Error จาก Business Logic (เช่น Table ไม่เจอ, JSON Validation failed)
+                
                 return BadRequest(new { Error = ex.Message });
             }
-            catch (Exception ex) // จับ Error อื่นๆ ที่ไม่คาดคิด
+            catch (Exception ex) 
             {
-                // ควร Log exception ex ไว้ด้วย
-                Console.WriteLine($"Error creating row: {ex}"); // Log ง่ายๆ ไปก่อน
+                
+                Console.WriteLine($"Error creating row: {ex}"); 
                 return StatusCode(
                     500,
                     new { Error = "An unexpected error occurred while creating the row." }
                 );
             }
         }
-        // --- *** 2. เพิ่ม Endpoint นี้เข้าไปทั้งยวงครับ *** ---
-        // (วางไว้เหนือ [HttpPost] CreateRow ของคุณ)
+        
+        
         [HttpGet("table/{tableId:int}")]
         public async Task<IActionResult> GetRowsByTableId(
             [FromRoute] int tableId,
             CancellationToken ct)
         {
-            // 1. สร้าง Query
+            
             var query = new GetRowsByTableIdQuery { TableId = tableId };
 
-            // 2. ส่งให้ Handler (ที่ใช้ Dapper)
-            var result = await _mediator.Send(query, ct); // <-- บรรทัดนี้คือส่วนที่ 2
+            
+            var result = await _mediator.Send(query, ct); 
 
-            // 3. ส่งผลลัพธ์ กลับไป
+            
             return Ok(result);
         }
 
         [HttpPut("{id}")]
-        // IActionResult: ระบุว่าคืนค่า HTTP Status Code (อาจมี Body หรือไม่มีก็ได้)
+        
         public async Task<IActionResult> UpdateRow(
-            // [FromRoute]: บอกให้ดึงค่า Parameter 'id' มาจาก URL Path ({id})
+            
             [FromRoute] int id,
-            // [FromBody]: บอกให้ดึงข้อมูลใหม่ (NewName) มาจาก Request Body (JSON)
+            
             [FromBody] UpdateRowRequest request,
             CancellationToken ct
         )
         {
-            // --- Mapping: Request -> Command ---
-            // ใช้ AutoMapper แปลงข้อมูลจาก API Request (EditProjectRequest)
-            // ไปเป็น Application Command (EditProjectCommand)
+            
+            
+            
             var command = _mapper.Map<UpdateRowCommand>(request);
 
-            // *** สำคัญ: กำหนด ID ที่จะแก้ไข ให้กับ Command ***
-            // ID มาจาก URL Path ไม่ใช่ Request Body
+            
+            
             command.RowId = id;
 
             try
             {
-                // --- Logic Execution ---
-                // ส่ง Command ไปให้ MediatR
-                // Handler (EditProjectHandler) จะทำงาน, ดึงข้อมูล, แก้ไข, บันทึก
-                // และคืนค่า DTO ที่อัปเดตแล้วกลับมา
+                
+                
+                
+                
                 RowResponseDto updatedDto = await _mediator.Send(command, ct);
 
-                // --- Response ---
-                // คืนค่า 200 OK พร้อมข้อมูล Project ที่อัปเดตแล้ว
+                
+                
                 return Ok(updatedDto);
             }
-            catch (ArgumentException ex) // จับ Error จาก Handler (เช่น ไม่เจอ Project ID)
+            catch (ArgumentException ex) 
             {
-                return NotFound(new { Error = ex.Message }); // คืน 404 Not Found
+                return NotFound(new { Error = ex.Message }); 
             }
-            catch (Exception ex) // จับ Error อื่นๆ
+            catch (Exception ex) 
             {
-                // ควร Log ex
-                return StatusCode(500, new { Error = "An unexpected error occurred." }); // คืน 500
+                
+                return StatusCode(500, new { Error = "An unexpected error occurred." }); 
             }
         }
 
-        // --- Endpoint: DELETE /api/rows/{id} ---
-        [HttpDelete("{id}")] // รับ ID จาก URL Path
+        
+        [HttpDelete("{id}")] 
         public async Task<IActionResult> DeleteRow(
-            [FromRoute] int id, // ดึง ID จาก Path
+            [FromRoute] int id, 
             CancellationToken ct
-        ) // เพิ่ม ct
+        ) 
         {
-            // สร้าง Command โดยตรงจาก ID ที่ได้จาก Route
+            
             var command = new DeleteRowCommand { RowId = id };
 
             try
             {
-                // ส่ง Command ให้ MediatR (Handler จะคืน Unit)
-                await _mediator.Send(command, ct); // เพิ่ม ct
+                
+                await _mediator.Send(command, ct); 
 
-                // คืน 204 No Content = สำเร็จ ไม่มีข้อมูลส่งกลับ
+                
                 return NoContent();
             }
-            catch (ArgumentException ex) // จับ Error จาก Handler (Row not found)
+            catch (ArgumentException ex) 
             {
-                return NotFound(new { Error = ex.Message }); // คืน 404 Not Found
+                return NotFound(new { Error = ex.Message }); 
             }
-            catch (Exception ex) // จับ Error อื่นๆ
+            catch (Exception ex) 
             {
-                Console.WriteLine($"Error deleting row {id}: {ex}"); // Log ง่ายๆ
+                Console.WriteLine($"Error deleting row {id}: {ex}"); 
                 return StatusCode(500, new { Error = "An unexpected error occurred." });
             }
         }

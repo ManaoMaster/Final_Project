@@ -24,7 +24,7 @@ namespace ProjectHub.Infrastructure.Services
             _projectRepository = projectRepository;
         }
 
-        // --- 1. Helper สำหรับดึง User ID ที่ล็อกอิน ---
+        
         public int GetCurrentUserId()
         {
             var userIdString = _httpContextAccessor.HttpContext?.User?.FindFirstValue(
@@ -45,12 +45,12 @@ namespace ProjectHub.Infrastructure.Services
             return role == "Admin";
         }
 
-        // --- 2. Logic ตรวจสอบสิทธิ์ของ Project ---
+        
         public async Task ValidateProjectAccessAsync(int projectId)
         {
             if (IsAdmin())
             {
-                return; // ✅ อนุญาตทันที จบข่าว
+                return; 
             }
             var currentUserId = GetCurrentUserId();
 
@@ -61,12 +61,12 @@ namespace ProjectHub.Infrastructure.Services
             if (project.User_id != currentUserId)
                 throw new UnauthorizedAccessException($"ไม่มีสิทธิ์ใน Project ID: {projectId}");
 
-            // อัปเดต recent-open
+            
             project.LastOpenedAt = DateTime.UtcNow;
             await _projectRepository.UpdateTimestampsAsync(project);
         }
 
-        // --- 3. Logic ตรวจสอบสิทธิ์ของ Table (ที่เราจะใช้บ่อย) ---
+        
         public async Task ValidateTableAccessAsync(int tableId)
         {
             var table = await _tableRepository.GetTableByIdAsync(tableId);
@@ -76,9 +76,9 @@ namespace ProjectHub.Infrastructure.Services
                 throw new Exception($"ไม่พบ Table ID: {tableId}");
             }
 
-            // ตรวจสอบสิทธิ์โดยการเช็ค Project ที่เป็นเจ้าของ Table นี้
-            // (เมื่อ Method นี้ถูกเรียก มันจะไปเรียก ValidateProjectAccessAsync
-            // ซึ่งจะ Trigger Logic [FIX] ของเราโดยอัตโนมัติ)
+            
+            
+            
             await ValidateProjectAccessAsync(table.Project_id);
         }
     }

@@ -1,25 +1,25 @@
-using System; // For ArgumentException
+using System; 
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using ProjectHub.Application.Interfaces; // 1. [ADD] Import "Yara"
+using ProjectHub.Application.Interfaces; 
 using ProjectHub.Application.Repositories;
-using ProjectHub.Application.Features.Columns.DeleteColumn; // (Assuming this is correct)
+using ProjectHub.Application.Features.Columns.DeleteColumn; 
 
-namespace ProjectHub.Application.Features.Columns.DeleteColumn // (Ensured namespace matches)
+namespace ProjectHub.Application.Features.Columns.DeleteColumn 
 {
-    // Handler for DeleteColumnCommand, returns Unit (nothing)
+    
     public class DeleteColumnHandler : IRequestHandler<DeleteColumnCommand, Unit>
     {
         private readonly IColumnRepository _columnRepository;
-        private readonly IProjectSecurityService _securityService; // 2. [ADD] Inject "Yara"
+        private readonly IProjectSecurityService _securityService; 
 
         public DeleteColumnHandler(
             IColumnRepository columnRepository, 
-            IProjectSecurityService securityService) // 3. [ADD] Receive "Yara"
+            IProjectSecurityService securityService) 
         {
             _columnRepository = columnRepository;
-            _securityService = securityService; // 4. [ADD] Assign "Yara"
+            _securityService = securityService; 
         }
 
         public async Task<Unit> Handle(
@@ -27,7 +27,7 @@ namespace ProjectHub.Application.Features.Columns.DeleteColumn // (Ensured names
             CancellationToken cancellationToken
         )
         {
-            // 5. [OPTIMIZE] Fetch the column once
+            
             var columnToDelete = await _columnRepository.GetColumnByIdAsync(request.ColumnId);
             
             if (columnToDelete == null)
@@ -35,13 +35,13 @@ namespace ProjectHub.Application.Features.Columns.DeleteColumn // (Ensured names
                 throw new ArgumentException($"Column with ID {request.ColumnId} not found.");
             }
 
-            // 6. [ADD] Call "Yara" to validate using the Table_id we just found
-            await _securityService.ValidateTableAccessAsync(columnToDelete.Table_id); // (or .TableId)
+            
+            await _securityService.ValidateTableAccessAsync(columnToDelete.Table_id); 
 
-            // 7. (If OK) Call the repository to delete the column by ID
+            
             await _columnRepository.DeleteColumnAsync(request.ColumnId);
 
-            // 8. Return Unit.Value to indicate success
+            
             return Unit.Value;
         }
     }

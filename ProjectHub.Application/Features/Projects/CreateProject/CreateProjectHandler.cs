@@ -30,8 +30,8 @@ namespace ProjectHub.Application.Features.Projects.CreateProject
         {
             var currentUserId = _securityService.GetCurrentUserId();
 
-            // เช็คว่า User ที่ล็อกอิน (currentUserId)
-            // พยายามสร้างโปรเจกต์ให้ตัวเอง (request.UserId) ใช่หรือไม่
+            
+            
             if (request.UserId != currentUserId)
             {
                 throw new UnauthorizedAccessException("คุณสามารถสร้างโปรเจกต์ให้ตัวเองได้เท่านั้น");
@@ -44,12 +44,12 @@ namespace ProjectHub.Application.Features.Projects.CreateProject
             if (string.IsNullOrWhiteSpace(request.Name))
                 throw new ArgumentException("Project name is required.");
 
-            // Map จาก Command -> Entity (ใช้ alias ป้องกัน namespace clash)
+            
             var entity = _mapper.Map<ProjectEntity>(request);
 
             await _projectRepository.AddProjectAsync(entity);
 
-            // Map จาก Entity -> DTO
+            
             return _mapper.Map<ProjectResponseDto>(entity);
         }
     }

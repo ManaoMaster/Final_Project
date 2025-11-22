@@ -23,10 +23,10 @@ namespace ProjectHub.Application.Features.Users.Queries.GetAllUsers
             GetAllUsersQuery request,
             CancellationToken cancellationToken)
         {
-            // ดึงลิสต์ Users (entity) จาก repo
+            
             var users = await _userRepository.GetAllAsync();
 
-            //  map เป็นลิสต์ DTO
+            
             var dtoList = _mapper.Map<List<UserResponseDto>>(users);
 
             return dtoList;

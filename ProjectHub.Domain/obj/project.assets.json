@@ -8,23 +8,23 @@
     "net9.0": []
   },
   "packageFolders": {
-    "C:\\Users\\Acer\\.nuget\\packages\\": {},
+    "C:\\Users\\ghost\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Acer\\Source\\Repos\\Final_Projects\\ProjectHub.Domain\\ProjectHub.Domain.csproj",
+      "projectUniqueName": "C:\\school\\final2\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj",
       "projectName": "ProjectHub.Domain",
-      "projectPath": "C:\\Users\\Acer\\Source\\Repos\\Final_Projects\\ProjectHub.Domain\\ProjectHub.Domain.csproj",
-      "packagesPath": "C:\\Users\\Acer\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Acer\\Source\\Repos\\Final_Projects\\ProjectHub.Domain\\obj\\",
+      "projectPath": "C:\\school\\final2\\Final_Project\\ProjectHub.Domain\\ProjectHub.Domain.csproj",
+      "packagesPath": "C:\\Users\\ghost\\.nuget\\packages\\",
+      "outputPath": "C:\\school\\final2\\Final_Project\\ProjectHub.Domain\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Acer\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\ghost\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],

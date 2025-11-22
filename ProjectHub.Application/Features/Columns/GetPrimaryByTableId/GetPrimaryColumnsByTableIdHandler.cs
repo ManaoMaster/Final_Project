@@ -1,5 +1,5 @@
 using MediatR;
-using ProjectHub.Application.Repositories; // <-- ตรวจสอบ Using (สำหรับ IColumnRepository)
+using ProjectHub.Application.Repositories; 
 using ColumnEntity = ProjectHub.Domain.Entities.Columns;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,14 +23,14 @@ namespace ProjectHub.Application.Features.Columns.GetPrimaryColumnsByTableId
         public async Task<IEnumerable<ColumnEntity>> Handle(GetPrimaryColumnsByTableIdQuery request, CancellationToken cancellationToken)
         {
             await _securityService.ValidateTableAccessAsync(request.TableId);
-            // 1. ดึงคอลัมน์ทั้งหมดของตารางนั้น
+            
             var allColumns = await _columnRepository.GetColumnsByTableIdAsync(request.TableId);
 
-            // 2. กรองเฉพาะคอลัมน์ที่ปักธง Is_primary = true เท่านั้น!
-            // นี่คือส่วนที่ "สถาปนิก" ต้องใช้
+            
+            
             var primaryColumns = allColumns.Where(c => c.Is_primary);
 
-            // 3. ส่งคืน (Dropdown ของ UI ก็จะแสดงแค่รายการนี้)
+            
             return primaryColumns;
         }
     }

@@ -21,25 +21,25 @@ namespace ProjectHub.Application.Features.Users.Register
 
         public async Task<UserResponseDto> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
         {
-            // validate เบื้องต้น
+            
             if (string.IsNullOrWhiteSpace(request.Email)) throw new ArgumentException("Email is required.");
             if (string.IsNullOrWhiteSpace(request.Username)) throw new ArgumentException("Username is required.");
             if (string.IsNullOrWhiteSpace(request.Password)) throw new ArgumentException("Password is required.");
 
-            // ตรวจ email ซ้ำ (ชื่อเมธอดปัจจุบัน 'IsEmailUniqueAsync' แต่คืน true เมื่อมีอยู่แล้ว)
+            
             var exists = await _userRepository.IsEmailUniqueAsync(request.Email);
             if (exists)
                 throw new ArgumentException("Email already exists.");
 
 
-            //เพิ่มให้มีการ hashpassword ตอน register
+            
             var user = _mapper.Map<UserEntity>(request);
             user.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
             user.Created_at = DateTime.UtcNow;
             user.ProfilePictureUrl = request.ProfilePictureUrl!;
             await _userRepository.AddUserAsync(user);
 
-            // map Entity -> DTO
+            
             return _mapper.Map<UserResponseDto>(user);
         }
     }

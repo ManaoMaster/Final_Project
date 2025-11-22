@@ -1,4 +1,4 @@
-// ใน ProjectHub.Infrastructure/Persistence/DesignTimeDbContextFactory.cs
+
 using System;
 using System.IO;
 using Microsoft.EntityFrameworkCore;
@@ -11,19 +11,19 @@ namespace ProjectHub.Infrastructure.Persistence
     {
         public AppDbContext CreateDbContext(string[] args)
         {
-            // Logic การหา Solution Root และ API Path
-            string basePath = Directory.GetCurrentDirectory(); // "...\ProjectHub.Infrastructure"
-            string solutionRoot = Directory.GetParent(basePath)!.FullName; // "...\Final_Project"
+            
+            string basePath = Directory.GetCurrentDirectory(); 
+            string solutionRoot = Directory.GetParent(basePath)!.FullName; 
             string apiProjectPath = Path.Combine(solutionRoot, "ProjectHub.API");
 
             IConfigurationRoot configuration = new ConfigurationBuilder()
-                .SetBasePath(apiProjectPath) // อ่านจาก API Project
+                .SetBasePath(apiProjectPath) 
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile("appsettings.Development.json", optional: true)
                 .Build();
 
-            // *** 1. อ่าน Connection String ใหม่ (ของ PostgreSQL) ***
-            // (เราจะใช้ชื่อใหม่ "PostgresConnection" เพื่อความชัดเจน)
+            
+            
             var connectionString = configuration.GetConnectionString("PostgresConnection");
 
             if (string.IsNullOrEmpty(connectionString))
@@ -35,7 +35,7 @@ namespace ProjectHub.Infrastructure.Persistence
 
             var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
 
-            // *** 2. เปลี่ยนจาก UseSqlite เป็น UseNpgsql ***
+            
             optionsBuilder.UseNpgsql(connectionString);
 
             return new AppDbContext(optionsBuilder.Options);

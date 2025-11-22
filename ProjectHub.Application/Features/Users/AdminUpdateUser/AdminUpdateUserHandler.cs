@@ -28,7 +28,7 @@ namespace ProjectHub.Application.Features.Users.AdminUpdateUser
                 throw new ArgumentException($"User id {request.UserId} not found.");
             }
 
-            // update field ตาม request
+            
             user.Email = request.Email.Trim();
             user.Username = request.Username.Trim();
             if (!string.IsNullOrWhiteSpace(request.Role))

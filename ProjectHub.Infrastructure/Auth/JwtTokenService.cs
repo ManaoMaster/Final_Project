@@ -28,10 +28,10 @@ namespace ProjectHub.Infrastructure.Auth
 
             var claims = new[]
             {
-                // มาตรฐาน JWT
+                
                 new Claim("sub", userId.ToString()),
                 new Claim("email", email),
-                // แบบ .NET (หลายจุดใน ASP.NET Core อ่านจากอันนี้)
+                
                 new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
                 new Claim(ClaimTypes.Email, email),
                 new Claim(ClaimTypes.Name, username),

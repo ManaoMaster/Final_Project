@@ -1,8 +1,8 @@
 using MediatR;
 using AutoMapper;
 using ProjectHub.Application.Dtos;
-using ProjectHub.Application.Interfaces; // (สำหรับ IProjectSecurityService)
-using ProjectHub.Application.Repositories; // (สำหรับ ITableRepository)
+using ProjectHub.Application.Interfaces; 
+using ProjectHub.Application.Repositories; 
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,13 +25,13 @@ namespace ProjectHub.Application.Features.Tables.GetAllTableByProjectId
 
         public async Task<IEnumerable<TableResponseDto>> Handle(GetAllTablesByProjectIdQuery request, CancellationToken cancellationToken)
         {
-            // 1. (Security) ตรวจสอบสิทธิ์ก่อนว่า User คนนี้ มีสิทธิ์ดู Project นี้หรือไม่
-            await _securityService.ValidateProjectAccessAsync(request.ProjectId); // (ผมเดาว่าคุณมี Method นี้)
+            
+            await _securityService.ValidateProjectAccessAsync(request.ProjectId); 
 
-            // 2. ดึงข้อมูลจาก Repository
+            
             var tables = await _tableRepository.GetTablesByProjectIdAsync(request.ProjectId);
 
-            // 3. Map Entity (Tables) -> DTO (TableResponseDto)
+            
             return _mapper.Map<IEnumerable<TableResponseDto>>(tables);
         }
     }

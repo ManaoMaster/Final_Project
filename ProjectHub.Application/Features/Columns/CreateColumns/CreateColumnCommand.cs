@@ -3,8 +3,8 @@ using ProjectHub.Application.Dtos;
 
 namespace ProjectHub.Application.Features.Columns.CreateColumn
 {
-    // *** [FIX 1] ***
-    // สร้าง Class ใหม่เพื่อเก็บข้อมูล Relationship
+    
+    
     public class NewRelationshipData
     {
         public int PrimaryTableId { get; set; }
@@ -15,7 +15,7 @@ namespace ProjectHub.Application.Features.Columns.CreateColumn
 
     public class CreateColumnCommand : IRequest<ColumnResponseDto>
     {
-        // --- ข้อมูล Column เดิม ---
+        
         public int TableId { get; set; }
         public required string Name { get; set; }
         public required string DataType { get; set; }
@@ -25,12 +25,12 @@ namespace ProjectHub.Application.Features.Columns.CreateColumn
         public string? FormulaDefinition { get; set; }
         public int? LookupTargetColumnId { get; set; }
 
-        // --- [FIX 2] แก้ปัญหาไก่กับไข่ ---
+        
 
-        // 1. "ไข่" (ถ้ามี ID อยู่แล้ว)
+        
         public int? LookupRelationshipId { get; set; }
 
-        // 2. "ไก่" (ข้อมูลสำหรับสร้าง Relationship ใหม่ ถ้า LookupRelationshipId เป็น null)
+        
         public NewRelationshipData? NewRelationship { get; set; }
     }
 }

@@ -8,7 +8,7 @@ using ProjectHub.Application.Features.Users.Queries.GetAllUsers;
 namespace ProjectHub.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]      // => /api/Admin
+    [Route("api/[controller]")]      
     [Authorize(Roles = "Admin")]
     public class AdminController : ControllerBase
     {
@@ -19,7 +19,7 @@ namespace ProjectHub.API.Controllers
             _mediator = mediator;
         }
 
-        // GET: /api/Admin/users
+        
         [HttpGet("users")]
         public async Task<IActionResult> GetAllUsers()
         {
@@ -27,7 +27,7 @@ namespace ProjectHub.API.Controllers
             return Ok(users);
         }
 
-        // PUT: /api/Admin/users/{id}
+        
         [HttpPut("users/{id:int}")]
         public async Task<IActionResult> UpdateUser(
             int id,

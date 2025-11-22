@@ -7,7 +7,7 @@ namespace ProjectHub.Application.Features.Users.ResetPassword
     {
         private readonly IPasswordResetTokenRepository _tokens;
         private readonly IUserRepository _users;
-        private readonly IPasswordHasher _hasher; // หรือ service ที่ใช้อยู่แล้ว
+        private readonly IPasswordHasher _hasher; 
 
         public ResetPasswordHandler(
             IPasswordResetTokenRepository tokens,

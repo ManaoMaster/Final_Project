@@ -29,7 +29,7 @@ namespace ProjectHub.Infrastructure.Services
             using var client = new SmtpClient(host, port)
             {
                 EnableSsl = useSsl,
-                UseDefaultCredentials = false,                 // ✅ สำคัญ
+                UseDefaultCredentials = false,                 
                 Credentials = new NetworkCredential(user, password),
             };
 

@@ -5,9 +5,9 @@ namespace ProjectHub.Application.Features.Relationships.UpdateRelationship
 {
     public class UpdateRelationshipCommand : IRequest
     {
-        public int Id { get; set; } // ID ของ Relationship ที่จะแก้
+        public int Id { get; set; } 
 
-        // ข้อมูล Metadata ที่อนุญาตให้แก้ได้
+        
         [Required]
         public string? DisplayName { get; set; }
         public string? Notes { get; set; }

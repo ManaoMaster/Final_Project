@@ -10,15 +10,15 @@ namespace ProjectHub.Application.Mapping
     {
         public RelationshipProfile()
         {
-            // Domain (Entity) -> DTO (Response)
-            // (ชื่อ Property ตรงกัน AutoMapper จัดการให้ส่วนใหญ่)
+            
+            
             CreateMap<Relationships, RelationshipResponseDto>();
 
-            // Command -> Domain (Entity)
+            
             CreateMap<CreateRelationshipCommand, Relationships>()
-                .ForMember(d => d.RelationshipId, m => m.Ignore()) // Database จะสร้างให้
-                                                                   // Property อื่นๆ (Id) ชื่อตรงกัน AutoMapper จัดการให้
-                                                                   // Ignore Navigation Properties
+                .ForMember(d => d.RelationshipId, m => m.Ignore()) 
+                                                                   
+                                                                   
                 .ForMember(d => d.PrimaryTable, m => m.Ignore())
                 .ForMember(d => d.PrimaryColumn, m => m.Ignore())
                 .ForMember(d => d.ForeignTable, m => m.Ignore())

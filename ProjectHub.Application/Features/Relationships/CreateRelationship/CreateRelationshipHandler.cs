@@ -7,7 +7,7 @@ using ProjectHub.Application.DTOs;
 using ProjectHub.Application.Interfaces;
 using ProjectHub.Application.Repositories;
 using ProjectHub.Domain.Entities;
-// *** Alias ที่ยอดเยี่ยมของคุณ ***
+
 using RelationshipEntity = ProjectHub.Domain.Entities.Relationships;
 
 namespace ProjectHub.Application.Features.Relationships.CreateRelationship
@@ -35,7 +35,7 @@ namespace ProjectHub.Application.Features.Relationships.CreateRelationship
             CancellationToken cancellationToken
         )
         {
-            // --- 1. Validation (ทั้งหมดนี้ยังคงทำงานเหมือนเดิม) ---
+            
             if (request.PrimaryColumnId == request.ForeignColumnId)
             {
                 throw new ArgumentException(
@@ -69,10 +69,10 @@ namespace ProjectHub.Application.Features.Relationships.CreateRelationship
                 throw new ArgumentException("Cannot create a relationship within the same table.");
             }
 
-            // --- 2. ตรวจสอบ Business Logic (ทั้งหมดนี้ยังคงทำงานเหมือนเดิม) ---
+            
             if (primaryColumn.Is_primary == false)
             {
-                // (Logic การตรวจสอบ PK ของคุณ)
+                throw new ArgumentException("Primary Column must be a primary key.");
             }
 
             if (
@@ -85,14 +85,14 @@ namespace ProjectHub.Application.Features.Relationships.CreateRelationship
                 );
             }
 
-            // --- 3. Mapping & Persistence ---
-            // *** บรรทัดนี้จะแมป DisplayName และ Notes ให้อัตโนมัติ ***
+            
+            
             var relationshipEntity = _mapper.Map<RelationshipEntity>(request);
 
-            // *** ใช้เมธอดของคุณ ***
+            
             await _relationshipRepository.AddRelationshipAsync(relationshipEntity);
 
-            // --- 4. Response ---
+            
             var responseDto = _mapper.Map<RelationshipResponseDto>(relationshipEntity);
 
             return responseDto;

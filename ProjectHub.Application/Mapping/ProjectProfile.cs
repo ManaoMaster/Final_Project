@@ -12,7 +12,7 @@ namespace ProjectHub.Application.Mapping
     {
         public ProjectProfile()
         {
-            // Domain -> DTO
+            
             CreateMap<Projects, ProjectResponseDto>()
                 .ForMember(d => d.ProjectId, m => m.MapFrom(s => s.Project_id))
                 .ForMember(d => d.UserId, m => m.MapFrom(s => s.User_id))
@@ -22,30 +22,30 @@ namespace ProjectHub.Application.Mapping
                 .ForMember(d => d.IsFavorite, m => m.MapFrom(s => s.IsFavorite))
                 .ForMember(d => d.TableCount, m => m.MapFrom(s => s.Tables.Count));
 
-            // Command -> Domain (เพื่อใช้ใน Handler)
+            
             CreateMap<CreateProjectCommand, Projects>()
-                .ForMember(d => d.Project_id, m => m.Ignore()) // Database จะสร้างให้
-                .ForMember(d => d.Created_at, m => m.Ignore()) // Entity มี Default / DB จัดการ
+                .ForMember(d => d.Project_id, m => m.Ignore()) 
+                .ForMember(d => d.Created_at, m => m.Ignore()) 
                 .ForMember(d => d.User_id, m => m.MapFrom(s => s.UserId))
                 .ForMember(d => d.Name, m => m.MapFrom(s => s.Name))
-                // *** เพิ่ม: Ignore Navigation Property เพื่อความชัดเจนและป้องกันปัญหา ***
+                
                 .ForMember(d => d.Tables, m => m.Ignore())
-                .ForMember(d => d.Users, m => m.Ignore()); // <-- เพิ่ม Users ด้วย (ถ้ามี)
+                .ForMember(d => d.Users, m => m.Ignore()); 
 
-            //CreateMap<UpdateProjectCommand, Projects>()
-            //    .ForMember(d => d.Name, m => m.MapFrom(s => s.NewName))
-            //    .ForMember(d => d.Project_id, m => m.Ignore())
-            //    .ForMember(d => d.Created_at, m => m.Ignore())
-            //    // *** เพิ่ม: Ignore Navigation Property เพื่อความชัดเจนและป้องกันปัญหา ***
-            //    .ForMember(d => d.Tables, m => m.Ignore())
-            //    .ForMember(d => d.Users, m => m.Ignore());
+            
+            
+            
+            
+            
+            
+            
 
-            // ProjectProfile.cs (เหมือนเดิม + แนะนำ ignore UpdatedAt เผื่อป้องกัน)
+            
             CreateMap<UpdateProjectCommand, Projects>()
                 .ForMember(d => d.Name, m => m.MapFrom(s => s.NewName))
                 .ForMember(d => d.Project_id, m => m.Ignore())
                 .ForMember(d => d.Created_at, m => m.Ignore())
-                .ForMember(d => d.UpdatedAt, m => m.Ignore()) // <— เตือนใจ: ไปตั้งใน Handler
+                .ForMember(d => d.UpdatedAt, m => m.Ignore()) 
                 .ForMember(d => d.Tables, m => m.Ignore())
                 .ForMember(d => d.Users, m => m.Ignore());
         }
